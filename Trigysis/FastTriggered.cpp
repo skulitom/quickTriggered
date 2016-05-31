@@ -79,7 +79,7 @@ void FastTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 {
 
 	//New Line
-	//Sagitus Line
+	//
 }
 
 void FastTriggered::ReleaseDefault()
