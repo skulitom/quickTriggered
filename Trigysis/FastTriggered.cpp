@@ -78,7 +78,8 @@ bool FastTriggered::InitApp()
 void FastTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 {
 
-	
+	//New Line
+
 }
 
 void FastTriggered::ReleaseDefault()
