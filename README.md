@@ -2,4 +2,4 @@
 
 ##A slightly politically incorrect game 
 
-###Maid By Sagitus
+###Made By Sagitus
