@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="FrameWork">
+      <UniqueIdentifier>{7e1e8676-bccb-47fd-821b-c45d1b6979a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trigysis">
+      <UniqueIdentifier>{d73b79eb-e641-407a-ad78-4b38007668ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Headers">
+      <UniqueIdentifier>{ace9e054-815b-482a-9189-b040871908de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Sources">
+      <UniqueIdentifier>{debd4ab9-1fcb-488b-9752-82a278b37a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trigysis\Header">
+      <UniqueIdentifier>{668a0234-a022-4f1c-a0a9-2919bac509c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trigysis\Sources">
+      <UniqueIdentifier>{36763198-5b70-46b0-b370-e6319e969e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f1ac8b18-b0f0-471b-9ba9-07a58e9118f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D3DAPP.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2d.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Trigysis\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Files.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic2DDraw.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic2DDrawPipeline.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Link.h">
+      <Filter>Trigysis\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ElementBaseManager.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Figures.h">
+      <Filter>Trigysis\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FastTriggered.h">
+      <Filter>Trigysis\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D3DAPP.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2d.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Trigysis\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic2DDraw.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic2DDrawPipeline.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Link.cpp">
+      <Filter>Trigysis\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Files.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Figure.cpp">
+      <Filter>Trigysis\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="FastTriggered.cpp">
+      <Filter>Trigysis\Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="B2DPShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="B2DVShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestSave.txt" />
+  </ItemGroup>
+</Project>
