@@ -79,7 +79,7 @@ void FastTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 {
 
 	//New Line
-	//
+	//Master
 }
 
 void FastTriggered::ReleaseDefault()
