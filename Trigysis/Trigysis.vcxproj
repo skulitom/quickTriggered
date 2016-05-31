@@ -104,7 +104,7 @@
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="StringHelper.h" />
-    <ClInclude Include="FastTriggered.h" />
+    <ClInclude Include="QuickTriggered.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2d.h" />
   </ItemGroup>
@@ -118,7 +118,7 @@
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="Link.cpp" />
-    <ClCompile Include="FastTriggered.cpp" />
+    <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #include "D3DAPP.h"
-#include "FastTriggered.h"
+#include "QuickTriggered.h"
 #include "MathHelper.h"
 #include "Timer.h"
 
@@ -8,21 +8,21 @@ HRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 HWND HWnd;
 D3DAPPINPUT* Input = new D3DAPPINPUT();
-bool Init(FastTriggered** ppFastTriggeredAppPtr, HINSTANCE hInstance, int cmd)
+bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 {
-	FastTriggered* TAA = new FastTriggered(HWnd, Input);
-	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, 800, 600, "HDWND", "FastTriggered");
+	QuickTriggered* TAA = new QuickTriggered(HWnd, Input);
+	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, 800, 600, "HDWND", "QuickTriggered");
 	if (!TAA->SInit(1, 4, true))
 		return false;
 	TAA->ShowD3DWindow(cmd);
 	MathHelp::InitRand();
-	*ppFastTriggeredAppPtr = TAA;
+	*ppQuickTriggeredAppPtr = TAA;
 	return true;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, int cmd)
 {
 	MSG msg = { 0 };
-	FastTriggered* TAApp = nullptr;
+	QuickTriggered* TAApp = nullptr;
 	if (!Init(&TAApp, hInstance, cmd))
 		return msg.wParam;
 	D3DAPPTIMER* Timer = new D3DAPPTIMER(1.f);

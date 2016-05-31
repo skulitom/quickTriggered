@@ -3,11 +3,11 @@
 #include <Windows.h>
 #include <windowsx.h>
 
-#include <Directx\D3D11.h>
-#include <Directx\D3DX10.h>
-#include <Directx\D3DX11.h>
-#include <Directx\xnamath.h>
-#include <directx\d3dx11effect.h>
+#include "DXInclude\D3D11.h"
+#include "DXInclude\D3DX10.h"
+#include "DXInclude\D3DX11.h"
+#include "DXInclude\xnamath.h"
+#include "DXInclude\d3dx11effect.h"
 
 #include <iostream>
 #include <sstream>
@@ -16,11 +16,9 @@
 
 #include "Vector2d.h"
 
-#pragma comment (lib, "d3d11.lib")
-#pragma comment (lib, "d3dx11.lib")
-#pragma comment (lib, "d3dx10.lib")
-
 //#include "Shader.h"
+
+
 
 #define D3DRelease(x){if(x) {x->Release() ; x = 0;}}
 #define D3DDelete(x){if(x) {delete x; x = NULL;}}

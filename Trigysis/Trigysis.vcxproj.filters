@@ -4,23 +4,23 @@
     <Filter Include="FrameWork">
       <UniqueIdentifier>{7e1e8676-bccb-47fd-821b-c45d1b6979a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Trigysis">
-      <UniqueIdentifier>{d73b79eb-e641-407a-ad78-4b38007668ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FrameWork\Headers">
       <UniqueIdentifier>{ace9e054-815b-482a-9189-b040871908de}</UniqueIdentifier>
     </Filter>
     <Filter Include="FrameWork\Sources">
       <UniqueIdentifier>{debd4ab9-1fcb-488b-9752-82a278b37a39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Trigysis\Header">
-      <UniqueIdentifier>{668a0234-a022-4f1c-a0a9-2919bac509c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Trigysis\Sources">
-      <UniqueIdentifier>{36763198-5b70-46b0-b370-e6319e969e38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{f1ac8b18-b0f0-471b-9ba9-07a58e9118f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuickTriggered">
+      <UniqueIdentifier>{d73b79eb-e641-407a-ad78-4b38007668ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuickTriggered\Header">
+      <UniqueIdentifier>{668a0234-a022-4f1c-a0a9-2919bac509c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuickTriggered\Sources">
+      <UniqueIdentifier>{36763198-5b70-46b0-b370-e6319e969e38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +34,7 @@
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Trigysis\Header</Filter>
+      <Filter>QuickTriggered\Header</Filter>
     </ClInclude>
     <ClInclude Include="Files.h">
       <Filter>FrameWork\Headers</Filter>
@@ -58,16 +58,16 @@
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Link.h">
-      <Filter>Trigysis\Header</Filter>
+      <Filter>QuickTriggered\Header</Filter>
     </ClInclude>
     <ClInclude Include="ElementBaseManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Figures.h">
-      <Filter>Trigysis\Header</Filter>
+      <Filter>QuickTriggered\Header</Filter>
     </ClInclude>
-    <ClInclude Include="FastTriggered.h">
-      <Filter>Trigysis\Header</Filter>
+    <ClInclude Include="QuickTriggered.h">
+      <Filter>QuickTriggered\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +81,7 @@
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Trigysis\Sources</Filter>
+      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>FrameWork\Sources</Filter>
@@ -96,16 +96,16 @@
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Link.cpp">
-      <Filter>Trigysis\Sources</Filter>
+      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Files.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Figure.cpp">
-      <Filter>Trigysis\Sources</Filter>
+      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="FastTriggered.cpp">
-      <Filter>Trigysis\Sources</Filter>
+    <ClCompile Include="QuickTriggered.cpp">
+      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
