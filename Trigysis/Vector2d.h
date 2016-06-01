@@ -2,7 +2,7 @@
 #define VECTOR2D_H
 
 #include <Windows.h>
-#include <Directx\xnamath.h>
+#include "DXInclude\xnamath.h"
 
 class Vector2d
 {

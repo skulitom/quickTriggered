@@ -182,6 +182,16 @@ bool ElementInterface::SetTexture(std::string& textureName)
 	return 1;
 }
 
+//////////////////////////////////////////////////////////////////////
+//**
+//**@If indexOfVPort == -1 -> Default IndexOfVPort would
+//**be applyed
+//**@If 'X(Y)' < 1 -> ElementSize = VPortSize.X(Y) * 'X(Y)' formula
+//**would be used
+//**@If 'X(Y)' < 0 -> ElementSize = VPortSize.Y(X) * '|X(Y)|' formula
+//**would be used
+//**
+//////////////////////////////////////////////////////////////////////
 void ElementInterface::SetSizesRelative(Vector2d& sizes, short indexOfVPort)
 {
 
@@ -218,28 +228,6 @@ void ElementInterface::Spawn(Vector2d& position, short indexOfVPort)
 	this->Position = position;
 	this->IsSpawned = 1;
 	this->IndexOfViewPort = indexOfVPort;
-
-	//if (sizes.X == 0 && sizes.Y == 0)
-	//	return;
-
-	//if (abs(sizes.X) <= 1)
-	//{
-	//	if (sizes.X > 0)
-	//		this->Sizes.X = sizes.X * this->D3dApp->GetViewPort(indexOfVPort).Width;
-	//	else
-	//		this->Sizes.X = abs(sizes.X) * this->D3dApp->GetViewPort(indexOfVPort).Height;
-	//}
-	//else
-	//	this->Sizes.X = sizes.X;
-	//if (abs(sizes.Y) <= 1)
-	//{
-	//	if (sizes.Y > 0)
-	//		this->Sizes.Y = sizes.Y * this->D3dApp->GetViewPort(indexOfVPort).Height;
-	//	else
-	//		this->Sizes.Y = abs(sizes.Y) * this->D3dApp->GetViewPort(indexOfVPort).Width;
-	//}
-	//else
-	//	this->Sizes.Y = sizes.Y;
 
 }
 

@@ -68,8 +68,17 @@ bool ButtonInterface::CheckIsClick()
 		this->SetStatus(DX_BUTTON_STATUS_CLICKED);
 		if (this->GetSettings().IsLongTerm)
 		{
-			this->SetStatus(DX_BUTTON_STATUS_IS_EXECUTING);
-			this->SetStatus(DX_BUTTON_STATUS_WAS_EXECUTE, false);
+			if (!this->GetStatus(DX_BUTTON_STATUS_IS_EXECUTING))
+			{
+				this->SetStatus(DX_BUTTON_STATUS_IS_EXECUTING);
+				this->SetStatus(DX_BUTTON_STATUS_WAS_EXECUTE, false);
+			}
+			else
+			{
+				this->SetStatus(DX_BUTTON_STATUS_IS_EXECUTING, false);
+				this->SetStatus(DX_BUTTON_STATUS_WAS_EXECUTE);
+			}
+
 		}
 		return true;
 	}

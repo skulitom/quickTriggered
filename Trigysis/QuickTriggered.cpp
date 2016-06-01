@@ -1,40 +1,41 @@
 #include "QuickTriggered.h"
 
 //////////////////////////////////////////////////////
-//**CCButton
+//**QTButton
 //////////////////////////////////////////////////////
-CCButton::CCButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs)
+QTButton::QTButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs)
 :ButtonInterface(ptrToMotherLand, bs)
 {
 	DeclareElementName(CCButton, this->EName);
+	this->Sizes = Vector2d(50, 30);
 	this->PQTClass = dynamic_cast<QuickTriggered*>(this->D3dApp);
 }
 
-void CCButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc tf)
+void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
 {
 	switch (DX_BUTTON_FUNC_TYPE_)
 	{
 		case DX_BUTTON_FUNC_TYPE_ONSELECT:
 		{
-			this->QTFOnSelect = tf;
+			this->QTFOnSelect = qtf;
 			this->Feature |= DX_BUTTON_FEATURE_ONSELECT;
 			return;
 		}
 		case DX_BUTTON_FUNC_TYPE_ONPRESS:
 		{
-			this->QTFOnPress = tf;
+			this->QTFOnPress = qtf;
 			this->Feature |= DX_BUTTON_FEATURE_ONPRESS;
 			return;
 		}
 		case DX_BUTTON_FUNC_TYPE_ONCLICK:
 		{
-			this->QTFOnClick = tf;
+			this->QTFOnClick = qtf;
 			this->Feature |= DX_BUTTON_FEATURE_ONCLICK;
 			return;
 		}
 		case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
 		{
-			this->QTFOnStopInquisition = tf;
+			this->QTFOnStopInquisition = qtf;
 			this->Feature |= DX_BUTTON_FEATUDE_ONSTOPINQUISITION;
 			return;
 		}

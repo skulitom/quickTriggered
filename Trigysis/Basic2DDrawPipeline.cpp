@@ -1,6 +1,6 @@
 #include "Basic2DDrawPipeline.h"
-#include <Directx\D3Dcompiler.h>
-#include <Directx\d3dx11effect.h>
+#include "DXInclude\D3Dcompiler.h"
+#include "DXInclude\d3dx11effect.h"
 Basic2DDrawPipeline::Basic2DDrawPipeline(D3DAPP* d3dApp)
 {
 

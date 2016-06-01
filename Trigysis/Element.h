@@ -1,7 +1,6 @@
 #ifndef RENDER_QUAD_RANGLE_H
 #define RENDER_QUAD_RANGLE_H
 #include "D3DAPP.h"
-#include <Directx\xnamath.h>
 #include "Vector2d.h"
 #include "Basic2DDraw.h"
 #include "Files.h"

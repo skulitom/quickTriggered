@@ -12,10 +12,10 @@
 
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
-class CCButton : public ButtonInterface
+class QTButton : public ButtonInterface
 {
 public:
-	CCButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs = ButtonSettings());
+	QTButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs = ButtonSettings());
 	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc tf);
 private:
 	void EventOnSelect() {(this->PQTClass->*this->QTFOnSelect)();}

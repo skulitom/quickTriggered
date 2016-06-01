@@ -1,7 +1,7 @@
 #ifndef MATHHELPER_H
 #define MATHHELPER_H
 
-#include <Directx\xnamath.h>
+#include "DXInclude\xnamath.h"
 #include "Vector2d.h"
 #include <time.h>
 
