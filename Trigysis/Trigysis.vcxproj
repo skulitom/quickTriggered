@@ -95,13 +95,15 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Basic2DDrawPipeline.h" />
     <ClInclude Include="Basic2DDraw.h" />
+    <ClInclude Include="BasicInterface.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D3DAPP.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="ElementBaseManager.h" />
     <ClInclude Include="Figures.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
-    <ClInclude Include="Element.h" />
+    <ClInclude Include="BasicElement.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
     <ClInclude Include="Timer.h" />
@@ -111,8 +113,10 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Basic2DDrawPipeline.cpp" />
     <ClCompile Include="Basic2DDraw.cpp" />
+    <ClCompile Include="BasicInterface.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D3DAPP.cpp" />
+    <ClCompile Include="BasicElement.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Files.cpp" />

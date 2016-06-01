@@ -48,9 +48,6 @@
     <ClInclude Include="Button.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Element.h">
-      <Filter>FrameWork\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Basic2DDraw.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
@@ -65,6 +62,15 @@
     </ClInclude>
     <ClInclude Include="QuickTriggered.h">
       <Filter>QuickTriggered\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicInterface.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicElement.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>FrameWork\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,9 +89,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Element.cpp">
-      <Filter>FrameWork\Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Basic2DDraw.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
@@ -100,6 +103,15 @@
     </ClCompile>
     <ClCompile Include="QuickTriggered.cpp">
       <Filter>QuickTriggered\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicInterface.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicElement.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>FrameWork\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

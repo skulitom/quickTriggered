@@ -63,6 +63,8 @@ void Basic2DDraw::DrawTriangle(Vector2d& pos1, Vector2d& pos2, Vector2d& pos3, s
 void Basic2DDraw::DrawRectangle(Vector2d& pos, Vector2d& sizes, short indexOfVP, XMFLOAT4 color, 
 	ID3D11ShaderResourceView* pTexture, std::string& textureName)
 {
+	if (!pTexture)
+		pTexture = this->D3dApp->GetTextureViewPtr(textureName);
 	if (pTexture)
 	{
 		this->Vertices[0].TexturePos = Vector2d(0, 0);

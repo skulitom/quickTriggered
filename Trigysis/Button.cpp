@@ -1,7 +1,7 @@
 #include "Button.h"
 
-ButtonInterface::ButtonInterface(ElementsMLand* ptrToMotherLand, ButtonSettings& bs)
-	:Element(ptrToMotherLand)
+ButtonInterface::ButtonInterface(BasicInterface* super, ButtonSettings& bs)
+	:Element(super)
 {
 	DeclareElementName(ButtonInterface, this->EName);
 	this->SetSettings(bs);

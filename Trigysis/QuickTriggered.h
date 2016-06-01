@@ -5,6 +5,7 @@
 #include "D3DAPP.h"
 #include "Element.h"
 #include "Button.h"
+#include "BasicInterface.h"
 //#include "LogicalElement.h"
 #include "Basic2DDraw.h"
 //#include "Link.h"
@@ -15,7 +16,7 @@ typedef void (QuickTriggered::*QTFunc)(void);
 class QTButton : public ButtonInterface
 {
 public:
-	QTButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs = ButtonSettings());
+	QTButton(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
 	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc tf);
 private:
 	void EventOnSelect() {(this->PQTClass->*this->QTFOnSelect)();}
@@ -33,11 +34,11 @@ private:
 //////////////////////////////////////////////////////
 //*QuickTriggered
 //////////////////////////////////////////////////////
-class QuickTriggered : public D3DAPP
+class QuickTriggered : public BasicInterface
 {
 public:
-	QuickTriggered(HWND hWnd, D3DAPPINPUT* input) :D3DAPP(false, false, hWnd)
-	{	this->Input = input;}
+	QuickTriggered(HWND hWnd, D3DAPPINPUT* input) : BasicInterface(false, true, hWnd, input)
+	{}
 	void ReleaseDefault() override;
 	bool InitApp();
 	void Update(FLOAT deltaTime, FLOAT totalTime);
@@ -47,11 +48,6 @@ private:
 	/////////////////////////////
 
 private:
-
-	D3DAPPINPUT* Input;
-	Basic2DDraw* Draw2d;
-
-	ElementsMLand* ElementsBase;
 
 };
 #endif //QuickTriggered_H
