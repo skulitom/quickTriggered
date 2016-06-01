@@ -11,7 +11,7 @@ D3DAPPINPUT* Input = new D3DAPPINPUT();
 bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 {
 	QuickTriggered* TAA = new QuickTriggered(HWnd, Input);
-	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, 800, 600, "HDWND", "QuickTriggered");
+	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, 800, 600, "HDWND", "QuickTriggered", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
 	if (!TAA->SInit(1, 4, true))
 		return false;
 	TAA->ShowD3DWindow(cmd);

@@ -53,11 +53,11 @@ bool QuickTriggered::InitApp()
 
 		this->SetStandartRenderSettings(D3D11_FILL_SOLID, D3D11_CULL_NONE);
 
-		this->Draw2d = new Basic2DDraw(this);
-
 		this->Input->SetWinSizes(this->WinSizes);
 
-		this->ElementsBase = new ElementsMLand(this, this->Input, std::string("TestSave.txt"));
+		this->ElementsBase = new ElementsMLand(this, this->Input);
+
+		this->Draw2d = this->ElementsBase->GetDraw2D();
 
 		/////////////////////////////////////
 		//**Load Textures
@@ -77,18 +77,21 @@ bool QuickTriggered::InitApp()
 
 void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 {
+	
 
-	//New Line
-	//Master
-
+	////////////////////////////////////////////////
+	//**Render Update
+	////////////////////////////////////////////////
 	QuickTriggered::ClearScreen(0, 0, 1, 1,true);
+
+	this->ElementsBase->UpdateAndDraw(deltaTime);
+
 	QuickTriggered::Draw();
 
 }
 
 void QuickTriggered::ReleaseDefault()
 {
-	D3DDelete(this->Draw2d);
 	D3DDelete(this->ElementsBase);
 	D3DAPP::ReleaseDefault();
 }

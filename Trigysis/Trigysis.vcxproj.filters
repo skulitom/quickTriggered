@@ -57,9 +57,6 @@
     <ClInclude Include="Basic2DDrawPipeline.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Link.h">
-      <Filter>QuickTriggered\Header</Filter>
-    </ClInclude>
     <ClInclude Include="ElementBaseManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
@@ -94,9 +91,6 @@
     </ClCompile>
     <ClCompile Include="Basic2DDrawPipeline.cpp">
       <Filter>FrameWork\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Link.cpp">
-      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Files.cpp">
       <Filter>FrameWork\Sources</Filter>

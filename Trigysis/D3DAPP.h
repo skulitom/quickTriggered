@@ -18,8 +18,6 @@
 
 //#include "Shader.h"
 
-
-
 #define D3DRelease(x){if(x) {x->Release() ; x = 0;}}
 #define D3DDelete(x){if(x) {delete x; x = NULL;}}
 
