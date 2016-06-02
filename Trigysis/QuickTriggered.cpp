@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////
 //**QTButton
 //////////////////////////////////////////////////////
-QTButton::QTButton(ElementsMLand* ptrToMotherLand, ButtonSettings& bs)
-:ButtonInterface(ptrToMotherLand, bs)
+QTButton::QTButton(BasicInterface* super, ButtonSettings& bs)
+:ButtonInterface(super, bs)
 {
 	DeclareElementName(CCButton, this->EName);
 	this->Sizes = Vector2d(50, 30);
@@ -48,6 +48,9 @@ bool QuickTriggered::InitApp()
 {
 	if (this->dxDevice)
 	{
+
+		QuickTriggered::Init();
+
 		/////////////////////////////////////
 		//**Create Views
 		/////////////////////////////////////
@@ -56,9 +59,9 @@ bool QuickTriggered::InitApp()
 
 		this->Input->SetWinSizes(this->WinSizes);
 
-		this->ElementsBase = new ElementsMLand(this, this->Input);
+		//this->ElementsBase = new ElementsMLand(this, this->Input);
 
-		this->Draw2d = this->ElementsBase->GetDraw2D();
+		//this->Draw2d = this->ElementsBase->GetDraw2D();
 
 		/////////////////////////////////////
 		//**Load Textures
@@ -68,6 +71,7 @@ bool QuickTriggered::InitApp()
 		//**Create BackGrounds
 		/////////////////////////////////////
 
+		this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, 0, 0);
 
 		return true;
 
@@ -85,7 +89,9 @@ void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 	////////////////////////////////////////////////
 	QuickTriggered::ClearScreen(0, 0, 1, 1,true);
 
-	this->ElementsBase->UpdateAndDraw(deltaTime);
+	this->Draw2D->DrawRectangle(Vector2d(0, 0), Vector2d(200, 200), 0, XMFLOAT4(1, 0, 0, 0), NULL, std::string("TestFont_0.dds"));
+
+	this->ElementBase->UpdateAndDraw(deltaTime);
 
 	QuickTriggered::Draw();
 
@@ -93,6 +99,6 @@ void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 
 void QuickTriggered::ReleaseDefault()
 {
-	D3DDelete(this->ElementsBase);
+	//D3DDelete(this->ElementsBase);
 	D3DAPP::ReleaseDefault();
 }

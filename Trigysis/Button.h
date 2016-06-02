@@ -1,5 +1,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
+#include "BasicInterface.h"
 #include "Element.h"
 #define DX_BUTTON_FUNC_TYPE_ONSELECT 0
 #define DX_BUTTON_FUNC_TYPE_ONPRESS 1
@@ -56,7 +57,7 @@ struct ButtonSettings
 class ButtonInterface : public Element
 {
 public:
-	ButtonInterface(ElementsMLand* ptrToMotherLand, ButtonSettings& bs = ButtonSettings());
+	ButtonInterface(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
 	void SetSettings(ButtonSettings& bSettings);
 	ButtonSettings& GetSettings() { return this->Settings; }
 	FLOAT GetPressTime() { return this->PressTime - 1.f; }

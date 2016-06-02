@@ -752,12 +752,12 @@ bool D3DAPP::SLoadAllTextures()
 	std::vector<std::string> FileList;
 
 
-	FileList = FileHelp::FindFiles(this->GetCatalogName() + "\\*.dds");
+	FileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.dds");
 
 	for (size_t i = 0; i < FileList.size(); i++)
 	{
 
-		this->LoadTexture(FileList.at(i), this->GetCatalogName() + "\\");
+		this->LoadTexture(FileList.at(i), this->GetCatalogName() + "\\Textures\\");
 
 	}
 
