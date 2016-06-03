@@ -1,4 +1,4 @@
-#include "Figures.h"
+#include "GUIFigures.h"
 
 //////////////////////////////////////////////////////
 //**CCButton
@@ -46,7 +46,7 @@ void FButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc ff)
 	case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
 	{
 		this->FFOnStopInquisition = ff;
-		this->Feature |= DX_BUTTON_FEATUDE_ONSTOPINQUISITION;
+		this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
 		return;
 	}
 	}

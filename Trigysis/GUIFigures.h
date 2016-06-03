@@ -1,5 +1,5 @@
-#ifndef FIGURES_H
-#define FIGURES_H
+#ifndef GUI_FIGURES_H
+#define GUI_FIGURES_H
 
 #include "BasicInterface.h"
 #include "Element.h"
@@ -55,4 +55,4 @@ protected:
 
 };
 
-#endif // !FIGURES_H
+#endif // !GUI_FIGURES_H

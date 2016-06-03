@@ -99,7 +99,7 @@ bool Basic2DDrawPipeline::CreatePixelShader(LPCSTR fileName, LPCSTR func)
 	SD.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SD.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SD.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	SD.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	SD.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
 	SD.MaxAnisotropy = 1;
 	hr = this->D3dApp->dxDevice->CreateSamplerState(&SD, &this->Sampler);
 	return true;

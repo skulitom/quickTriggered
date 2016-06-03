@@ -145,7 +145,6 @@ ElementInterface::ElementInterface(ElementsMLand* ptrToMotherLand)
 	this->D3dApp = this->PMLand->GetD3DApp();
 }
 
-
 ElementInterface::ElementInterface(D3DAPP* d3dApp, Vector2d& position, Vector2d& sizes, short indexOfVPort,
 	ElementsMLand* ptrToMotherLand, bool isNeedRender)
 {

@@ -100,7 +100,7 @@
     <ClInclude Include="D3DAPP.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ElementBaseManager.h" />
-    <ClInclude Include="Figures.h" />
+    <ClInclude Include="GUIFigures.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="BasicElement.h" />
@@ -118,7 +118,7 @@
     <ClCompile Include="D3DAPP.cpp" />
     <ClCompile Include="BasicElement.cpp" />
     <ClCompile Include="Element.cpp" />
-    <ClCompile Include="Figure.cpp" />
+    <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="Timer.cpp" />

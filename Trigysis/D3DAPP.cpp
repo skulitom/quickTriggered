@@ -158,8 +158,10 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	scd.OutputWindow = this->HWnd;
 	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	//scd.SampleDesc.Count = 2;
+	//scd.SampleDesc.Quality = 0;
 	if (this->MMsaa > 1)
-		scd.SampleDesc.Count = sampleDescCount;
+		scd.SampleDesc.Count = 4;
 	else
 		scd.SampleDesc.Count = 1;
 	scd.SampleDesc.Quality = this->MMsaa - 1;
@@ -226,8 +228,10 @@ bool D3DAPP::DXCreateTargetViewAndDepthView(const int sampleDescCount)
 	DepthTextureDesc.Height = this->WinSizes.ClientWHeight;
 	DepthTextureDesc.MipLevels = 1;
 	DepthTextureDesc.MiscFlags = NULL;
+	//DepthTextureDesc.SampleDesc.Count = 1;
+	//DepthTextureDesc.SampleDesc.Quality = 1;
 	if (this->MMsaa > 1)
-		DepthTextureDesc.SampleDesc.Count = sampleDescCount;
+		DepthTextureDesc.SampleDesc.Count = 4;
 	else
 		DepthTextureDesc.SampleDesc.Count = 1;
 	DepthTextureDesc.SampleDesc.Quality = this->MMsaa - 1;
@@ -584,7 +588,7 @@ void D3DAPP::m4xMsaaQuality()
 
 	if (this->MMsaa == NULL)
 	{
-		HRESULT hr = dxDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 4, &this->MMsaa);
+		HRESULT hr = dxDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R32G32B32A32_UINT, 4, &this->MMsaa);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL, "Quality faild!", "ERROR", MB_ICONERROR);
@@ -648,21 +652,6 @@ void D3DAPP::Draw()
 	dxSwapChain->Present(0, 0);
 }
 
-void D3DAPP::SetRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode, ID3D11RasterizerState*& rast)
-{
-
-	D3D11_RASTERIZER_DESC rsDesc;
-	ZeroMemory(&rsDesc, sizeof(D3D11_RASTERIZER_DESC));
-
-	rsDesc.FillMode = fmode;
-	rsDesc.CullMode = cmode;
-	rsDesc.FrontCounterClockwise = false;
-	rsDesc.DepthClipEnable = true;
-
-	this->dxDevice->CreateRasterizerState(&rsDesc, &rast);
-
-}
-
 void D3DAPP::ReleaseDefault()
 {
 
@@ -710,8 +699,10 @@ void D3DAPP::SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cm
 
 	rsDesc.FillMode = fmode;
 	rsDesc.CullMode = cmode;
-	rsDesc.FrontCounterClockwise = false;
+	rsDesc.FrontCounterClockwise = true;
 	rsDesc.DepthClipEnable = true;
+	rsDesc.AntialiasedLineEnable = true;
+	rsDesc.MultisampleEnable = true;
 
 	this->dxDevice->CreateRasterizerState(&rsDesc, &this->StandartRastState);
 

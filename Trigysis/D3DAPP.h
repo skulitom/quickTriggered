@@ -102,7 +102,6 @@ public:
 	// Удаляет все устройства для создания базового приложения DX
 	virtual void ReleaseDefault();
 	// Настройка рендера
-	virtual void SetRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode, ID3D11RasterizerState*& rast);
 	virtual void SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode);
 
 	virtual void SetPaused(bool pause);

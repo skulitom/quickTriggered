@@ -36,7 +36,7 @@ void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
 		case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
 		{
 			this->QTFOnStopInquisition = qtf;
-			this->Feature |= DX_BUTTON_FEATUDE_ONSTOPINQUISITION;
+			this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
 			return;
 		}
 	}
@@ -87,9 +87,6 @@ void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 	////////////////////////////////////////////////
 	//**Render Update
 	////////////////////////////////////////////////
-	QuickTriggered::ClearScreen(0, 0, 1, 1,true);
-
-	this->Draw2D->DrawRectangle(Vector2d(0, 0), Vector2d(200, 200), 0, XMFLOAT4(1, 0, 0, 0), NULL, std::string("TestFont_0.dds"));
 
 	this->ElementBase->UpdateAndDraw(deltaTime);
 

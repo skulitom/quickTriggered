@@ -169,7 +169,7 @@ bool ButtonInterface::Update(FLOAT deltaTime)
 		{
 			if (!this->GetStatus(DX_BUTTON_STATUS_IS_EXECUTING))
 				this->SetColors(this->Settings.IdleColor);
-			if (this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT) && (this->Feature & DX_BUTTON_FEATUDE_ONSTOPINQUISITION))
+			if (this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT) && (this->Feature & DX_BUTTON_FEATURE_ONSTOPINQUISITION))
 				this->EventOnStopInquisition();
 			if (!this->GetStatus(DX_BUTTON_STATUS_WORKING) && this->GetStatus(DX_BUTTON_STATUS_WAS_WORKING))
 				this->ToggleStatus(DX_BUTTON_STATUS_WAS_WORKING);

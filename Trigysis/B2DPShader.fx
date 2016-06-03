@@ -16,7 +16,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	
 	float4 Color = input.Color + Texture.Sample(Sampler, input.TexPos);
 
-	clip(Color.a - 0.1f);
+	clip(Color.a - 0.5f);
 
 	return Color;
 

@@ -16,11 +16,11 @@
     <Filter Include="QuickTriggered">
       <UniqueIdentifier>{d73b79eb-e641-407a-ad78-4b38007668ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="QuickTriggered\Header">
-      <UniqueIdentifier>{668a0234-a022-4f1c-a0a9-2919bac509c8}</UniqueIdentifier>
+    <Filter Include="QuickTriggered\BackEnd">
+      <UniqueIdentifier>{df34c5c1-5c7f-47a1-a57a-b9d24eda39da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="QuickTriggered\Sources">
-      <UniqueIdentifier>{36763198-5b70-46b0-b370-e6319e969e38}</UniqueIdentifier>
+    <Filter Include="QuickTriggered\FrontEnd">
+      <UniqueIdentifier>{90a3cb3e-5f2e-45f1-84f6-3b9972618c4d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,9 +32,6 @@
     </ClInclude>
     <ClInclude Include="Vector2d.h">
       <Filter>FrameWork\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>QuickTriggered\Header</Filter>
     </ClInclude>
     <ClInclude Include="Files.h">
       <Filter>FrameWork\Headers</Filter>
@@ -57,12 +54,6 @@
     <ClInclude Include="ElementBaseManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Figures.h">
-      <Filter>QuickTriggered\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="QuickTriggered.h">
-      <Filter>QuickTriggered\Header</Filter>
-    </ClInclude>
     <ClInclude Include="BasicInterface.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
@@ -71,6 +62,15 @@
     </ClInclude>
     <ClInclude Include="Element.h">
       <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="QuickTriggered.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIFigures.h">
+      <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +82,6 @@
     </ClCompile>
     <ClCompile Include="Vector2d.cpp">
       <Filter>FrameWork\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>QuickTriggered\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>FrameWork\Sources</Filter>
@@ -98,12 +95,6 @@
     <ClCompile Include="Files.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Figure.cpp">
-      <Filter>QuickTriggered\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="QuickTriggered.cpp">
-      <Filter>QuickTriggered\Sources</Filter>
-    </ClCompile>
     <ClCompile Include="BasicInterface.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
@@ -112,6 +103,15 @@
     </ClCompile>
     <ClCompile Include="Element.cpp">
       <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="QuickTriggered.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIFigure.cpp">
+      <Filter>QuickTriggered\FrontEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
