@@ -104,6 +104,7 @@
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="BasicElement.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
     <ClInclude Include="Timer.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>

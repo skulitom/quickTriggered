@@ -6,6 +6,7 @@
 #include "Element.h"
 #include "Button.h"
 #include "BasicInterface.h"
+#include "GUIFigures.h"
 //#include "LogicalElement.h"
 #include "Basic2DDraw.h"
 //#include "Link.h"

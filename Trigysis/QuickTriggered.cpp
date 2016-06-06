@@ -59,10 +59,6 @@ bool QuickTriggered::InitApp()
 
 		this->Input->SetWinSizes(this->WinSizes);
 
-		//this->ElementsBase = new ElementsMLand(this, this->Input);
-
-		//this->Draw2d = this->ElementsBase->GetDraw2D();
-
 		/////////////////////////////////////
 		//**Load Textures
 		/////////////////////////////////////
@@ -72,6 +68,29 @@ bool QuickTriggered::InitApp()
 		/////////////////////////////////////
 
 		this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, 0, 0);
+
+		for (int i = 0; i < 6; i++)
+		{
+			for (int j = 0; j < 6; j++)
+			{
+
+				Figure* F = new Figure(this);
+				F->SetFigureSuperType(0);
+				F->SetFigureType(0);
+				F->Spawn(Vector2d((i - 3) * 64, (j - 3)*64), 0);
+
+			}
+		}
+
+		//Figure* F = new Figure(this);
+		//F->SetFigureSuperType(0);
+		//F->SetFigureType(0);
+		//F->Spawn(Vector2d(-32, 0), 0);
+
+		//F = new Figure(this);
+		//F->SetFigureSuperType(1);
+		//F->SetFigureType(0);
+		//F->Spawn(Vector2d(32, 0), 0);
 
 		return true;
 
@@ -87,6 +106,8 @@ void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 	////////////////////////////////////////////////
 	//**Render Update
 	////////////////////////////////////////////////
+
+	this->ClearScreen(0, 0, 1, 1, true);
 
 	this->ElementBase->UpdateAndDraw(deltaTime);
 

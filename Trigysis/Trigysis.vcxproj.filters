@@ -72,6 +72,9 @@
     <ClInclude Include="GUIFigures.h">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="GUIFigure.cpp">
       <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>FrameWork\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

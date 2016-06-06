@@ -9,15 +9,17 @@ FButton::FButton(BasicInterface* super)
 	DeclareElementName(FButton, this->EName);
 	this->PFigureClass = dynamic_cast<Figure*>(this->D3dApp);
 	ButtonSettings BS;
-	BS.IdleColor = XMFLOAT4(0.5f, 0.5f, 0.5f, 1);
-	BS.InActiveColor = XMFLOAT4(1, 1, 1, 1);
-	BS.ReadyColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1);
-	BS.SuppressColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 1);
+	BS.IdleColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.f);
+	BS.InActiveColor = XMFLOAT4(1, 1, 1, 0.f);
+	BS.ReadyColor = XMFLOAT4(0.3f, 0.3f, 0.3f, 0.f);
+	BS.SuppressColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.f);
 	BS.IsActive = true;
 	BS.IsLongTerm = true;
 	BS.IsVisible = true;
 	
 	this->SetSettings(BS);
+
+	this->Sizes = Vector2d(GUIF_SIZE, GUIF_SIZE);
 
 }
 
@@ -60,7 +62,11 @@ Figure::Figure(BasicInterface* super)
 	:Element(super)
 {
 
+	this->Sizes = Vector2d(GUIF_SIZE, GUIF_SIZE);
+	this->Color = XMFLOAT4(1, 1, 1, 1);
 
+	this->FrontButton = new FButton(super);
+	Figure::SetFigureSuperType(0);
 
 }
 
@@ -73,7 +79,79 @@ Figure::~Figure()
 
 void Figure::Spawn(Vector2d& position, short indexOfVPort)
 {
-
+	Element::Spawn(position, indexOfVPort);
 	
+	this->FrontButton->Spawn(position, indexOfVPort);
+
+}
+
+void Figure::SetFigureSuperType(UINT sType)
+{
+
+	this->SType = sType;
+	
+	if (this->FrontButton)
+	{
+		std::string TName;
+		switch (this->SType)
+		{
+
+			case 0:
+			{
+
+				TName = "DTBF.dds";
+				break;
+
+			}
+			default:
+			{
+				TName = "DTHD.dds";
+			}
+
+		}
+
+		this->FrontButton->SetTexture(TName);
+
+	}
+
+}
+
+void Figure::SetFigureType(UINT type)
+{
+
+	this->Type = type;
+
+	switch (this->Type)
+	{
+
+		case 0:
+		{
+			this->Color = XMFLOAT4(1, 0, 0, 1);
+			break;
+		}
+		default :
+		{
+			this->Color = XMFLOAT4(1, 1, 1, 1);
+			break;
+		}
+
+	}
+
+}
+
+void Figure::Move(int dPosX, int dPosY, float deltaTime)
+{
+
+
+
+}
+
+bool Figure::Update(float deltaTime)
+{
+
+	if (!Element::Update(deltaTime))
+		return false;
+
+	this->FrontButton->SetPosition(this->Position);
 
 }
