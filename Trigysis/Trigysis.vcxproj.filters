@@ -72,6 +72,21 @@
     <ClInclude Include="GUIFigures.h">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
+    <ClInclude Include="FigurePos.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureDrop.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveGame.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgress.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Progress.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -112,6 +127,18 @@
     </ClCompile>
     <ClCompile Include="GUIFigure.cpp">
       <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="FigurePos.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="FigureDrop.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveGame.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgress.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

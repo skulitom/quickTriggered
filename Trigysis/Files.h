@@ -30,8 +30,11 @@ public:
 	void Close();
 
 	std::string& GetStringFromFile();
+	int FindString(std::string findName);
+	int getIntFromLine(int lineNum);
+
 	bool GetBoolFromString();
-	INT GetINTFromFile();
+	int GetINTFromFile();
 
 	inline std::string& GetCString(){ return this->CString; }
 	inline char GetCSymbol() { return this->CSymbol; }
