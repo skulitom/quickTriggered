@@ -43,6 +43,20 @@ void FileManager::Close()
 
 }
 
+void FileManager::writeToFileAt(int num, int loc){
+	this->FILE.seekg(loc);
+	writeToFile(num);
+	this->FILE.seekg(0);
+}
+
+void FileManager::writeToFileAt(std::string& name, int loc){
+	this->FILE.seekg(loc);
+	writeToFile(name);
+	this->FILE.seekg(0);
+
+}
+
+
 std::string& FileManager::GetStringFromFile()
 {
 
@@ -75,6 +89,18 @@ int FileManager::getIntFromLine(int lineNum){
 	int num = GetINTFromFile();
 	this->FILE.seekg(0);
 	return num;
+}
+
+int FileManager::getLineQuo(){
+	this->FILE.seekg(0);
+	int lineNumber = 0;
+
+	while (!this->FILE.eof()){
+		std::getline(this->FILE, this->CString);
+		lineNumber++;
+	}
+	this->FILE.seekg(0);
+	return lineNumber;
 }
 
 bool FileManager::GetBoolFromString()

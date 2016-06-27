@@ -16,9 +16,11 @@ public:
 protected:
 private:
 	void saveAll(GameProgress *currentProgress, std::string fileName);
-	void saveStoryPoint(int storyPoint, std::string fileName);
-	void saveLocation(int location, std::string fileName);
+	inline void saveStoryPoint(int storyPoint, std::string fileName){ save(storyPoint, fileName, "stroryPoint"); }
+	inline void saveLocation(int location, std::string fileName){ save(location,fileName,"location"); }
+	void save(int num, std::string fileName, std::string name);
 	const std::string fileType = ".txt";
+	FileManager *FM;
 };
 
 #endif

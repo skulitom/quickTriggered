@@ -9,18 +9,16 @@ void SaveGame::saveAll(GameProgress *currentProgress, std::string fileName){
 	this->saveStoryPoint(currentProgress->getStoryPoint(), fileName);
 }
 
-void SaveGame::saveLocation(int location, std::string fileName){
-	std::ofstream saveFile;
-    saveFile.open(fileName+this->fileType);
-	std::string currentName;
-	
-	saveFile.close();
-}
-
-void SaveGame::saveStoryPoint(int storyPoint, std::string fileName){
-	std::ofstream saveFile;
-
-//	saveFile.close;
+void SaveGame::save(int num, std::string fileName, std::string name){
+	FM->Open(fileName + this->fileType, FM_FILE_WRITE);
+	int position = FM->FindString(name);
+	if (position = -1){
+		position = FM->getLineQuo();
+		FM->writeToFileAt(num, position);
+	}
+	else{
+		FM->writeToFileAt(num, position);
+	}
 }
 
 int SaveGame::getLocation(){
