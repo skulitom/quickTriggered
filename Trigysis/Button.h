@@ -39,7 +39,7 @@ struct ButtonSettings
 		this->ReadyColor = XMFLOAT4(0.75f, 0.75f, 0.75f, 1.f);
 		this->SuppressColor = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.f);
 		this->InActiveColor = XMFLOAT4(0.9f, 0.9f, 0.9f, 1.f);
-		this->TextureName = std::string(""); 
+		this->MaterialName = std::string("");
 		this->IsVisible = true; 
 		this->IsActive = true; 
 		this->IsLongTerm = false;
@@ -48,7 +48,7 @@ struct ButtonSettings
 	XMFLOAT4 ReadyColor;
 	XMFLOAT4 SuppressColor;
 	XMFLOAT4 InActiveColor;
-	std::string TextureName;
+	std::string MaterialName;
 	bool IsVisible;
 	bool IsActive;
 	bool IsLongTerm;
@@ -89,5 +89,6 @@ private:
 protected:
 	unsigned __int8 Feature;
 	unsigned __int8 MButtonUsed;
+	bool IsCircle;
 };
 #endif //BUTTON_H

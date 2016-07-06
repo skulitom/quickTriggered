@@ -103,10 +103,8 @@ float D3DAPPTIMER::GetTimeScale()
 
 float D3DAPPTIMER::GetSecondsPerCount()
 {
-	_int64 CountsPerSecond;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&CountsPerSecond);
-	float SecondsPerCount = 1.0 / (double)CountsPerSecond;
-	return SecondsPerCount * mTimeScale;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&this->CountsPerSecond);
+	return 1.0 / (double)CountsPerSecond * mTimeScale;
 }
 
 float D3DAPPTIMER::GetDeltaTime()
@@ -116,8 +114,7 @@ float D3DAPPTIMER::GetDeltaTime()
 
 __int64& D3DAPPTIMER::GetCurrTime()
 {
-	_int64 CurrTime;
-	QueryPerformanceCounter((LARGE_INTEGER*)&CurrTime);
+	QueryPerformanceCounter((LARGE_INTEGER*)&this->CurrTime);
 	return CurrTime;
 }
 

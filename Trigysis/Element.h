@@ -12,6 +12,8 @@ public:
 
 	virtual ~Element() {}
 
+	virtual void Spawn(Vector2d& position, short indexOfVPort) override;
+
 private:
 
 	BasicInterface* Super;

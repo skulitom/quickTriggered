@@ -7,6 +7,7 @@
 #include "BasicElement.h"
 #include "Timer.h"
 #include "Basic2DDraw.h"
+#include "MathHelper.h"
 
 class BasicInterface : public D3DAPP
 {
@@ -22,6 +23,10 @@ public:
 	ElementsMLand* GetElementBase() { return this->ElementBase; }
 	D3DAPPINPUT* GetInput() { return this->Input; }
 
+	void Draw() override;
+
+	//D3DAPPTIMER* GetTimer() { return this->Timer; }
+
 private:
 
 protected:
@@ -30,6 +35,7 @@ protected:
 	ElementsMLand* ElementBase;
 
 	D3DAPPINPUT* Input;
+	//D3DAPPTIMER* Timer;
 
 };
 

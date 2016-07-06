@@ -15,7 +15,10 @@
 #include <vector>
 
 #include "Vector2d.h"
+#include "Files.h"
+#include "Timer.h"
 
+#pragma comment(lib, "dxgi.lib")
 //#include "Shader.h"
 
 #define D3DRelease(x){if(x) {x->Release() ; x = 0;}}
@@ -24,10 +27,62 @@
 #define DX_RS_DEPTH_RENDER_STATE 0
 #define DX_RS_2D_RENDER_STATE 1
 
+
+
+struct TextureStruct
+{
+	TextureStruct() { Texture = nullptr; }
+	ID3D11ShaderResourceView* Texture;
+	std::string TextureName;
+};
+
+struct Material
+{
+
+	Material() { 
+		Texture = nullptr; 
+		AdditionalTexture = nullptr; 
+		EffectShader = nullptr; 
+		TextureMove = XMFLOAT4(0, 0, 0, 0);
+		TextureOffset = XMFLOAT4(0, 0, 0, 0);
+		UseGlobalCoords = false;
+		UseAlpha = false;
+	}
+
+	~Material()
+	{
+		D3DRelease(Texture);
+		D3DRelease(AdditionalTexture);
+		D3DRelease(EffectShader);
+	}
+
+	ID3D11ShaderResourceView* Texture;
+	ID3D11ShaderResourceView* AdditionalTexture;
+	ID3D11PixelShader* EffectShader;
+	XMFLOAT4 TextureMove;
+	XMFLOAT4 TextureOffset;
+	std::string ShaderName;
+	std::string Name;
+	bool UseGlobalCoords;
+	bool UseAlpha;
+
+};
+
+struct VPortStruct
+{
+	VPortStruct() { MaterialToRender = nullptr; RTView = nullptr; }
+	D3D11_VIEWPORT VPort;
+	D3DXMATRIX PMatrix;
+	Material* MaterialToRender;
+	ID3D11RenderTargetView* RTView;
+	Vector2d WinPos;
+	Vector2d WorldPos;
+};
+
 struct DepthStencilState
 {
 
-	DepthStencilState() { ZeroMemory(&this->PDepthStencilState, sizeof(ID3D11DepthStencilState)); }
+	DepthStencilState() { PDepthStencilState = nullptr; }
 
 	ID3D11DepthStencilState* PDepthStencilState;
 	std::string Name;
@@ -37,7 +92,7 @@ struct DepthStencilState
 struct WindowSizes
 {
 
-	WindowSizes() {};
+	WindowSizes() { }
 
 	UINT ClientWWidth;
 	UINT ClientWHeight;
@@ -90,13 +145,15 @@ public:
 	// НЕ РАБОТАЕТ!
 	void m4xMsaaQuality();
 
+	ID3D11RenderTargetView* CreateRenderTarget(ID3D11Texture2D* textureRenderTo);
+	void SetRenderTarget(ID3D11RenderTargetView* renderTV);
 
 	// Вызывается во время изменения размера окна Windows
 	virtual void OnResize(); 
 	// Возвращает высоту и ширину экрана(mWindowHeight,mWindowWidth)
 	void UpdateWindowRect();
 	// Отчищает окно Windows и Depth view
-	void ClearScreen(float r, float g, float b, float a, bool depthClear);
+	void ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
 	// Рисует сцену
 	virtual void Draw(); 
 	// Удаляет все устройства для создания базового приложения DX
@@ -124,6 +181,10 @@ public:
 		const FLOAT width, const FLOAT height, const FLOAT maxDepth, const FLOAT minDepth, const SHORT indexOfNewVPort = 0);
 	bool SetViewPort(SHORT indexOfVPort);
 	D3D11_VIEWPORT& GetViewPort(const SHORT indexOfVPort);
+	D3DXMATRIX& GetVPMatrix(const short indexOfVPort);
+	Material* GetVPMaterial(const short indexOfVPort);
+	ID3D11RenderTargetView* GetVPRenderTV(const short indexOfVPort);
+	VPortStruct& GetVPStruct(const short indexOfVPort);
 
 	bool SInit(int bufferCount, int sampleDestCount, bool windowed);
 
@@ -134,8 +195,8 @@ public:
 
 	virtual std::string& GetCatalogName();
 
-	bool SLoadAllTextures();
-	ID3D11ShaderResourceView* GetTextureViewPtr(std::string& textureName);
+	bool SInitMaterials();
+	Material* GetMaterial(std::string& materialName);
 
 	bool GetIsInVPort(XMFLOAT2& pos,const short indexOfVPort);
 
@@ -143,22 +204,30 @@ public:
 
 	ID3D11RasterizerState* GetStandartRastState() { return this->StandartRastState; }
 
-public :
+	D3DAPPTIMER* GetTimer() { return this->Timer; }
 
-	ID3D11ShaderResourceView* CreateSShaderResourceView(ID3D11Texture2D* renderBufferTexture);
-	ID3D11Texture2D* CreateSTexture2D(UINT width, UINT heigth, UINT bindFlags);
+public:
+
+	ID3D11ShaderResourceView* CreateSShaderResourceView(ID3D11Texture2D* renderBufferTexture, DXGI_FORMAT format);
+	ID3D11Texture2D* CreateSTexture2D(UINT width, UINT height, UINT bindFlags, DXGI_FORMAT format);
 	ID3D11Buffer* CreateSVertexBuffer(bool dynamic, UINT size, UINT numOfElements);
 	ID3D11Buffer* CreateSIndexBuffer(std::vector<UINT>& indexBuffer);
 	ID3D11Buffer* CreateSConstantBuffer(UINT size);
 
 private:
 
-	void DeleteAllTextures();
-	bool LoadTexture(std::string& textureName, std::string& path);
+	void DeleteAllMaterials();
+	ID3D11ShaderResourceView* LoadTexture(std::string& textureName, std::string& path);
 
 private:
 
-	std::vector <ID3D11ShaderResourceView*> TextureViews;
+	UINT Numenator;
+	UINT Denomirator;
+
+	INT VCardMem;
+	char VCardDescription[128];
+
+	std::vector <Material*> Materials;
 	std::vector <std::string> TextureNames;
 
 protected:
@@ -190,7 +259,9 @@ protected:
 
 	ID3D11RasterizerState* StandartRastState;
 
-	D3D11_VIEWPORT ViewPorts[8];
+	VPortStruct ViewPorts[8];
+
+	D3DAPPTIMER* Timer;
 
 };
 
@@ -234,12 +305,12 @@ public:
 	FLOAT GetMapMousePosX(XMFLOAT4X4 mProject, XMFLOAT3 cameraPos);
 	FLOAT GetMapMousePosY(XMFLOAT3 cameraPos);
 
-	XMFLOAT3 GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos);
+	XMFLOAT3& GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos);
 
 	FLOAT GetMousePosXCenter(FLOAT shiftByX = 0);
 	FLOAT GetMousePosYCenter(FLOAT shiftByY = 0);
 
-	Vector2d GetMousePosCenterVPort(D3D11_VIEWPORT& viewPort);
+	Vector2d& GetMousePosCenterVPort(VPortStruct& viewPortStruct);
 
 	FLOAT GetMouseScroll();
 

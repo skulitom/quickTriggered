@@ -62,7 +62,7 @@
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;Effects11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
+      <ShaderModel>4.0</ShaderModel>
       <ShaderType>Effect</ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
@@ -104,9 +104,10 @@
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="BasicElement.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
+    <ClInclude Include="TestPipeline.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2d.h" />
   </ItemGroup>
@@ -122,16 +123,20 @@
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="TestPipeline.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="B2DPShader.fx" />
-    <FxCompile Include="B2DVShader.fx" />
+    <FxCompile Include="StandartPShader.fx" />
+    <FxCompile Include="StandartVShader.fx" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSave.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NewShader.ps" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

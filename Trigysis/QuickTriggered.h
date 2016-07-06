@@ -12,6 +12,8 @@
 //#include "Link.h"
 #include "Files.h"
 
+#include "TestPipeline.h"
+
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
 class QTButton : public ButtonInterface
@@ -42,11 +44,15 @@ public:
 	{}
 	void ReleaseDefault() override;
 	bool InitApp();
-	void Update(FLOAT deltaTime, FLOAT totalTime);
+	void Update();
 private:
 	/////////////////////////////
 	//**Functions for buttons
 	/////////////////////////////
+
+	//TestPipeline* TPipeline;
+
+	Figure* Fig1;
 
 private:
 

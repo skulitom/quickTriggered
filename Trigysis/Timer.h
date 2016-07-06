@@ -56,6 +56,9 @@ private:
 	// Время в предыдущей паузе (не в секундах!)
 	__int64 mPrevPauseTime;
 
+	_int64 CountsPerSecond;
+	_int64 CurrTime;
+
 	// количество кадров в секунде
 	int fps;
 	// Коэфициент изменения времени

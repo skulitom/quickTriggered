@@ -85,7 +85,7 @@ namespace FileHelp
 		else
 		{
 
-			std::cout << "Error!" << std::endl;
+			//std::cout << "Error!" << std::endl;
 
 		}
 

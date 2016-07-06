@@ -19,6 +19,8 @@ D3DAPP::D3DAPP(bool Paused, bool Resizing, HWND hWnd)
 
 	this->Catalog = CatalogPath;
 
+	this->Timer = new D3DAPPTIMER(1.f);
+
 }
 
 HWND D3DAPP::CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam),
@@ -80,6 +82,74 @@ WindowSizes& D3DAPP::GetWindowSizes()
 bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleDescCount, const bool isWindowed)
 {
 
+	HRESULT HR = S_OK;
+
+	IDXGIFactory* dxgiFactory = 0;
+	IDXGIAdapter* dxgiAdapter = 0;
+	IDXGIOutput* dxgiOutput = 0;
+
+	DXGI_MODE_DESC* DisplayModeDesc;
+	DXGI_ADAPTER_DESC AdapterDesc;
+
+	UINT NumModes = 0;
+
+	HR = CreateDXGIFactory(__uuidof(IDXGIFactory),
+		(void**)&dxgiFactory);
+	if (FAILED(HR))
+		return false;
+
+	HR = dxgiFactory->EnumAdapters(0, &dxgiAdapter);
+	if (FAILED(HR))
+		return false;
+
+	HR = dxgiAdapter->EnumOutputs(0, &dxgiOutput);
+	if (FAILED(HR))
+		return false;
+
+	HR = dxgiOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_ENUM_MODES_INTERLACED, &NumModes, nullptr);
+	if (FAILED(HR))
+		return false;
+
+	DisplayModeDesc = new DXGI_MODE_DESC[NumModes];
+	if (!DisplayModeDesc)
+		return false;
+
+	HR = dxgiOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_ENUM_MODES_INTERLACED, &NumModes, DisplayModeDesc);
+	if (FAILED(HR))
+		return false;
+
+	for (int i = 0; i < NumModes; i++)
+	{
+
+		if (DisplayModeDesc[i].Width == (UINT)this->ScreenSizes.x)
+			if (DisplayModeDesc[i].Height == (UINT)this->ScreenSizes.y)
+			{
+				this->Numenator = DisplayModeDesc[i].RefreshRate.Numerator;
+				this->Denomirator = DisplayModeDesc[i].RefreshRate.Denominator;
+			}
+
+	}
+
+	HR = dxgiAdapter->GetDesc(&AdapterDesc);
+	if (FAILED(HR))
+		return false;
+
+	this->VCardMem = (int)(AdapterDesc.DedicatedVideoMemory / 1024 / 1024);
+
+	UINT StringL;
+	int Error = wcstombs_s(&StringL, this->VCardDescription, 128, AdapterDesc.Description,
+		128);
+	if (Error != 0)
+		return false;
+
+	delete[] DisplayModeDesc;
+	DisplayModeDesc = 0;
+
+	D3DRelease(dxgiOutput);
+	
+
 	D3D_FEATURE_LEVEL FeatureLevelStruct[] =
 	{
 
@@ -139,7 +209,7 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 	DXGI_SWAP_CHAIN_DESC scd;
 	ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
 	
-	scd.BufferCount = bufferCount;
+	scd.BufferCount = 1;
 	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	scd.Windowed = isWindowed;
 	if (!isWindowed)
@@ -151,7 +221,7 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 	}
 	scd.BufferDesc.Height = this->WinSizes.ClientWHeight;
 	scd.BufferDesc.Width = this->WinSizes.ClientWWidth;
-	scd.BufferDesc.RefreshRate.Numerator = 60;
+	scd.BufferDesc.RefreshRate.Numerator = 0;
 	scd.BufferDesc.RefreshRate.Denominator = 1;
 	scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -167,15 +237,13 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 	scd.SampleDesc.Quality = this->MMsaa - 1;
 	scd.Flags = 0;
 
-
 	IDXGIDevice* dxgiDevice = 0;
 	dxDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 
-	IDXGIAdapter* dxgiAdapter = 0;
 	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 
-	IDXGIFactory* dxgiFactory = 0;
 	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
+
 
 	hr = dxgiFactory->CreateSwapChain(dxDevice, &scd, &dxSwapChain);
 
@@ -305,7 +373,26 @@ bool D3DAPP::DXCreateTargetViewAndDepthView(const int sampleDescCount)
 
 	D3DRelease(TargetBuffer);
 
+	this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, 1.f, 0.f);
+
 	return true;
+
+}
+
+ID3D11RenderTargetView* D3DAPP::CreateRenderTarget(ID3D11Texture2D* textureRenderTo)
+{
+
+	if (!textureRenderTo)
+		return nullptr;
+
+	ID3D11RenderTargetView* NewRTV;
+
+	HRESULT HR = this->dxDevice->CreateRenderTargetView(textureRenderTo, 0, &NewRTV);
+	
+	if (FAILED(HR))
+		return nullptr;
+
+	return NewRTV;
 
 }
 
@@ -323,12 +410,34 @@ UINT D3DAPP::CreateViewPort(const FLOAT topLeftX, const FLOAT topLeftY,
 		
 	indexOfNewVPort = (indexOfNewVPort != 0) ? indexOfNewVPort : this->NumOfVPorts;
 
-	this->ViewPorts[indexOfNewVPort].Height = height;
-	this->ViewPorts[indexOfNewVPort].Width = width;
-	this->ViewPorts[indexOfNewVPort].TopLeftX = topLeftX;
-	this->ViewPorts[indexOfNewVPort].TopLeftY = topLeftY;
-	this->ViewPorts[indexOfNewVPort].MaxDepth = maxDepth;
-	this->ViewPorts[indexOfNewVPort].MinDepth = minDepth;
+	Vector2d Pos;
+	Pos.X = (topLeftX + width * 0.5f);
+	Pos.Y = (topLeftY + height * 0.5f);
+
+	this->ViewPorts[indexOfNewVPort].WinPos = Pos;
+
+	Pos.X = Pos.X - this->WinSizes.ClientWWidth * 0.5f;
+	Pos.Y = -Pos.Y + this->WinSizes.ClientWHeight * 0.5f;
+
+	this->ViewPorts[indexOfNewVPort].WorldPos = Pos;
+
+	this->ViewPorts[indexOfNewVPort].VPort.Height = height;
+	this->ViewPorts[indexOfNewVPort].VPort.Width = width;
+	this->ViewPorts[indexOfNewVPort].VPort.TopLeftX = 0;
+	this->ViewPorts[indexOfNewVPort].VPort.TopLeftY = 0;
+	this->ViewPorts[indexOfNewVPort].VPort.MaxDepth = maxDepth;
+	this->ViewPorts[indexOfNewVPort].VPort.MinDepth = minDepth;
+
+	D3DXMatrixOrthoLH(&this->ViewPorts[indexOfNewVPort].PMatrix, this->ViewPorts[indexOfNewVPort].VPort.Width,
+		this->ViewPorts[indexOfNewVPort].VPort.Height, 0, 1);
+
+	ID3D11Texture2D* Texture = this->CreateSTexture2D(width, height, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, DXGI_FORMAT_R32G32B32A32_FLOAT);
+
+	this->ViewPorts[indexOfNewVPort].MaterialToRender = new Material;
+
+	this->ViewPorts[indexOfNewVPort].MaterialToRender->Texture = this->CreateSShaderResourceView(Texture, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	
+	this->ViewPorts[indexOfNewVPort].RTView = this->CreateRenderTarget(Texture);
 
 	this->NumOfVPorts++;
 
@@ -345,7 +454,7 @@ bool D3DAPP::SetViewPort(const SHORT indexOfVPort)
 	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
 		return false;
 
-	this->dxDeviceCon->RSSetViewports(1, &this->ViewPorts[indexOfVPort]);
+	this->dxDeviceCon->RSSetViewports(1, &this->ViewPorts[indexOfVPort].VPort);
 
 	return true;
 
@@ -355,7 +464,57 @@ D3D11_VIEWPORT& D3DAPP::GetViewPort(const SHORT indexOfVPort)
 {
 
 	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
-		return this->ViewPorts[0];
+		return this->ViewPorts[0].VPort;
+
+	return this->ViewPorts[indexOfVPort].VPort;
+
+}
+
+D3DXMATRIX& D3DAPP::GetVPMatrix(const short indexOfVPort)
+{
+
+	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
+		return *D3DXMatrixIdentity(nullptr);
+
+	return this->ViewPorts[indexOfVPort].PMatrix;
+
+}
+
+Material* D3DAPP::GetVPMaterial(const short indexOfVPort)
+{
+
+	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
+		return nullptr;
+
+	return this->ViewPorts[indexOfVPort].MaterialToRender;
+
+}
+
+ID3D11RenderTargetView* D3DAPP::GetVPRenderTV(const short indexOfVPort)
+{
+
+	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
+		return nullptr;
+
+	return this->ViewPorts[indexOfVPort].RTView;
+
+}
+
+void D3DAPP::SetRenderTarget(ID3D11RenderTargetView* renderTV)
+{
+
+	if (!renderTV)
+		return;
+
+	this->dxDeviceCon->OMSetRenderTargets(1, &renderTV, this->dxDepthView);
+
+}
+
+VPortStruct& D3DAPP::GetVPStruct(const short indexOfVPort)
+{
+
+	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
+		return VPortStruct();
 
 	return this->ViewPorts[indexOfVPort];
 
@@ -409,7 +568,7 @@ bool D3DAPP::SetDepthStencilStateByName(std::string & name)
 
 }
 
-ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT heigth, UINT bindFlags)
+ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT height, UINT bindFlags, DXGI_FORMAT format)
 {
 
 	ID3D11Texture2D* RenderBufferTexture;
@@ -418,8 +577,9 @@ ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT heigth, UINT bindFlag
 	T2DD.ArraySize = 1;
 	T2DD.BindFlags = bindFlags;
 	T2DD.CPUAccessFlags = 0;
-	T2DD.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
-	T2DD.Height = heigth;
+	T2DD.Format = format;
+	//T2DD.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+	T2DD.Height = height;
 	T2DD.Width = width;
 	T2DD.MipLevels = 1;
 	T2DD.MiscFlags = 0;
@@ -470,7 +630,7 @@ ID3D11Buffer* D3DAPP::CreateSVertexBuffer(bool dynamic, UINT size, UINT numOfEle
 
 }
 
-ID3D11ShaderResourceView* D3DAPP::CreateSShaderResourceView(ID3D11Texture2D* renderBufferTexture)
+ID3D11ShaderResourceView* D3DAPP::CreateSShaderResourceView(ID3D11Texture2D* renderBufferTexture, DXGI_FORMAT format)
 {
 
 	if (!renderBufferTexture)
@@ -480,7 +640,7 @@ ID3D11ShaderResourceView* D3DAPP::CreateSShaderResourceView(ID3D11Texture2D* ren
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVD;
 	ZeroMemory(&SRVD, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-	SRVD.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	SRVD.Format = format;
 	SRVD.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	SRVD.Buffer.ElementOffset = 0;
 	SRVD.Buffer.FirstElement = 0;
@@ -640,11 +800,11 @@ XMFLOAT2 & D3DAPP::GetScreenSizes()
 
 }
 
-void D3DAPP::ClearScreen(float r, float g, float b, float a, bool depthClear)
+void D3DAPP::ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
-	dxDeviceCon->ClearRenderTargetView(dxRenderTargetView, D3DXCOLOR(r, g, b, a));
-	if (depthClear)
-		dxDeviceCon->ClearDepthStencilView(dxDepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, NULL);
+	dxDeviceCon->ClearRenderTargetView(rtv, (float*)&color);
+	if (dsv)
+		dxDeviceCon->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, NULL);
 }
 
 void D3DAPP::Draw()
@@ -658,7 +818,15 @@ void D3DAPP::ReleaseDefault()
 	if (this->dxSwapChain)
 	this->dxSwapChain->SetFullscreenState(false, NULL);
 	
-	this->DeleteAllTextures();
+	this->DeleteAllMaterials();
+
+	for (int i = 0; i < this->NumOfVPorts; i++)
+	{
+
+		D3DRelease(this->ViewPorts[i].RTView);
+		D3DDelete(this->ViewPorts[i].MaterialToRender);
+
+	}
 
 	D3DRelease(this->dxDepthView);
 	D3DRelease(this->dxDevice);
@@ -668,6 +836,8 @@ void D3DAPP::ReleaseDefault()
 	D3DRelease(this->dxDepthView);
 	D3DRelease(this->DepthBuffer);
 	D3DRelease(this->StandartRastState);
+
+	D3DDelete(this->Timer);
 
 }
 
@@ -737,35 +907,167 @@ bool D3DAPP::SInit(int bufferCount, int sampleDestCount, bool windowed)
 
 }
 
-bool D3DAPP::SLoadAllTextures()
+bool D3DAPP::SInitMaterials()
 {
 
-	std::vector<std::string> FileList;
+	FileManager* FManager = new FileManager();
+	std::vector<std::string> TextureFileList;
+	std::vector<std::string> MaterialFileList;
+
+	///////////////////////////////////////////////
+	//**Load Textures
+	///////////////////////////////////////////////
+
+	std::vector<TextureStruct*> Textures;
+
+	TextureFileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.dds");
+
+	//for (int i = 0; i < TextureFileList.size(); i++)
+	//{
+
+		//Textures.push_back(this->LoadTexture(TextureFileList.at(i), this->GetCatalogName() + "\\Textures\\"));
+
+	//}
 
 
-	FileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.dds");
+	//for (int i = 0; i < FileList.size(); i++)
+	//{
+	//
+	//	Textures.push_back(this->LoadTexture(FileList.at(i), this->GetCatalogName() + "\\Textures\\"));
+	//
+	//}
+	//
+	//FileList.clear();
+	//FileList.shrink_to_fit();
 
-	for (size_t i = 0; i < FileList.size(); i++)
+	////////////////////////////////////////////////
+	//**Init Materials
+	////////////////////////////////////////////////
+
+	MaterialFileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.txt");
+
+	for (size_t i = 0; i < MaterialFileList.size(); i++)
 	{
 
-		this->LoadTexture(FileList.at(i), this->GetCatalogName() + "\\Textures\\");
+		FManager->Open(this->GetCatalogName() + "\\Textures\\" + MaterialFileList.at(i));
+
+		Material* NewMaterial = new Material();
+
+		std::string Line;
+
+		while (!FManager->GetFILE().eof())
+		{
+
+			Line = FManager->GetStringFromFile();
+
+			if (!Line.compare("$Name:"))
+			{
+
+				NewMaterial->Name = FManager->GetStringFromFile();
+
+			}
+			else if (!Line.compare("$Texture:"))
+			{
+
+				Line = FManager->GetStringFromFile();
+
+				NewMaterial->Texture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
+
+				//for (int j = 0; j < TextureFileList.size(); j++)
+				//{
+				//	if (Textures.at(j)->TextureName == Line) // <-
+				//	{
+				//		NewMaterial.Texture = Textures.at(j)->Texture;
+				//		if (NewMaterial.Name == "")
+				//			NewMaterial.Name = Textures.at(j)->TextureName;
+				//		break;
+				//	}
+				//}
+
+			}
+			else if (!Line.compare("$ATexture:"))
+			{
+
+				Line = FManager->GetStringFromFile();
+
+				NewMaterial->AdditionalTexture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
+
+				//for (int j = 0; j < Textures.size(); j++)
+				//{
+				//	if (this->TextureNames.at(i) == Line)
+				//	{
+				//		NewMaterial.AdditionalTexture = Textures.at(i)->Texture;
+				//		break;
+				//	}
+				//}
+
+			}
+			else if (!Line.compare("$Alpha"))
+			{
+				NewMaterial->UseAlpha = true;
+			}
+			else if (!Line.compare("$Shader:"))
+			{
+				NewMaterial->ShaderName = FManager->GetStringFromFile();
+			}
+			else if (!Line.compare("$GlobalTexCoords"))
+			{
+				NewMaterial->UseGlobalCoords = true;
+			}
+			else if (!Line.compare("$TextureMoveUp:"))
+			{
+				NewMaterial->TextureMove.y = FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$TextureMoveRight:"))
+			{
+				NewMaterial->TextureMove.x = -FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$ATextureMoveUp:"))
+			{
+				NewMaterial->TextureMove.w = FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$ATextureMoveRight:"))
+			{
+				NewMaterial->TextureMove.z = -FManager->GetINTFromFile() / 100.f;
+			}
+		}
+
+		this->Materials.push_back(NewMaterial);
+		FManager->Close();
 
 	}
+
+	//Textures.clear();
+
+	//MateFileList.clear();
+
+	FManager->Close();
+	D3DDelete(FManager);
 
 	return true;
 
 }
 
-ID3D11ShaderResourceView* D3DAPP::GetTextureViewPtr(std::string& textureName)
+void D3DAPP::DeleteAllMaterials()
 {
 
-	for (size_t i = 0; i < this->TextureNames.size(); i++)
+	for (int i = 0; i < this->Materials.size(); i++)
+	{
+		D3DDelete(this->Materials.at(i));
+	}
+
+}
+
+Material* D3DAPP::GetMaterial(std::string& materialName)
+{
+
+	for (size_t i = 0; i < this->Materials.size(); i++)
 	{
 
-		if (this->TextureNames.at(i) == textureName)
+		if (this->Materials.at(i)->Name == materialName)
 		{
 
-			return this->TextureViews.at(i);
+			return this->Materials.at(i);
 
 		}
 
@@ -775,8 +1077,10 @@ ID3D11ShaderResourceView* D3DAPP::GetTextureViewPtr(std::string& textureName)
 
 }
 
-bool D3DAPP::LoadTexture(std::string& textureName, std::string& path)
+ID3D11ShaderResourceView* D3DAPP::LoadTexture(std::string& textureName, std::string& path)
 {
+
+	//TextureStruct* TStruct = new TextureStruct;
 
 	ID3D11ShaderResourceView* SRV;
 
@@ -788,26 +1092,15 @@ bool D3DAPP::LoadTexture(std::string& textureName, std::string& path)
 	if (FAILED(hr))
 	{
 
-		return false;
+		return nullptr;
 
 	}
+	//TStruct->Texture = SRV;
+	//TStruct->TextureName = textureName;
+	//this->TextureViews.push_back(SRV);
+	//this->TextureNames.push_back(textureName);
 
-	this->TextureViews.push_back(SRV);
-	this->TextureNames.push_back(textureName);
-
-	return true;
-
-}
-
-void D3DAPP::DeleteAllTextures()
-{
-
-	for (size_t i = 0; i < this->TextureViews.size(); i++)
-	{
-
-		D3DRelease(this->TextureViews.at(i));
-
-	}
+	return SRV;
 
 }
 
@@ -817,10 +1110,10 @@ bool D3DAPP::GetIsInVPort(XMFLOAT2& pos, const short indexOfVPort)
 	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
 		return false;
 
-	if (pos.x < this->ViewPorts[indexOfVPort].TopLeftX || pos.y < this->ViewPorts[indexOfVPort].TopLeftY)
+	if (pos.x < this->ViewPorts[indexOfVPort].VPort.TopLeftX || pos.y < this->ViewPorts[indexOfVPort].VPort.TopLeftY)
 		return false;
-	if (pos.x > this->ViewPorts[indexOfVPort].Width + this->ViewPorts[indexOfVPort].TopLeftX
-		|| pos.y > this->ViewPorts[indexOfVPort].TopLeftY + this->ViewPorts[indexOfVPort].Height)
+	if (pos.x > this->ViewPorts[indexOfVPort].VPort.Width + this->ViewPorts[indexOfVPort].VPort.TopLeftX
+		|| pos.y > this->ViewPorts[indexOfVPort].VPort.TopLeftY + this->ViewPorts[indexOfVPort].VPort.Height)
 		return false;
 
 	return true;
@@ -907,7 +1200,7 @@ FLOAT D3DAPPINPUT::GetMapMousePosY(XMFLOAT3 cameraPos)
 
 }
 
-XMFLOAT3 D3DAPPINPUT::GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos)
+XMFLOAT3& D3DAPPINPUT::GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos)
 {
 
 	XMFLOAT3 Start = { cameraPos.x, cameraPos.y, cameraPos.z };
@@ -947,11 +1240,10 @@ FLOAT D3DAPPINPUT::GetMouseScroll()
 
 }
 
-Vector2d D3DAPPINPUT::GetMousePosCenterVPort(D3D11_VIEWPORT& viewPort)
+Vector2d& D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct)
 {
 
-	return Vector2d(this->mMouseX - viewPort.TopLeftX - ((int)viewPort.Width >> 1), 
-		((int)viewPort.Height >> 1) - (this->mMouseY - viewPort.TopLeftY));
+	return Vector2d(this->mMouseX - viewPortStruct.WinPos.X, this->mMouseY - viewPortStruct.WinPos.Y);
 
 }
 

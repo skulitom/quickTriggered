@@ -72,7 +72,10 @@
     <ClInclude Include="GUIFigures.h">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="TestPipeline.h">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,19 +119,27 @@
     <ClCompile Include="GUIFigure.cpp">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="TestPipeline.cpp">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="B2DPShader.fx">
+    <FxCompile Include="StandartVShader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="B2DVShader.fx">
+    <FxCompile Include="StandartPShader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSave.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NewShader.ps">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

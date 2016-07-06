@@ -17,8 +17,8 @@ void ButtonInterface::SetSettings(ButtonSettings& bSettings)
 {
 	this->Settings = bSettings;
 	this->SetStatus(DX_BUTTON_STATUS_IS_ACTIVE, bSettings.IsActive);
-	if (this->Settings.TextureName != "")
-		this->SetTexture(this->Settings.TextureName);
+	if (this->Settings.MaterialName != "")
+		this->SetMaterial(this->Settings.MaterialName);
 	this->SetIsNeedRender(this->Settings.IsVisible);
 }
 
@@ -26,11 +26,22 @@ bool ButtonInterface::CheckIsSelected()
 {
 	if (this->Settings.IsActive)
 	{
+
 		Vector2d HalfSizes = this->GetSizes() * 0.5f;
-		Vector2d MousePos = this->Input->GetMousePosCenterVPort(this->D3dApp->GetViewPort(this->GetIndexOfViewPort()));
-		FLOAT BRadius = HalfSizes.GetLength();
+		Vector2d MousePos = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->GetIndexOfViewPort()));
+		FLOAT BRadius = HalfSizes.GetLength() * 0.707f;
 		HalfSizes = this->GetPosition() - MousePos;
 		FLOAT Radius = HalfSizes.GetLength();
+
+		if (this->IsCircle)
+		{
+
+			BRadius = BRadius * 0.866f;
+			if (Radius - BRadius <= 0)
+				return true;
+			return false;
+		}
+
 		if (Radius - BRadius <= 0)
 		{
 			if (MousePos.X < this->GetPosition().X - this->GetSizes().X * 0.5f || MousePos.X > this->GetPosition().X + this->GetSizes().X * 0.5f)

@@ -1,0 +1,6 @@
+$Name:
+Icon
+$Texture:
+Icon.dds
+$Shader:
+NewShader

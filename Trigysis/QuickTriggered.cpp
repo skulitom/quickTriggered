@@ -50,7 +50,7 @@ bool QuickTriggered::InitApp()
 	{
 
 		QuickTriggered::Init();
-
+		
 		/////////////////////////////////////
 		//**Create Views
 		/////////////////////////////////////
@@ -62,35 +62,82 @@ bool QuickTriggered::InitApp()
 		/////////////////////////////////////
 		//**Load Textures
 		/////////////////////////////////////
-		this->SLoadAllTextures();
+		this->SInitMaterials();
+		//this->TPipeline = new TestPipeline(this, SHADER_MODEL_4_0);
 		/////////////////////////////////////
 		//**Create BackGrounds
 		/////////////////////////////////////
 
-		this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, 0, 0);
+		this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth,
+			this->WinSizes.ClientWHeight, 0, 0);
+		//this->CreateViewPort(this->WinSizes.ClientWWidth*0.5f, 0, this->WinSizes.ClientWWidth * 0.5f,
+		//	this->WinSizes.ClientWHeight*0.5f, 0, 0);
+		//this->CreateViewPort(0, this->WinSizes.ClientWHeight*0.5f, this->WinSizes.ClientWWidth * 0.5f,
+		//	this->WinSizes.ClientWHeight*0.5f, 0, 0);
 
-		for (int i = 0; i < 6; i++)
-		{
-			for (int j = 0; j < 6; j++)
-			{
+		
+		Element* NE = new Element(this);
+		NE->SetSizesRelative(Vector2d(512, 512));
+		NE->SetMaterial(std::string("Icon"));
+		NE->Spawn(Vector2d(0, 0), 1);
 
-				Figure* F = new Figure(this);
-				F->SetFigureSuperType(0);
-				F->SetFigureType(0);
-				F->Spawn(Vector2d((i - 3) * 64, (j - 3)*64), 0);
+		NE = new Element(this);
+		NE->SetSizes(Vector2d(80, 80));
+		NE->SetMaterial(std::string("DonaldLow"));
+		NE->Spawn(Vector2d(60, -60), 1);
 
-			}
-		}
+		//NE = new Element(this);
+		//NE->SetSizes(Vector2d(256, 256));
+		//NE->SetMaterial(std::string("DonaldHD"));
+		//NE->Spawn(Vector2d(0, 0), 2);
+
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	for (int j = 0; j < 4; j++)
+		//	{
+
+		//		Figure* F = new Figure(this);
+		//		F->SetFigureSuperType(0);
+		//		F->SetFigureType(0);
+		//		F->Spawn(Vector2d((i - 3) * 64, (j - 3)*64), 1);
+
+		//	}
+		//}
+
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	for (int j = 0; j < 4; j++)
+		//	{
+
+		//		Figure* F = new Figure(this);
+		//		F->SetFigureSuperType(0);
+		//		F->SetFigureType(0);
+		//		F->Spawn(Vector2d((i - 3) * 64, (j - 3) * 64), 2);
+
+		//	}
+		//}
+
+		this->Fig1 = new Figure(this);
+		this->Fig1->SetFigureSuperType(0);
+		this->Fig1->SetFigureType(0);
+		this->Fig1->Spawn(Vector2d(0, 0), 1);
+
+		this->Fig1 = new Figure(this);
+		this->Fig1->SetFigureSuperType(0);
+		this->Fig1->SetFigureType(0);
+		this->Fig1->Spawn(Vector2d(20, 0), 1);
+
+		//this->Fig1 = new Figure(this);
+		//this->Fig1->SetFigureSuperType(0);
+		//this->Fig1->SetFigureType(0);
+		//this->Fig1->Spawn(Vector2d(0, 0), 2);
+
+		//F->MoveDirect(Vector2d(-100, -100), 100);
 
 		//Figure* F = new Figure(this);
-		//F->SetFigureSuperType(0);
-		//F->SetFigureType(0);
-		//F->Spawn(Vector2d(-32, 0), 0);
-
-		//F = new Figure(this);
 		//F->SetFigureSuperType(1);
 		//F->SetFigureType(0);
-		//F->Spawn(Vector2d(32, 0), 0);
+		//F->Spawn(Vector2d(1, 0), 2);
 
 		return true;
 
@@ -99,17 +146,53 @@ bool QuickTriggered::InitApp()
 	return false;
 }
 
-void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
+void QuickTriggered::Update()
 {
 	
-
 	////////////////////////////////////////////////
 	//**Render Update
 	////////////////////////////////////////////////
 
-	this->ClearScreen(0, 0, 1, 1, true);
+	
+	//Figure* FigureToWork = nullptr;
+	//for (int i = 0; i < this->ElementBase->GetElements().size(); i++)
+	//{
+		
+		//if (this->ElementBase->GetElements().at(i)->GetEName() == "Figure")
+		//{
 
-	this->ElementBase->UpdateAndDraw(deltaTime);
+			//FigureToWork = dynamic_cast<Figure*>(this->ElementBase->GetElements().at(i));
+			//if (this->Input->GetStatus() == DX_MOUSE_DOWN_LEFT)
+				//FigureToWork->MoveDirect(this->Input->GetMousePosCenterVPort(this->GetViewPort(0)), 100);
+
+		//}
+
+	//}
+
+	//if (this->Input->GetStatus() == DX_MOUSE_DOWN_LEFT)
+	//	this->Fig1->MoveDirect(this->Input->GetMousePosCenterVPort(this->GetViewPort(0)),100);
+
+	//this->Draw2D->DrawRectangle(Vector2d(0, 0), Vector2d(64, 64), 0, XMFLOAT4(0, 0, 0, 0), NULL, std::string("DTBF.dds"));
+
+	//this->Draw2D->DrawHexagon(this->Input->GetMousePosCenterVPort(this->ViewPorts[0].VPort), Vector2d(10, 10), 0, XMFLOAT4(1, 0, 0, 1));
+	//this->Draw2D->DrawHexagon(Vector2d(0, 0), Vector2d(50, 50), 0, XMFLOAT4(1, 0, 0, 1));
+
+	if (GetAsyncKeyState(VK_SPACE))
+	{
+
+		this->Fig1 = new Figure(this);
+		this->Fig1->SetFigureSuperType(0);
+		this->Fig1->SetFigureType(0);
+		this->Fig1->Spawn(this->Input->GetMousePosCenterVPort(this->GetVPStruct(1)), 1);
+
+	}
+
+	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
+
+	//this->SetRenderTarget(this->ViewPorts[1].RTView);
+	//this->TPipeline->Apply(this->ViewPorts[1].TextureToRender, 1, XMFLOAT4(0,0,0,1),this->ViewPorts[1].WorldPos, 
+	//	Vector2d(this->ViewPorts[1].VPort.Width, this->ViewPorts[1].VPort.Height));
+	//this->dxDeviceCon->
 
 	QuickTriggered::Draw();
 
@@ -118,5 +201,6 @@ void QuickTriggered::Update(FLOAT deltaTime, FLOAT totalTime)
 void QuickTriggered::ReleaseDefault()
 {
 	//D3DDelete(this->ElementsBase);
+	//D3DDelete(this->TPipeline);
 	D3DAPP::ReleaseDefault();
 }

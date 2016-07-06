@@ -25,9 +25,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, 
 	QuickTriggered* TAApp = nullptr;
 	if (!Init(&TAApp, hInstance, cmd))
 		return msg.wParam;
-	D3DAPPTIMER* Timer = new D3DAPPTIMER(1.f);
-	Timer->Reset();
+	TAApp->GetTimer()->Reset();
 	TAApp->InitApp();
+	
 	while (TRUE)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -39,15 +39,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, 
 		}
 		else
 		{
-			Timer->Tick();
-			if (!Timer->GetIsStoped())
-				TAApp->Update(Timer->GetDeltaTime(), Timer->GetTotalTime());
+			TAApp->GetTimer()->Tick();
+			std::stringstream Str;
+			Str << TAApp->GetTimer()->GetFPS();
+			SetWindowText(HWnd, Str.str().c_str());
+			if (!TAApp->GetTimer()->GetIsStoped())
+				TAApp->Update();
 		}
 	}
 	TAApp->CloseD3DWindow();
 	TAApp->ReleaseDefault();
 	D3DDelete(TAApp);
-	D3DDelete(Timer);
 	D3DDelete(Input);
 	_CrtDumpMemoryLeaks();
 	return msg.wParam;

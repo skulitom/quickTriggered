@@ -8,14 +8,16 @@ ElementsMLand::ElementsMLand(D3DAPP* d3dApp, D3DAPPINPUT* input, Basic2DDraw* dr
 	this->Input = input;
 	this->Draw2D = draw2D;
 	this->FManager = new FileManager(saveBufferName);
+	this->Elements.resize(8);
 }
 
 ElementsMLand::~ElementsMLand()
 {
-	for (size_t i = 0; i < this->Elements.size(); i++)
-	{
-		D3DDelete(this->Elements.at(i));
-	}
+	for (int i = 0; i < this->Elements.size(); i++)
+		for (size_t j = 0; j < this->Elements.at(i).size(); j++)
+		{
+			D3DDelete(this->Elements.at(i).at(j));
+		}
 	D3DDelete(this->FManager);
 	D3DRelease(this->VertexBuffer);
 	D3DRelease(this->IndexBuffer);
@@ -24,50 +26,66 @@ ElementsMLand::~ElementsMLand()
 
 void ElementsMLand::AddNewElement(ElementInterface* pNewElement)
 {
+
 	if (pNewElement)
 	{
+
 		pNewElement->SetInput(this->Input);
-		this->Elements.push_back(pNewElement);
+		this->Elements.at(pNewElement->GetIndexOfViewPort()).push_back(pNewElement);
+		
 	}
+
 }
-void ElementsMLand::DeleteElement(ElementInterface* pElementToDelete)
+void ElementsMLand::DeleteElement(const UINT indexOfVP, const UINT indexOfElement)
 {
-	if (!pElementToDelete)
+
+	if (indexOfVP > this->D3dApp->GetNumOfVPorts() || indexOfVP < 0)
 		return;
-	for (size_t i = 0; i < this->Elements.size(); i++)
-	{
-		if (this->Elements.at(i) == pElementToDelete)
-		{
-			D3DDelete(this->Elements.at(i));
-			this->Elements.erase(this->Elements.begin() + i);
-			return;
-		}
-	}
+
+	D3DDelete(this->Elements.at(indexOfVP).at(indexOfElement));
+	this->Elements.at(indexOfVP).erase(this->Elements.at(indexOfVP).begin() + indexOfElement);
+
 }
 
 void ElementsMLand::UpdateAndDraw(FLOAT deltaTime)
 {
-	int Index = 0;
-	while (Index < this->Elements.size())
+	int Index;
+	for (int i = 0; i < this->Elements.size(); i++)
 	{
-		if ((!this->Elements.at(Index)->GetIsFired()))
+
+		this->D3dApp->SetRenderTarget(this->D3dApp->GetVPRenderTV(i));
+		Index = 0;
+		//this->D3dApp->ClearScreen(XMFLOAT4(0, 1, 0, 1), this->D3dApp->GetVPRenderTV(i), this->D3dApp->dxDepthView);
+		while (Index < this->Elements.at(i).size())
 		{
-			if (this->Elements.at(Index)->GetIsSpawned())
+			if ((!this->Elements.at(i).at(Index)->GetIsFired()))
 			{
-				if (!this->IsLoadMode)
-					this->Elements.at(Index)->Update(deltaTime);
-				if (this->Elements.at(Index)->GetIsNeedRender())
+				if (this->Elements.at(i).at(Index)->GetIsSpawned())
 				{
-					this->Draw2D->DrawRectangle(this->Elements.at(Index)->GetPosition(), this->Elements.at(Index)->GetSizes(),
-						this->Elements.at(Index)->GetIndexOfViewPort(),
-						this->Elements.at(Index)->GetColors(), this->Elements.at(Index)->GetTextureViewPtr());
+					if (!this->IsLoadMode)
+						this->Elements.at(i).at(Index)->Update(deltaTime);
+					if (this->Elements.at(i).at(Index)->GetIsNeedRender())
+					{
+						if (this->Elements.at(i).at(Index)->GetShapeType() == EL_SHAPE_TYPE_RECTANGLE)
+							this->Draw2D->DrawRectangle(this->Elements.at(i).at(Index)->GetPosition(), 
+							this->Elements.at(i).at(Index)->GetSizes(), this->Elements.at(i).at(Index)->GetIndexOfViewPort(),
+							this->Elements.at(i).at(Index)->GetCustomVars(),
+							this->Elements.at(i).at(Index)->GetColors(), this->Elements.at(i).at(Index)->GetMaterial());
+						else if (this->Elements.at(i).at(Index)->GetShapeType() == EL_SHAPE_TYPE_HEXAGON)
+							this->Draw2D->DrawHexagon(this->Elements.at(i).at(Index)->GetPosition(),
+							this->Elements.at(i).at(Index)->GetSizes(), this->Elements.at(i).at(Index)->GetIndexOfViewPort(),
+							this->Elements.at(i).at(Index)->GetCustomVars(),
+							this->Elements.at(i).at(Index)->GetColors(), this->Elements.at(i).at(Index)->GetMaterial());
+					}
 				}
+				Index++;
 			}
-			Index++;
+			else
+				this->DeleteElement(i, Index);
 		}
-		else
-			this->DeleteElement(this->Elements.at(Index));
+
 	}
+
 }
 
 void ElementsMLand::SetIsLoadMode(bool isLoadMode)
@@ -106,6 +124,20 @@ void ElementsMLand::LoadElements()
 
 }
 
+void ElementsMLand::LoadShaders()
+{
+
+	std::vector<std::string> Files = FileHelp::FindFiles(std::string("*.fx"));
+
+	for (size_t i = 0; i < Files.size(); i++)
+	{
+
+		//if ()
+
+	}
+
+}
+
 ///////////////////////////////////////////////////
 //**ElementInterface
 ///////////////////////////////////////////////////
@@ -113,6 +145,8 @@ ElementInterface::ElementInterface(ElementsMLand* ptrToMotherLand)
 {
 
 	this->IsNeedRender = 1;
+
+	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
 
 	if (ptrToMotherLand->GetIsLoadMode() && ptrToMotherLand->GetFManager()->GetCString() != "ELCMP")
 	{
@@ -174,10 +208,31 @@ ElementInterface::ElementInterface(D3DAPP* d3dApp, Vector2d& position, Vector2d&
 	this->Color = XMFLOAT4(0, 0, 0, 0);
 }
 
-bool ElementInterface::SetTexture(std::string& textureName)
+bool ElementInterface::SetMaterial(std::string& materialName)
 {
-	this->TextureView = this->D3dApp->GetTextureViewPtr(textureName);
-	return 1;
+	this->MaterialPtr = this->D3dApp->GetMaterial(materialName);
+	if (this->MaterialPtr)
+	{
+		PrepareShader(this->MaterialPtr, this->PMLand->GetDraw2D()->GetShaderManager());
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ElementInterface::SetMaterial(Material* pMaterial)
+{
+
+	if (pMaterial)
+	{
+
+		this->MaterialPtr = pMaterial;
+		return true;
+
+	}
+
+	return false;
+
 }
 
 //////////////////////////////////////////////////////////////////////

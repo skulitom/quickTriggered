@@ -8,5 +8,12 @@ Element::Element(BasicInterface* super)
 {
 	DeclareElementName(Element, this->EName);
 	this->Super = super;
+}
+
+void Element::Spawn(Vector2d& position, short indexOfVPort)
+{
+
+	ElementInterface::Spawn(position, indexOfVPort);
 	this->PMLand->AddNewElement(this);
+
 }

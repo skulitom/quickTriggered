@@ -1,0 +1,5 @@
+$Name:
+DonaldHD
+$Texture:
+DTHD.dds
+$Alpha

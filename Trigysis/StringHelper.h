@@ -1,15 +1,15 @@
 #ifndef STRINGHELPER_H
 #define STRINGHELPER_H
 
-#include "D3DAPP.h"
+#include <stdlib.h>
 
 namespace StringHelp
 {
 
-	static INT ASCIIToINT(std::string& str)
+	static int ASCIIToINT(std::string& str)
 	{
 
-		INT Number = 0;
+		int Number = 0;
 		short sign = 1;
 
 		for (int i = 0; i < str.size(); i++)

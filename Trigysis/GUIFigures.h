@@ -16,7 +16,7 @@ class FButton : public ButtonInterface
 
 public:
 
-	FButton(BasicInterface* super);
+	FButton(BasicInterface* super, Figure* pFigureClass);
 	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc tf);
 
 private:
@@ -60,7 +60,9 @@ public:
 
 	bool Update(float deltaTime) override;
 
-	void MoveDirect(Vector2d& dest);
+	void MoveDirect(Vector2d& dest, float moveSpeed);
+
+	void DeleteMeBFunc();
 
 private:
 
@@ -71,12 +73,14 @@ private:
 
 	bool IsMoving;
 	
-public:
+private:
 
-	void Move(int dPosX, int dPosY, float deltaTime);
+	void Move(Vector2d& dest, float deltaTime);
 
 protected:
 
+	float MoveSpeed;
+	Vector2d DestPos;
 	Vector2d InCellPos;
 
 };
