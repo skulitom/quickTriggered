@@ -78,6 +78,18 @@
     <ClInclude Include="ShaderManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="FigureDrop.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="FigurePos.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgress.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Progress.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -125,6 +137,15 @@
     <ClCompile Include="ShaderManager.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="FigureDrop.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="FigurePos.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgress.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="StandartVShader.fx">
@@ -138,7 +159,7 @@
     <Text Include="TestSave.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NewShader.ps">
+    <None Include="NewPS.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

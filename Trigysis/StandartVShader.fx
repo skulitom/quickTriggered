@@ -15,7 +15,7 @@ struct VSOut
    
 };
 
-cbuffer LowFUpdate : register (b0)
+cbuffer CPPOut : register (b0)
 {
 
 	matrix ViewMatrix;
@@ -24,6 +24,7 @@ cbuffer LowFUpdate : register (b0)
     float4 TextureOffset;
     float4 Color;
     float4 AColor;
+    float2 Scale;
     uint UseGlobalCoords;
     float3 Pad;
 
@@ -48,6 +49,9 @@ VSOut VSMain(VSInput input)
         VOut.TexCoord = VOut.PosH.xy + TextureOffset.xy;
         VOut.ATexCoord = VOut.PosH.xy + TextureOffset.zw;
     }
+
+    VOut.TexCoord = VOut.TexCoord / float2(Scale.x, Scale.x);
+    VOut.ATexCoord = VOut.ATexCoord / float2(Scale.y, Scale.y);
 
 	return VOut;
 }

@@ -32,6 +32,7 @@ void FileManager::Open(char FM_FILE_READ_OR_WRITE)
 {
 
 	FileManager::Open(this->FileName, FM_FILE_READ_OR_WRITE);
+	// TODO exception when no FileName
 	
 }
 
@@ -42,12 +43,64 @@ void FileManager::Close()
 
 }
 
+void FileManager::writeToFileAt(int num, int loc){
+	this->FILE.seekg(loc);
+	writeToFile(num);
+	this->FILE.seekg(0);
+}
+
+void FileManager::writeToFileAt(std::string& name, int loc){
+	this->FILE.seekg(loc);
+	writeToFile(name);
+	this->FILE.seekg(0);
+
+}
+
+
 std::string& FileManager::GetStringFromFile()
 {
 
 	std::getline(this->FILE, this->CString);
 	return this->CString;
 
+}
+
+int FileManager::FindString(std::string findName){
+	this->FILE.seekg(0);
+	int lineNumber = 0;
+	
+	while (!this->FILE.eof()){
+		std::getline(this->FILE, this->CString);
+		if (this->CString==findName){
+			break;
+		}
+		lineNumber++;
+	}
+	if (this->CString != findName){
+		lineNumber = -1;
+	}
+	this->FILE.seekg(0);
+	return lineNumber;
+
+}
+
+int FileManager::getIntFromLine(int lineNum){
+	this->FILE.seekg(lineNum);
+	int num = GetINTFromFile();
+	this->FILE.seekg(0);
+	return num;
+}
+
+int FileManager::getLineQuo(){
+	this->FILE.seekg(0);
+	int lineNumber = 0;
+
+	while (!this->FILE.eof()){
+		std::getline(this->FILE, this->CString);
+		lineNumber++;
+	}
+	this->FILE.seekg(0);
+	return lineNumber;
 }
 
 bool FileManager::GetBoolFromString()
@@ -62,7 +115,7 @@ bool FileManager::GetBoolFromString()
 
 }
 
-INT FileManager::GetINTFromFile()
+int FileManager::GetINTFromFile()
 {
 
 	FileManager::GetStringFromFile();

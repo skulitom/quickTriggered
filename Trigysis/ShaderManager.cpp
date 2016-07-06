@@ -278,7 +278,7 @@ void ShaderManager::InitAllShaders()
 
 	FileManager* FManager;
 
-	std::vector<std::string> Files = FileHelp::FindFiles(std::string(this->D3dApp->GetCatalogName() + "\\*.ps"));
+	std::vector<std::string> Files = FileHelp::FindFiles(std::string(this->D3dApp->GetCatalogName() + "\\*PS.fx"));
 
 	for (int i = 0; i < Files.size(); i++)
 	{
@@ -355,6 +355,7 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vect
 	this->VSInput.AColor = aColor;
 	this->VSInput.UseGlobalCoords = (UINT)pMaterial->UseGlobalCoords;
 	this->VSInput.TextureOffset = pMaterial->TextureOffset;
+	this->VSInput.Scale = pMaterial->Scale;
 
 	this->SetVShader(nullptr);
 	this->D3dApp->dxDeviceCon->UpdateSubresource(this->CBVSInput, 0, 0, &this->VSInput, 0, 0);

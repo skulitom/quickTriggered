@@ -81,10 +81,10 @@ bool QuickTriggered::InitApp()
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 
-		NE = new Element(this);
-		NE->SetSizes(Vector2d(80, 80));
-		NE->SetMaterial(std::string("DonaldLow"));
-		NE->Spawn(Vector2d(60, -60), 1);
+		//NE = new Element(this);
+		//NE->SetSizes(Vector2d(80, 80));
+		//NE->SetMaterial(std::string("DonaldLow"));
+		//NE->Spawn(Vector2d(60, -60), 1);
 
 		//NE = new Element(this);
 		//NE->SetSizes(Vector2d(256, 256));
@@ -120,12 +120,22 @@ bool QuickTriggered::InitApp()
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
 		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(0, 0), 1);
+		this->Fig1->Spawn(Vector2d(-100, -100), 1);
 
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
 		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(20, 0), 1);
+		this->Fig1->Spawn(Vector2d(100, -100), 1);
+
+		this->Fig1 = new Figure(this);
+		this->Fig1->SetFigureSuperType(0);
+		this->Fig1->SetFigureType(0);
+		this->Fig1->Spawn(Vector2d(100, 100), 1);
+
+		this->Fig1 = new Figure(this);
+		this->Fig1->SetFigureSuperType(0);
+		this->Fig1->SetFigureType(0);
+		this->Fig1->Spawn(Vector2d(-100, 100), 1);
 
 		//this->Fig1 = new Figure(this);
 		//this->Fig1->SetFigureSuperType(0);
@@ -177,13 +187,15 @@ void QuickTriggered::Update()
 	//this->Draw2D->DrawHexagon(this->Input->GetMousePosCenterVPort(this->ViewPorts[0].VPort), Vector2d(10, 10), 0, XMFLOAT4(1, 0, 0, 1));
 	//this->Draw2D->DrawHexagon(Vector2d(0, 0), Vector2d(50, 50), 0, XMFLOAT4(1, 0, 0, 1));
 
+	Vector2d Pos;
 	if (GetAsyncKeyState(VK_SPACE))
 	{
 
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
 		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(this->Input->GetMousePosCenterVPort(this->GetVPStruct(1)), 1);
+		Vector2d Pos = this->Input->GetMousePosCenterVPort(this->GetVPStruct(1));
+		this->Fig1->Spawn(Pos, 1);
 
 	}
 

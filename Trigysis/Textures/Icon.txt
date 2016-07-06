@@ -1,6 +1,12 @@
 $Name:
 Icon
 $Texture:
-Icon.dds
-$Shader:
-NewShader
+IRTONEFPS.dds
+$ATexture:
+Fog.dds
+$ATextureMoveUp:
+2
+$TextureScale:
+50
+$TextureMoveRight:
+10

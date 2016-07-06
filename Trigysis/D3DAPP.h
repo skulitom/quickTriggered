@@ -45,6 +45,7 @@ struct Material
 		EffectShader = nullptr; 
 		TextureMove = XMFLOAT4(0, 0, 0, 0);
 		TextureOffset = XMFLOAT4(0, 0, 0, 0);
+		Scale = XMFLOAT2(1,1);
 		UseGlobalCoords = false;
 		UseAlpha = false;
 	}
@@ -63,6 +64,7 @@ struct Material
 	XMFLOAT4 TextureOffset;
 	std::string ShaderName;
 	std::string Name;
+	XMFLOAT2 Scale;
 	bool UseGlobalCoords;
 	bool UseAlpha;
 

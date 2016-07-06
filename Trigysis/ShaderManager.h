@@ -42,8 +42,9 @@ struct CBSVSInput
 	XMFLOAT4 TextureOffset;
 	XMFLOAT4 Color;
 	XMFLOAT4 AColor;
+	XMFLOAT2 Scale;
 	unsigned int UseGlobalCoords;
-	XMFLOAT3 Pad;
+	unsigned int Pad;
 };
 
 struct Shader

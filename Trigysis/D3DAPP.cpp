@@ -1002,6 +1002,14 @@ bool D3DAPP::SInitMaterials()
 				//}
 
 			}
+			else if (!Line.compare("$TextureScale:"))
+			{
+				NewMaterial->Scale.x = FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$ATextureScale:"))
+			{
+				NewMaterial->Scale.y = FManager->GetINTFromFile() / 100.f;
+			}
 			else if (!Line.compare("$Alpha"))
 			{
 				NewMaterial->UseAlpha = true;
@@ -1243,7 +1251,7 @@ FLOAT D3DAPPINPUT::GetMouseScroll()
 Vector2d& D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct)
 {
 
-	return Vector2d(this->mMouseX - viewPortStruct.WinPos.X, this->mMouseY - viewPortStruct.WinPos.Y);
+	return Vector2d(this->mMouseX - viewPortStruct.WinPos.X, -this->mMouseY + viewPortStruct.WinPos.Y);
 
 }
 

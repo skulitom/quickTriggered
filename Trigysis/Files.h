@@ -28,14 +28,22 @@ public:
 	void Open(std::string& fileName, char FM_FILE_READ_OR_WRITE = 0);
 	void Open(char FM_FILE_READ_OR_WRITE = 0);
 	void Close();
+	void writeToFileAt(int num, int loc);
+	void writeToFileAt(std::string& name, int loc);
 
 	std::string& GetStringFromFile();
+	int FindString(std::string findName);
+	int getIntFromLine(int lineNum);
+	int getLineQuo();
+
 	bool GetBoolFromString();
-	INT GetINTFromFile();
+	int GetINTFromFile();
 
 	inline std::string& GetCString(){ return this->CString; }
 	inline char GetCSymbol() { return this->CSymbol; }
 	inline unsigned __int64 GetCurrentSIndex() { return this->CurrentSIndex; }
+	inline void writeToFile(int num){ this->FILE << num << std::endl; }
+	inline void writeToFile(std::string& name){ this->FILE << name << std::endl; }
 
 	std::fstream& GetFILE() { return this->FILE; }
 
