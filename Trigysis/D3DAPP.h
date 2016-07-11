@@ -27,7 +27,28 @@
 #define DX_RS_DEPTH_RENDER_STATE 0
 #define DX_RS_2D_RENDER_STATE 1
 
+enum EDisplayModes
+{
 
+	DX_DISPLAY_MODE_FULL_SCREEN = 0,
+	DX_DISPLAY_MODE_640_480,
+	DX_DISPLAY_MODE_800_600,
+	DX_DISPLAY_MODE_1024_768,
+	DX_DISPLAY_MODE_1152_864,
+	DX_DISPLAY_MODE_1280_600,
+	DX_DISPLAY_MODE_1280_720,
+	DX_DISPLAY_MODE_1280_768,
+	DX_DISPLAY_MODE_1280_1024,
+	DX_DISPLAY_MODE_1360_768,
+	DX_DISLPAY_MODE_1366_768,
+	DX_DISPLAY_MODE_1440_900,
+	DX_DISPLAY_MODE_1600_900,
+	DX_DISPLAY_MODE_1600_1024,
+	DX_DISPLAY_MODE_1600_1200,
+	DX_DISPLAY_MODE_1680_1050,
+	DX_DISPLAY_MODE_1920_1080
+
+};
 
 struct TextureStruct
 {
@@ -107,7 +128,10 @@ struct WindowSizes
 
 };
 
-// Основной класс приложения DX
+#define DX_COM_DEVICE_AND_CONTEXT 1
+#define DX_COM_SWAPCHAIN 2
+
+// PAPA Class
 class D3DAPP 
 {
 public:
@@ -115,101 +139,86 @@ public:
 	D3DAPP(bool Paused, bool Resizing, HWND hWnd);
 	virtual ~D3DAPP();
 
-	ID3D11Device* dxDevice;
-	ID3D11DeviceContext* dxDeviceCon;
-	IDXGISwapChain *dxSwapChain;
-	ID3D11RenderTargetView* dxRenderTargetView;
-	ID3D11DepthStencilView* dxDepthView;
+public:
+	///////////////////////////////////////////
+	//**Puplic COM Objects
+	///////////////////////////////////////////
+	ID3D11Device* Device;
+	ID3D11DeviceContext* DeviceContext;
+	IDXGISwapChain* SwapChain;
 
-	std::vector <DepthStencilState> dxDepthState;
+public:
 
-	//ID3D11DepthStencilState* dxDepthState;
-	ID3D11Texture2D *DepthBuffer;
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	////Функции для создания приложения
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Создаёт окно Windows
+	///////////////////////////////////////////////
+	//**INIT WINAPI
+	///////////////////////////////////////////////
+	// Create application window
 	HWND CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam),
-		const int xPos, const int yPos, const int width, const int height, const LPSTR classname, const LPSTR winname, const UINT winType = WS_OVERLAPPEDWINDOW);
-	// Рисует окно Windows
+		const int xPos, const int yPos, enum EDisplayModes mode, const LPSTR classname, const LPSTR winname, const UINT winType = WS_OVERLAPPEDWINDOW);
+	
 	void ShowD3DWindow(int cmd);
-	// Закрывает окно Windows
 	void CloseD3DWindow();
 
-	//Создаёт основные устройства DX
-	bool DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleDescCount, const bool isWindowed);
-	// Создаёт Target view и Depth view
-	bool DXCreateTargetViewAndDepthView(const int sampleDescCount);
-	// Создаёт Depth stencil state
-	bool DXCreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC& dsd, std::string& name);
-	// НЕ РАБОТАЕТ!
-	void m4xMsaaQuality();
+	///////////////////////////////////////////////
+	//**INIT DIRECT3D
+	///////////////////////////////////////////////
+	bool InitAdapters();
+	bool CreateOutput(UINT mode = 0);
+	bool CreateDevice(IDXGIAdapter* pAdapter);
+	bool CreateSwapChain(INT numOfCounts = -1, bool isInWindow = true);
+	bool CreateMainRenderTargetAndDepthStencilViews();
+	bool CreateMainDepthStencilStates();
+	void ResetMainCOM();
+	void ResetAllAdapters();
 
+	///////////////////////////////////////////////
+	//**ADDITIONAL CREATIONS
+	///////////////////////////////////////////////
+	bool CreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC& dsd, std::string& name);
 	ID3D11RenderTargetView* CreateRenderTarget(ID3D11Texture2D* textureRenderTo);
-	void SetRenderTarget(ID3D11RenderTargetView* renderTV);
-
-	// Вызывается во время изменения размера окна Windows
-	virtual void OnResize(); 
-	// Возвращает высоту и ширину экрана(mWindowHeight,mWindowWidth)
-	void UpdateWindowRect();
-	// Отчищает окно Windows и Depth view
-	void ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
-	// Рисует сцену
-	virtual void Draw(); 
-	// Удаляет все устройства для создания базового приложения DX
-	virtual void ReleaseDefault();
-	// Настройка рендера
-	virtual void SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode);
-
-	virtual void SetPaused(bool pause);
-
-	virtual bool SetDepthStencilStateByName(std::string& name);
-	virtual bool SetDepthStencilStateByIndex(UINT index);
-
-	// Возвращает координаты окна Windows по X
-	virtual float GetWindowPosX();
-	// Возвращает координаты окна Windows по Y
-	virtual float GetWindowPosY(); 
-
-	virtual bool GetPaused();
-
-	virtual WindowSizes& GetWindowSizes();
-
-	virtual XMFLOAT2& GetScreenSizes();
-
 	UINT CreateViewPort(const FLOAT topLeftX, const FLOAT topLeftY,
-		const FLOAT width, const FLOAT height, const FLOAT maxDepth, const FLOAT minDepth, const SHORT indexOfNewVPort = 0);
+		const FLOAT width, const FLOAT height, const FLOAT maxDepth, const FLOAT minDepth, char* shader = nullptr);
+	///////////////////////////////////////////////
+	//**ADDITIONAL METHODS
+	///////////////////////////////////////////////
+	inline HWND GetWindow() { return HWnd; }
+	UINT GetMaxMSQuality(enum DXGI_FORMAT, INT numOfCounts = -1);
+	void SetRenderTarget(ID3D11RenderTargetView* renderTV);
+	virtual void Resize();
+	void UpdateWindowRect();
+	void ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
+	virtual void Draw();
+	virtual void ReleaseDefault();
+	virtual void SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode);
+	inline void SetPaused(bool pause) { this->IsPaused = pause; }
+	inline bool GetPaused() { return this->IsPaused; }
+	bool SetDepthStencilStateByName(std::string& name);
+	bool SetDepthStencilStateByIndex(UINT index);
+	void DeleteAllDepthStencilStates();
+	//float GetWindowPosX() { return this->WindowCoorX; }
+	//float GetWindowPosY() { return this->WindowCoorY; }
+	inline WindowSizes& GetWindowSizes() { return this->WinSizes; }
+	virtual XMFLOAT2& GetScreenSizes();
 	bool SetViewPort(SHORT indexOfVPort);
 	D3D11_VIEWPORT& GetViewPort(const SHORT indexOfVPort);
 	D3DXMATRIX& GetVPMatrix(const short indexOfVPort);
 	Material* GetVPMaterial(const short indexOfVPort);
 	ID3D11RenderTargetView* GetVPRenderTV(const short indexOfVPort);
 	VPortStruct& GetVPStruct(const short indexOfVPort);
-
-	bool SInit(int bufferCount, int sampleDestCount, bool windowed);
-
-	void SetRenderSizesAndPos();
-
-	// Возвращает окно
-	HWND GetWindow();
-
-	virtual std::string& GetCatalogName();
-
-	bool SInitMaterials();
+	inline std::string& GetCatalogName() { return this->Catalog; }
 	Material* GetMaterial(std::string& materialName);
+	bool GetIsInVPort(XMFLOAT2& pos, const short indexOfVPort);
+	inline unsigned short GetNumOfVPorts() { return this->NumOfVPorts; }
+	inline ID3D11RasterizerState* GetStandartRastState() { return this->StandartRastState; }
+	inline D3DAPPTIMER* GetTimer() { return this->Timer; }
+	inline UINT GetMSAA() { return this->MMsaa; }
 
-	bool GetIsInVPort(XMFLOAT2& pos,const short indexOfVPort);
-
-	unsigned short GetNumOfVPorts(){ return this->NumOfVPorts; }
-
-	ID3D11RasterizerState* GetStandartRastState() { return this->StandartRastState; }
-
-	D3DAPPTIMER* GetTimer() { return this->Timer; }
-
-public:
-
+	///////////////////////////////////////////////
+	//**SIMPLE-CREATION METHODS
+	///////////////////////////////////////////////
+	bool SInit(int bufferCount, int sampleDestCount, bool windowed);
+	bool SInitMaterials();
+	ID3D11SamplerState* SCreateSampler(enum D3D11_TEXTURE_ADDRESS_MODE adress, enum D3D11_FILTER filter, UINT maxAnisotropy);
 	ID3D11ShaderResourceView* CreateSShaderResourceView(ID3D11Texture2D* renderBufferTexture, DXGI_FORMAT format);
 	ID3D11Texture2D* CreateSTexture2D(UINT width, UINT height, UINT bindFlags, DXGI_FORMAT format);
 	ID3D11Buffer* CreateSVertexBuffer(bool dynamic, UINT size, UINT numOfElements);
@@ -226,30 +235,43 @@ private:
 	UINT Numenator;
 	UINT Denomirator;
 
-	INT VCardMem;
-	char VCardDescription[128];
-
 	std::vector <Material*> Materials;
-	std::vector <std::string> TextureNames;
 
 protected:
 
+	/////////////////////////////////////
+	//**Adapters
+	/////////////////////////////////////
+	std::vector<IDXGIAdapter*> Adapters;
+	IDXGIAdapter* CurrentAdapter;
+	std::vector<IDXGIOutput*> Outputs;
+	IDXGIOutput* CurrentOutput;
+	UINT FeatureLevel;
+
+	/////////////////////////////////////
+	//**Views
+	/////////////////////////////////////
+	ID3D11RenderTargetView* MainRenderTarget;
+	ID3D11DepthStencilView* MainDepth;
+	std::vector <DepthStencilState> DepthStencilStates;
+
 	unsigned short NumOfVPorts;
 
-	// Имя окна(Windows)
-	HWND HWnd;
-	// Сглаживание
-	UINT MMsaa;
+	/////////////////////////////////////
+	//**Other Pointers
+	/////////////////////////////////////
+	D3DAPPTIMER* Timer;
+	ID3D11RasterizerState* StandartRastState;
 
-	// Приложение DX на паузе?
+	HWND HWnd;
+	UINT MMsaa;
+	UINT NumOfCounts;
+
 	bool IsPaused;
-	// Окно(Windows) приложения DX меняет размеры?
 	bool IsResizing;
 
-	// Координаты окна(Windows) по X
-	float WindowCoorX;
-	// Координаты окна(Windows) по y
-	float WindowCoorY;
+	//float WindowCoorX;
+	//float WindowCoorY;
 
 	WindowSizes WinSizes;
 	XMFLOAT2 ScreenSizes;
@@ -259,11 +281,7 @@ protected:
 
 	bool LoopError;
 
-	ID3D11RasterizerState* StandartRastState;
-
 	VPortStruct ViewPorts[8];
-
-	D3DAPPTIMER* Timer;
 
 };
 

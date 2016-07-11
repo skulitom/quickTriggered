@@ -55,7 +55,7 @@ void ElementsMLand::UpdateAndDraw(FLOAT deltaTime)
 
 		this->D3dApp->SetRenderTarget(this->D3dApp->GetVPRenderTV(i));
 		Index = 0;
-		//this->D3dApp->ClearScreen(XMFLOAT4(0, 1, 0, 1), this->D3dApp->GetVPRenderTV(i), this->D3dApp->dxDepthView);
+		//this->D3dApp->ClearScreen(XMFLOAT4(0, 1, 0, 1), this->D3dApp->GetVPRenderTV(i), this->D3dApp->MainDepth);
 		while (Index < this->Elements.at(i).size())
 		{
 			if ((!this->Elements.at(i).at(Index)->GetIsFired()))

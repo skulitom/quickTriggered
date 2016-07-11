@@ -16,7 +16,7 @@
 //	//SD.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 //	//SD.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
 //	//SD.MaxAnisotropy = 1;
-//	//HRESULT hr = this->D3dApp->dxDevice->CreateSamplerState(&SD, &this->Sampler);
+//	//HRESULT hr = this->D3dApp->Device->CreateSamplerState(&SD, &this->Sampler);
 //
 //}
 //
@@ -32,12 +32,12 @@
 //
 //	this->SetPShader();
 //
-//	this->D3dApp->dxDeviceCon->PSSetShaderResources(0, 1, &textureView);
+//	this->D3dApp->DeviceContext->PSSetShaderResources(0, 1, &textureView);
 //
 //	this->SRVCBuffer.RValue = RAND(0.f, 1.f);
 //
-//	this->D3dApp->dxDeviceCon->UpdateSubresource(this->RandomVCBuffer, 0, 0, &this->SRVCBuffer, 0, 0);
-//	this->D3dApp->dxDeviceCon->PSSetConstantBuffers(0, 1, &this->RandomVCBuffer);
+//	this->D3dApp->DeviceContext->UpdateSubresource(this->RandomVCBuffer, 0, 0, &this->SRVCBuffer, 0, 0);
+//	this->D3dApp->DeviceContext->PSSetConstantBuffers(0, 1, &this->RandomVCBuffer);
 //
 //	Basic2DDrawPipeline::Apply(indexOfVP, color, pos, size);
 //

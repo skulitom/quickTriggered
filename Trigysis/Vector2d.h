@@ -34,7 +34,7 @@ public:
 	//////////////////////////////////////////
 
 	// Vec2 = Vec1
-	void operator = (Vector2d& secondVec);
+	Vector2d& operator = (Vector2d& secondVec);
 
 	// Vec3 = Vec1(this) + Vec2
 	Vector2d operator + (Vector2d secondVec);

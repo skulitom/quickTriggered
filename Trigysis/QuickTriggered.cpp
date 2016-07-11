@@ -46,7 +46,7 @@ void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
 //////////////////////////////////////////////////////
 bool QuickTriggered::InitApp()
 {
-	if (this->dxDevice)
+	if (this->Device)
 	{
 
 		QuickTriggered::Init();
@@ -69,12 +69,13 @@ bool QuickTriggered::InitApp()
 		/////////////////////////////////////
 
 		this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth,
-			this->WinSizes.ClientWHeight, 0, 0);
+			this->WinSizes.ClientWHeight, 0, 0, "NewPS");
 		//this->CreateViewPort(this->WinSizes.ClientWWidth*0.5f, 0, this->WinSizes.ClientWWidth * 0.5f,
 		//	this->WinSizes.ClientWHeight*0.5f, 0, 0);
 		//this->CreateViewPort(0, this->WinSizes.ClientWHeight*0.5f, this->WinSizes.ClientWWidth * 0.5f,
 		//	this->WinSizes.ClientWHeight*0.5f, 0, 0);
 
+		this->InitVPShaders();
 		
 		Element* NE = new Element(this);
 		NE->SetSizesRelative(Vector2d(512, 512));
@@ -187,6 +188,8 @@ void QuickTriggered::Update()
 	//this->Draw2D->DrawHexagon(this->Input->GetMousePosCenterVPort(this->ViewPorts[0].VPort), Vector2d(10, 10), 0, XMFLOAT4(1, 0, 0, 1));
 	//this->Draw2D->DrawHexagon(Vector2d(0, 0), Vector2d(50, 50), 0, XMFLOAT4(1, 0, 0, 1));
 
+	this->Draw2D->GetShaderManager()->SetFilter();
+
 	Vector2d Pos;
 	if (GetAsyncKeyState(VK_SPACE))
 	{
@@ -204,7 +207,7 @@ void QuickTriggered::Update()
 	//this->SetRenderTarget(this->ViewPorts[1].RTView);
 	//this->TPipeline->Apply(this->ViewPorts[1].TextureToRender, 1, XMFLOAT4(0,0,0,1),this->ViewPorts[1].WorldPos, 
 	//	Vector2d(this->ViewPorts[1].VPort.Width, this->ViewPorts[1].VPort.Height));
-	//this->dxDeviceCon->
+	//this->DeviceContext->
 
 	QuickTriggered::Draw();
 
@@ -214,5 +217,5 @@ void QuickTriggered::ReleaseDefault()
 {
 	//D3DDelete(this->ElementsBase);
 	//D3DDelete(this->TPipeline);
-	D3DAPP::ReleaseDefault();
+	BasicInterface::ReleaseDefault();
 }

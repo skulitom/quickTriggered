@@ -3,6 +3,8 @@
 #include "MathHelper.h"
 #include "Timer.h"
 
+#include "Timer.h" 
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, int cmd);
 HRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -11,12 +13,15 @@ D3DAPPINPUT* Input = new D3DAPPINPUT();
 bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 {
 	QuickTriggered* TAA = new QuickTriggered(HWnd, Input);
-	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, 800, 600, "HDWND", "QuickTriggered", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
+	
+	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, DX_DISPLAY_MODE_1024_768,
+		"HDWND", "QuickTriggered", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
 	if (!TAA->SInit(1, 4, true))
 		return false;
 	TAA->ShowD3DWindow(cmd);
 	MathHelp::InitRand();
 	*ppQuickTriggeredAppPtr = TAA;
+
 	return true;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, int cmd)

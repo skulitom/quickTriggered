@@ -3,7 +3,7 @@
 Basic2DDraw::Basic2DDraw(D3DAPP* d3dApp)
 {
 	this->D3dApp = d3dApp;
-	ShaderManager* RS = new ShaderManager(this->D3dApp, SHADER_MODEL_4_0);
+	ShaderManager* RS = new ShaderManager(this->D3dApp, SHADER_MODEL_5_0);
 
 	this->Shader = RS;
 	if (!this->D3dApp->SetDepthStencilStateByIndex(DX_RS_2D_RENDER_STATE))
@@ -30,16 +30,16 @@ void Basic2DDraw::DrawLine(Vector2d & pos1, Vector2d & pos2, XMFLOAT4 & color, s
 	//this->Vertices[1].Pos = pos2;
 	//this->Vertices[1].Color = color;
 	//D3D11_MAPPED_SUBRESOURCE MSR;
-	//this->D3dApp->dxDeviceCon->Map(this->Shader->GetVertexBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
+	//this->D3dApp->DeviceContext->Map(this->Shader->GetVertexBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
 	//memcpy(MSR.pData, &this->Vertices, sizeof(Basic2DDrawPipeline::Vertex2d) * 2);
-	//this->D3dApp->dxDeviceCon->Unmap(this->Shader->GetVertexBuffer(), 0);
+	//this->D3dApp->DeviceContext->Unmap(this->Shader->GetVertexBuffer(), 0);
 	/////////////////////////////////////////////////////////
 	////**Set Topology, InputLayout, RastState
 	/////////////////////////////////////////////////////////
 	//this->Shader->SetShaderResourceView(nullptr);
-	//this->D3dApp->dxDeviceCon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	//this->D3dApp->DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	//this->Shader->Apply(indexOfVP);
-	//this->D3dApp->dxDeviceCon->Draw(2, 0);
+	//this->D3dApp->DeviceContext->Draw(2, 0);
 }
 
 void Basic2DDraw::DrawTriangle(Vector2d& pos1, Vector2d& pos2, Vector2d& pos3,
@@ -52,14 +52,14 @@ void Basic2DDraw::DrawTriangle(Vector2d& pos1, Vector2d& pos2, Vector2d& pos3,
 	//this->Vertices[2].Pos = pos3;
 	//this->Vertices[2].Color = color;
 	//D3D11_MAPPED_SUBRESOURCE MSR;
-	//this->D3dApp->dxDeviceCon->Map(this->Shader->GetVertexBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
+	//this->D3dApp->DeviceContext->Map(this->Shader->GetVertexBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
 	//memcpy(MSR.pData, &this->Vertices[0], sizeof(Basic2DDrawPipeline::Vertex2d) * 3);
-	//this->D3dApp->dxDeviceCon->Unmap(this->Shader->GetVertexBuffer(), 0);
-	//this->D3dApp->dxDeviceCon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//this->D3dApp->DeviceContext->Unmap(this->Shader->GetVertexBuffer(), 0);
+	//this->D3dApp->DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//this->PMatrix = XMFLOAT4X4(pos1.X, pos1.Y, tPos1.X, tPos1.Y, pos2.X, pos2.Y, tPos2.X, tPos2.Y, pos3.X, pos3.Y, tPos3.X, tPos3.Y,
 	//	color.x, color.y, color.z, color.w);
 	//this->Shader->ApplyTriangle(indexOfVP, this->PMatrix);
-	//this->D3dApp->dxDeviceCon->Draw(3, 0);
+	//this->D3dApp->DeviceContext->Draw(3, 0);
 }
 
 void Basic2DDraw::UpdateMaterial(Material* pMaterial)
@@ -98,7 +98,7 @@ void Basic2DDraw::DrawRectangle(Vector2d& pos, Vector2d& sizes, short indexOfVP,
 		this->UpdateMaterial(pMaterial);
 		this->Shader->Render(indexOfVP, color, pos, sizes, pMaterial, userVars, aColor);
 
-		this->D3dApp->dxDeviceCon->DrawIndexed(BASIC_2DDRAWP_RECTANGLE_I_NUM, BASIC_2DDRAWP_RECTANGLE_I_START, 0);
+		this->D3dApp->DeviceContext->DrawIndexed(BASIC_2DDRAWP_RECTANGLE_I_NUM, BASIC_2DDRAWP_RECTANGLE_I_START, 0);
 
 	}
 
@@ -114,7 +114,7 @@ void Basic2DDraw::DrawHexagon(Vector2d& pos, Vector2d& sizes, short indexOfVP, X
 		this->UpdateMaterial(pMaterial);
 		this->Shader->Render(indexOfVP, color, pos, sizes, pMaterial, userVars, aColor);
 
-		this->D3dApp->dxDeviceCon->DrawIndexed(BASIC_2DDRAWP_HEXAGON_I_NUM, BASIC_2DDRAWP_HEXAGON_I_START, 0);
+		this->D3dApp->DeviceContext->DrawIndexed(BASIC_2DDRAWP_HEXAGON_I_NUM, BASIC_2DDRAWP_HEXAGON_I_START, 0);
 
 	}
 

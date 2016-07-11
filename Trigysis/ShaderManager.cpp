@@ -27,22 +27,9 @@ ShaderManager::ShaderManager(D3DAPP* d3dApp, char shaderModel)
 	//**Create Samplers
 	//////////////////////////////////////////
 
-	D3D11_SAMPLER_DESC SD;
-	ZeroMemory(&SD, sizeof(D3D11_SAMPLER_DESC));
-	SD.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-	SD.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-	SD.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-	SD.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
-	SD.MaxAnisotropy = 1;
-	HRESULT hr = this->D3dApp->dxDevice->CreateSamplerState(&SD, &this->AdvanceSampler);
+	this->AdvanceSampler = this->D3dApp->SCreateSampler(D3D11_TEXTURE_ADDRESS_BORDER, D3D11_FILTER_ANISOTROPIC, 16);
 
-	ZeroMemory(&SD, sizeof(D3D11_SAMPLER_DESC));
-	SD.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	SD.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	SD.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	SD.Filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-	SD.MaxAnisotropy = 1;
-	hr = this->D3dApp->dxDevice->CreateSamplerState(&SD, &this->SimpleSampler);
+	this->SimpleSampler = this->D3dApp->SCreateSampler(D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_ANISOTROPIC, 16);
 
 	////////////////////////////////////////////////
 	//**Create Buffers
@@ -99,9 +86,9 @@ ShaderManager::ShaderManager(D3DAPP* d3dApp, char shaderModel)
 	VertexArray[9].TexturePos = Vector2d(0.75f, 0.933f);
 
 	D3D11_MAPPED_SUBRESOURCE MSR;
-	this->D3dApp->dxDeviceCon->Map(this->VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
+	this->D3dApp->DeviceContext->Map(this->VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSR);
 	memcpy(MSR.pData, &VertexArray[0], sizeof(ShaderManager::Vertex2d) * ARRAYSIZE(VertexArray));
-	this->D3dApp->dxDeviceCon->Unmap(this->VertexBuffer, 0);
+	this->D3dApp->DeviceContext->Unmap(this->VertexBuffer, 0);
 
 	////////////////////////////////////
 	//**Index Buffer
@@ -156,6 +143,28 @@ ShaderManager::ShaderManager(D3DAPP* d3dApp, char shaderModel)
 
 }
 
+void ShaderManager::SetFilter()
+{
+
+	//if (GetAsyncKeyState('1'))
+	//	this->Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
+	//else if (GetAsyncKeyState('2'))
+	//	this->Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	//else if (GetAsyncKeyState('3'))
+	//	this->Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	//else if (GetAsyncKeyState('4'))
+	//	this->Filter = D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+	//this->Filter = D3D11_FILTER_ANISOTROPIC;
+	//if (GetAsyncKeyState('1'))
+	//	this->AdvanceSampler = this->D3dApp->SCreateSampler(D3D11_TEXTURE_ADDRESS_BORDER, D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT, 1);
+	//else if (GetAsyncKeyState('2'))
+	//	this->AdvanceSampler = this->D3dApp->SCreateSampler(D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_COMPARISON_ANISOTROPIC, 1);
+
+
+	//this->AdvanceSampler = this->D3dApp->SCreateSampler(D3D11_TEXTURE_ADDRESS_BORDER, this->Filter, this->MaxAnis);
+
+}
+
 ShaderManager::~ShaderManager()
 {
 
@@ -204,7 +213,7 @@ ID3D11VertexShader* ShaderManager::CreateVertexShader(LPCSTR fileName, LPCSTR fu
 		D3DRelease(this->BlobVShader);
 		return nullptr;
 	}
-	hr = this->D3dApp->dxDevice->CreateVertexShader(this->BlobVShader->GetBufferPointer(), this->BlobVShader->GetBufferSize(),
+	hr = this->D3dApp->Device->CreateVertexShader(this->BlobVShader->GetBufferPointer(), this->BlobVShader->GetBufferSize(),
 		0, &VShader);
 	if(FAILED(hr))
 	{
@@ -221,10 +230,10 @@ ID3D11VertexShader* ShaderManager::CreateVertexShader(LPCSTR fileName, LPCSTR fu
 		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
-	this->D3dApp->dxDevice->CreateInputLayout(IED, ARRAYSIZE(IED), this->BlobVShader->GetBufferPointer(),
+	this->D3dApp->Device->CreateInputLayout(IED, ARRAYSIZE(IED), this->BlobVShader->GetBufferPointer(),
 		this->BlobVShader->GetBufferSize(), &this->InputLayout);
 
-	this->D3dApp->dxDeviceCon->IASetInputLayout(this->InputLayout);
+	this->D3dApp->DeviceContext->IASetInputLayout(this->InputLayout);
 
 	return VShader;
 
@@ -260,7 +269,7 @@ ID3D11PixelShader* ShaderManager::CreatePixelShader(LPCSTR fileName, LPCSTR func
 		D3DRelease(BlobPShader);
 		return false;
 	}
-	hr = this->D3dApp->dxDevice->CreatePixelShader(BlobPShader->GetBufferPointer(), BlobPShader->GetBufferSize(),
+	hr = this->D3dApp->Device->CreatePixelShader(BlobPShader->GetBufferPointer(), BlobPShader->GetBufferSize(),
 		0, &PShader);
 	if (FAILED(hr))
 	{
@@ -330,10 +339,10 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vect
 
 	this->PStrides = sizeof(ShaderManager::Vertex2d);
 	this->POffSet = 0;
-	this->D3dApp->dxDeviceCon->IASetVertexBuffers(0, 1, &this->VertexBuffer, &PStrides, &POffSet);
-	this->D3dApp->dxDeviceCon->IASetIndexBuffer(this->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	this->D3dApp->dxDeviceCon->RSSetState(this->D3dApp->GetStandartRastState());
-	this->D3dApp->dxDeviceCon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	this->D3dApp->DeviceContext->IASetVertexBuffers(0, 1, &this->VertexBuffer, &PStrides, &POffSet);
+	this->D3dApp->DeviceContext->IASetIndexBuffer(this->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	this->D3dApp->DeviceContext->RSSetState(this->D3dApp->GetStandartRastState());
+	this->D3dApp->DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	if (this->IndexOfVP < 0 || this->IndexOfVP != indexOfVP)
 	{
@@ -358,32 +367,23 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vect
 	this->VSInput.Scale = pMaterial->Scale;
 
 	this->SetVShader(nullptr);
-	this->D3dApp->dxDeviceCon->UpdateSubresource(this->CBVSInput, 0, 0, &this->VSInput, 0, 0);
-	this->D3dApp->dxDeviceCon->VSSetConstantBuffers(0, 1, &this->CBVSInput);
+	this->D3dApp->DeviceContext->UpdateSubresource(this->CBVSInput, 0, 0, &this->VSInput, 0, 0);
+	this->D3dApp->DeviceContext->VSSetConstantBuffers(0, 1, &this->CBVSInput);
 
 	this->PSInput.DeltaTime = this->D3dApp->GetTimer()->GetDeltaTime();
 	this->PSInput.Time = this->D3dApp->GetTimer()->GetTotalTime();
 	this->PSInput.UseAlpha = (UINT)pMaterial->UseAlpha;
 	this->PSInput.UserVars = userVars;
 
-	//if (userVars)
-	//{
-	//	userVars->Val1 = 10;
-	//	this->PSInput.UserVars01 = (double*)userVars;
-	//	userVars->Val1 = this->PSInput.UserVars01;
-	//	this->PSInput.UserVars23 = (long long&)*(userVars) << 32;
-	//}
-
-
 	this->SetPShader(pMaterial->EffectShader);
-	this->D3dApp->dxDeviceCon->UpdateSubresource(this->CBPSInput, 0, 0, &this->PSInput, 0, 0);
-	this->D3dApp->dxDeviceCon->PSSetConstantBuffers(0, 1, &this->CBPSInput);
-	if (this->AdvanceSampler)
-		this->D3dApp->dxDeviceCon->PSSetSamplers(0, 1, &this->AdvanceSampler);
+	this->D3dApp->DeviceContext->UpdateSubresource(this->CBPSInput, 0, 0, &this->PSInput, 0, 0);
+	this->D3dApp->DeviceContext->PSSetConstantBuffers(0, 1, &this->CBPSInput);
+	if (this->IsAdvanceRender)
+		this->D3dApp->DeviceContext->PSSetSamplers(0, 1, &this->AdvanceSampler);
 	else 
-		this->D3dApp->dxDeviceCon->PSSetSamplers(0, 1, &this->SimpleSampler);
-	this->D3dApp->dxDeviceCon->PSSetShaderResources(0, 1, &pMaterial->Texture);
-	this->D3dApp->dxDeviceCon->PSSetShaderResources(1, 1, &pMaterial->AdditionalTexture);
+		this->D3dApp->DeviceContext->PSSetSamplers(0, 1, &this->SimpleSampler);
+	this->D3dApp->DeviceContext->PSSetShaderResources(0, 1, &pMaterial->Texture);
+	this->D3dApp->DeviceContext->PSSetShaderResources(1, 1, &pMaterial->AdditionalTexture);
 
 }
 
@@ -391,9 +391,9 @@ void ShaderManager::SetVShader(ID3D11VertexShader* vShader)
 {
 
 	if (vShader)
-		this->D3dApp->dxDeviceCon->VSSetShader(vShader, 0, 0);
+		this->D3dApp->DeviceContext->VSSetShader(vShader, 0, 0);
 	else if (this->StandartVShader)
-		this->D3dApp->dxDeviceCon->VSSetShader(this->StandartVShader, 0, 0);
+		this->D3dApp->DeviceContext->VSSetShader(this->StandartVShader, 0, 0);
 
 }
 
@@ -401,9 +401,9 @@ void ShaderManager::SetPShader(ID3D11PixelShader* pShader)
 {
 
 	if (pShader)
-		this->D3dApp->dxDeviceCon->PSSetShader(pShader, 0, 0);
+		this->D3dApp->DeviceContext->PSSetShader(pShader, 0, 0);
 	else if (this->StandartPShader)
-		this->D3dApp->dxDeviceCon->PSSetShader(this->StandartPShader, 0, 0);
+		this->D3dApp->DeviceContext->PSSetShader(this->StandartPShader, 0, 0);
 
 }
 

@@ -24,6 +24,7 @@ struct PSInput
 {
 
     float4 PosH : SV_POSITION;
+    float2 PosW : POS;
     float4 Color : COLOR0;
     float4 AColor : COLOR1;
     float2 TexCoord : TEXCOORD0;
@@ -39,7 +40,7 @@ float4 PSMain(PSInput input) : SV_Target
     if(UseAlpha)
     {
 
-        clip(PTexture.a - 0.1f);
+        clip(PTexture.a - 0.5f);
         if (PATexture.a != 0)
             clip(PATexture.a - 0.5f);
         else

@@ -25,12 +25,20 @@ public:
 
 	void Draw() override;
 
+	virtual void ReleaseDefault() override;
+
 	//D3DAPPTIMER* GetTimer() { return this->Timer; }
 
 private:
 
+	short Special;
+	float Smooth;
+
 protected:
 
+	void InitVPShaders();
+
+protected:
 	Basic2DDraw* Draw2D;
 	ElementsMLand* ElementBase;
 

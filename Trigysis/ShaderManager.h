@@ -78,6 +78,8 @@ public:
 	void Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vector2d& size, Material* pMaterial, XMFLOAT4& userVars,
 		XMFLOAT4& aColor = XMFLOAT4(0,0,0,0));
 
+	void SetFilter();
+
 public:
 
 	struct Vertex2d
@@ -92,7 +94,8 @@ private:
 	void DeleteAllShaders();
 
 private:
-
+	enum D3D11_FILTER Filter;
+	UINT MaxAnis;
 	bool IsAdvanceRender;
 
 protected:

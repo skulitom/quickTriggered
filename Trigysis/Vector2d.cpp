@@ -79,11 +79,13 @@ float Vector2d::GetLength()
 //**Operators
 //////////////////////////////////////////
 
-void Vector2d::operator= (Vector2d& secondVec)
+Vector2d& Vector2d::operator= (Vector2d& secondVec)
 {
 
 	this->X = secondVec.X;
 	this->Y = secondVec.Y;
+
+	return *this;
 
 }
 

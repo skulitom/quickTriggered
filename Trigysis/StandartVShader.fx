@@ -7,7 +7,8 @@ struct VSInput
 struct VSOut
 {
 
-	float4 PosH : SV_POSITION;
+    float4 PosH : SV_POSITION;
+    float2 PosW : POS;
 	float4 Color : COLOR0;
     float4 AColor : COLOR1;
 	float2 TexCoord : TEXCOORD0;
@@ -37,6 +38,7 @@ VSOut VSMain(VSInput input)
     VOut.AColor = AColor;
 
     VOut.PosH = mul(float4(input.Pos, 0, 1), WorldMatrix);
+    VOut.PosW = VOut.PosH.xy;
     VOut.PosH = mul(VOut.PosH, ViewMatrix);
     VOut.PosH = mul(VOut.PosH, ProjMatrix);
     if(!UseGlobalCoords)

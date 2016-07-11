@@ -48,9 +48,6 @@
     <ClInclude Include="Basic2DDraw.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Basic2DDrawPipeline.h">
-      <Filter>FrameWork\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="ElementBaseManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
@@ -107,9 +104,6 @@
     <ClCompile Include="Basic2DDraw.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Basic2DDrawPipeline.cpp">
-      <Filter>FrameWork\Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Files.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
@@ -152,6 +146,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="StandartPShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SmoothPS.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

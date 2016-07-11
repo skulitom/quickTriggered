@@ -3,78 +3,90 @@
 
 #include <Windows.h>
 
-// Таймер 
 class D3DAPPTIMER
 {
 public:
 
-	D3DAPPTIMER(float TimeScale);
+	D3DAPPTIMER(float timeScale);
 	~D3DAPPTIMER();
 
-	// Отчистить таймер
+	// Reset Timer
 	void Reset();
-	// Шаг таймера (Главный цикл)
+	
+	// Update Timer
+	// Must be executed every cycle
 	void Tick();
-	// Остановка таймера
+	
 	void Stop();
-	// Возобновление
 	void Resume();
-	// Изменение скорости таймера (1.0f - стандарт)
-	void SetTimeScale(float TimeScalse);
+	
+	// Change Timer Speed
+	// TimeScale = 1.f - default
+	void SetTimeScale(float timeScale) { TimeScale = timeScale; }
 
-	// Возвращает количество кадров в секунде
-	int GetFPS();
-	// Возвращает время паузы
+	// Return Fraps(cycles) per second
+	int GetFPS(){ return FPS; }
+	// Return Pause Time
 	float GetPauseTime();
-	// Возвращает общее время(пока таймер находился не в паузе)
-	float GetTotalTime();
-	// Возвращает количество секунд в кадре
-	float GetSecondsPerCount();
-	// Возвращает скорость таймера
-	float GetTimeScale();
-	// Возвращает (настоящее время - время предыдущего кадра)
-	float GetDeltaTime();
-	// Возвращает настоящее время(не в секундах!)
-	__int64& GetCurrTime();
+	// Return non-Pause Time
+	float GetTotalTime() { return this->TotalTime; }
+	
+	float GetSecondsPerCount() { return this->SecondsPerCount; }
+	void ComputeSecondsPerCount();
+	
+	float GetTimeScale() { return this->TimeScale; }
+	
+	//Return seconds in one cycle
+	float GetDeltaTime() { return this->DeltaTime; }
+	
+	void ComputeCurrTime() { QueryPerformanceCounter((LARGE_INTEGER*)&this->CurrTime); }
+	
+	//Return Time (Processor cycles) 
+	__int64& GetCurrTime() { return this->CurrTime; }
 
-	// Возвращает: Таймер на паузе?
-	bool GetIsStoped();
+	
+	bool GetIsStoped() { return this->IsInPause; }
 
 
 
 private:
-	// настоящее время(не в секундах!)
-	__int64 mCurrTime;
-	// предыдущее время(предыдущий кадр)(не в секундах!)
-	__int64 mPrevTime;
-	// Начальное время (не в секундах!)
-	__int64 mBaseTime;
-	// Время остановки (не в секундах!)
-	__int64 mStopTime;
-	// Время в паузе (не в секундах!)
-	__int64 mPauseTime;
-	// Время в предыдущей паузе (не в секундах!)
-	__int64 mPrevPauseTime;
 
-	_int64 CountsPerSecond;
-	_int64 CurrTime;
+	///////////////////////////////////
+	//**Processor Counts
+	///////////////////////////////////
+	// Current Time
+	__int64 CurrTime;
+	// Previous Time
+	__int64 PrevTime;
+	// Start Time
+	__int64 BaseTime;
+	// Stop Time
+	__int64 StopTime;
+	// In Pause Time
+	__int64 PauseTime;
+	// In Previuos Pause Time
+	__int64 PrevPauseTime;
 
-	// количество кадров в секунде
-	int fps;
-	// Коэфициент изменения времени
-	float mTimeScale;
-	// Полное время(без времени в паузе)
-	float mTotalTime;
-	// настоящее время - время в предыдущем кадре
-	float mDeltaTime;
+	__int64 CountsPerSecond;
+	double SecondsPerCount;
+
+	///////////////////////////////////
+	//**Non-Processor Counts
+	///////////////////////////////////
+	int FPS;
+	
+	float TimeScale;
+	// non-Pause Time
+	float TotalTime;
+	
+	float DeltaTime;
 
 private:
 
 	int FrameCnt;
 	float TimeElapsed;
 
-	// таймер на паузе?
-	bool mStoped;
+	bool IsInPause;
 };
 
 #endif

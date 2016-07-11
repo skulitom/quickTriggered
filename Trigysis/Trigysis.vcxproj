@@ -93,7 +93,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="Basic2DDrawPipeline.h" />
     <ClInclude Include="Basic2DDraw.h" />
     <ClInclude Include="BasicInterface.h" />
     <ClInclude Include="Button.h" />
@@ -117,7 +116,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Basic2DDrawPipeline.cpp" />
     <ClCompile Include="Basic2DDraw.cpp" />
     <ClCompile Include="BasicInterface.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -136,6 +134,7 @@
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="SmoothPS.fx" />
     <FxCompile Include="StandartPShader.fx" />
     <FxCompile Include="StandartVShader.fx" />
   </ItemGroup>

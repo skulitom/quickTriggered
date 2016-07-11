@@ -5,6 +5,7 @@
 
 #define GetCurrentDir _getcwd
 
+
 D3DAPP::D3DAPP(bool Paused, bool Resizing, HWND hWnd)
 {
 	this->HWnd = hWnd;
@@ -24,7 +25,7 @@ D3DAPP::D3DAPP(bool Paused, bool Resizing, HWND hWnd)
 }
 
 HWND D3DAPP::CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam),
-	const int xPos, const int yPos, const int width, const int height, const LPSTR classname, const LPSTR winname, const UINT winType)
+	const int xPos, const int yPos, enum EDisplayModes mode, const LPSTR classname, const LPSTR winname, const UINT winType)
 {
 
 	WNDCLASSEX WC;
@@ -41,7 +42,96 @@ HWND D3DAPP::CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC
 
 	RegisterClassEx(&WC);
 
-	this->HWnd = CreateWindowEx(NULL, classname, winname, winType, xPos, yPos, width, height, NULL, NULL, hInstance, NULL);
+	Vector2d Sizes;
+
+	switch (mode)
+	{
+		case DX_DISPLAY_MODE_1024_768:
+		{
+			Sizes = Vector2d(1024, 768);
+			break;
+		}
+		case DX_DISPLAY_MODE_1152_864:
+		{
+			Sizes = Vector2d(1152, 864);
+			break;
+		}
+		case DX_DISPLAY_MODE_1280_1024:
+		{
+			Sizes = Vector2d(1280, 1024);
+			break;
+		}
+		case DX_DISPLAY_MODE_1280_600:
+		{
+			Sizes = Vector2d(1280, 600);
+			break;
+		}
+		case DX_DISPLAY_MODE_1280_720:
+		{
+			Sizes = Vector2d(1280, 720);
+			break;
+		}
+		case DX_DISPLAY_MODE_1280_768:
+		{
+			Sizes = Vector2d(1280, 768);
+			break;
+		}
+		case DX_DISPLAY_MODE_1360_768:
+		{
+			Sizes = Vector2d(1360, 768);
+			break;
+		}
+		case DX_DISPLAY_MODE_1440_900:
+		{
+			Sizes = Vector2d(1440, 900);
+			break;
+		}
+		case DX_DISPLAY_MODE_1600_1024:
+		{
+			Sizes = Vector2d(1600, 1024);
+			break;
+		}
+		case DX_DISPLAY_MODE_1600_1200:
+		{
+			Sizes = Vector2d(1600, 1200);
+			break;
+		}
+		case DX_DISPLAY_MODE_1600_900:
+		{
+			Sizes = Vector2d(1600, 900);
+			break;
+		}
+		case DX_DISPLAY_MODE_1680_1050:
+		{
+			Sizes = Vector2d(1680, 1050);
+			break;
+		}
+		case DX_DISPLAY_MODE_1920_1080:
+		{
+			Sizes = Vector2d(1920, 1080);
+			break;
+		}
+		case DX_DISPLAY_MODE_640_480:
+		{
+			Sizes = Vector2d(640, 480);
+			break;
+		}
+		case DX_DISPLAY_MODE_800_600:
+		{
+			Sizes = Vector2d(800, 600);
+			break;
+		}
+		default:
+		case DX_DISPLAY_MODE_FULL_SCREEN:
+		{
+			XMFLOAT2 SSizes = this->GetScreenSizes();
+			Sizes = Vector2d(SSizes.x, SSizes.y);
+			break;
+		}
+
+	}
+
+	this->HWnd = CreateWindowEx(NULL, classname, winname, winType, xPos, yPos, Sizes.X, Sizes.Y, NULL, NULL, hInstance, NULL);
 	
 	this->UpdateWindowRect();
 
@@ -58,98 +148,131 @@ void D3DAPP::CloseD3DWindow()
 	CloseWindow(this->HWnd);
 }
 
-void D3DAPP::SetPaused(bool pause)
+bool D3DAPP::InitAdapters()
 {
+	
+	/////////////////////////////////////////
+	//**Delete Adapters
+	//**Reset Pointers
+	/////////////////////////////////////////
+	this->ResetAllAdapters();
 
-	this->IsPaused = pause;
+	HRESULT HR = S_OK;
+	DXGI_ADAPTER_DESC AdapterDesc;
+
+	IDXGIFactory* Factory = 0;
+
+	////////////////////////////////////////
+	//**Load Adapters
+	////////////////////////////////////////
+
+	HR = CreateDXGIFactory(__uuidof(IDXGIFactory),
+		(void**)&Factory);
+	if (FAILED(HR))
+	{
+		MessageBox(this->HWnd, "Create DXGIFactory failed!", "Create Factory error!", MB_ICONERROR);
+		return false;
+	}
+
+	for (int i = 0; Factory->EnumAdapters(i, &this->CurrentAdapter) != DXGI_ERROR_NOT_FOUND; ++i)
+	{
+
+		Adapters.push_back(this->CurrentAdapter);
+		HR = this->CurrentAdapter->EnumOutputs(0, &this->CurrentOutput);
+		if (SUCCEEDED(HR))
+		{
+			Outputs.push_back(this->CurrentOutput);
+		}
+		else
+			Outputs.push_back(nullptr);
+	}
+
+	if (Adapters.size() == 0)
+	{
+
+		MessageBox(this->HWnd, "WTF?! No Video Adapers!", "Create Adapters Error", MB_ICONERROR);
+		return false;
+
+	}
+
+	////////////////////////////////
+	//**Get Best Adapter
+	/////////////////////////////////////
+	UINT MaxRevision = 0;
+	for (int cnt = 0; cnt < Adapters.size(); cnt++)
+	{
+
+		Adapters.at(cnt)->GetDesc(&AdapterDesc);
+		if (AdapterDesc.Revision >= MaxRevision)
+		{
+
+			this->CurrentAdapter = this->Adapters.at(cnt);
+			this->CurrentOutput = this->Outputs.at(cnt);
+			MaxRevision = AdapterDesc.Revision;
+
+		}
+
+	}
+
+	return true;
 
 }
 
-bool D3DAPP::GetPaused()
+bool D3DAPP::CreateOutput(UINT mode)
 {
 
-	return this->IsPaused;
+	for (int i = 0; i < this->Outputs.size(); i++)
+	{
+
+		if (this->Outputs.at(i))
+		{
+
+			this->CurrentOutput = this->Outputs.at(i);
+
+			DXGI_MODE_DESC* MD = nullptr;
+			UINT NumOfModes = 0;
+
+			this->CurrentOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &NumOfModes, nullptr);
+
+			MD = new DXGI_MODE_DESC[NumOfModes];
+
+			this->CurrentOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &NumOfModes, MD);
+
+			//for (int j = 0; j < NumOfModes; j++)
+			//{
+
+			//	if (this->WinSizes.ClientWWidth + this->WinSizes.LCOffSet+  == MD[j].Width)
+			//		if (this->WinSizes.ClientWHeight == MD[j].Height)
+			//		{
+
+			//			this->Numenator = MD[j].RefreshRate.Numerator;
+			//			this->Denomirator = MD[j].RefreshRate.Denominator;
+
+			//		}
+
+			//}
+
+			if (MD)
+				delete[] MD;
+
+			return true;
+
+		}
+
+	}
+
+	return false;
 
 }
 
-WindowSizes& D3DAPP::GetWindowSizes()
-{
-
-	return this->WinSizes;
-
-}
-
-bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleDescCount, const bool isWindowed)
+bool D3DAPP::CreateDevice(IDXGIAdapter* pAdapter)
 {
 
 	HRESULT HR = S_OK;
 
-	IDXGIFactory* dxgiFactory = 0;
-	IDXGIAdapter* dxgiAdapter = 0;
-	IDXGIOutput* dxgiOutput = 0;
-
-	DXGI_MODE_DESC* DisplayModeDesc;
-	DXGI_ADAPTER_DESC AdapterDesc;
-
-	UINT NumModes = 0;
-
-	HR = CreateDXGIFactory(__uuidof(IDXGIFactory),
-		(void**)&dxgiFactory);
-	if (FAILED(HR))
-		return false;
-
-	HR = dxgiFactory->EnumAdapters(0, &dxgiAdapter);
-	if (FAILED(HR))
-		return false;
-
-	HR = dxgiAdapter->EnumOutputs(0, &dxgiOutput);
-	if (FAILED(HR))
-		return false;
-
-	HR = dxgiOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-		DXGI_ENUM_MODES_INTERLACED, &NumModes, nullptr);
-	if (FAILED(HR))
-		return false;
-
-	DisplayModeDesc = new DXGI_MODE_DESC[NumModes];
-	if (!DisplayModeDesc)
-		return false;
-
-	HR = dxgiOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-		DXGI_ENUM_MODES_INTERLACED, &NumModes, DisplayModeDesc);
-	if (FAILED(HR))
-		return false;
-
-	for (int i = 0; i < NumModes; i++)
-	{
-
-		if (DisplayModeDesc[i].Width == (UINT)this->ScreenSizes.x)
-			if (DisplayModeDesc[i].Height == (UINT)this->ScreenSizes.y)
-			{
-				this->Numenator = DisplayModeDesc[i].RefreshRate.Numerator;
-				this->Denomirator = DisplayModeDesc[i].RefreshRate.Denominator;
-			}
-
-	}
-
-	HR = dxgiAdapter->GetDesc(&AdapterDesc);
-	if (FAILED(HR))
-		return false;
-
-	this->VCardMem = (int)(AdapterDesc.DedicatedVideoMemory / 1024 / 1024);
-
-	UINT StringL;
-	int Error = wcstombs_s(&StringL, this->VCardDescription, 128, AdapterDesc.Description,
-		128);
-	if (Error != 0)
-		return false;
-
-	delete[] DisplayModeDesc;
-	DisplayModeDesc = 0;
-
-	D3DRelease(dxgiOutput);
-	
-
+	///////////////////////////////////////////////
+	//**Features
+	///////////////////////////////////////////////
 	D3D_FEATURE_LEVEL FeatureLevelStruct[] =
 	{
 
@@ -160,10 +283,11 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 	};
 
 	UINT NumOfFeatuereLevels = ARRAYSIZE(FeatureLevelStruct);
-	
+
 	D3D_DRIVER_TYPE DriverTypeStruct[] =
 	{
 
+		D3D_DRIVER_TYPE_UNKNOWN,
 		D3D_DRIVER_TYPE_HARDWARE,
 		D3D_DRIVER_TYPE_WARP,
 		D3D_DRIVER_TYPE_REFERENCE
@@ -172,147 +296,241 @@ bool D3DAPP::DXCreateDeviceAndSwapChain(const int bufferCount, const int sampleD
 
 	UINT NumOfDriverTypes = ARRAYSIZE(DriverTypeStruct);
 
-	UINT createDeviceFlags = 0;
+	UINT DeviceFlags = 0;
 
-	HRESULT hr = S_OK;
-	D3D_DRIVER_TYPE DType;
-	D3D_FEATURE_LEVEL FLevel;
-	for (UINT i = 0; i < NumOfDriverTypes; i++)
+	/////////////////////////////////////////////
+	//**Create Device
+	/////////////////////////////////////////////
+	if (pAdapter)
 	{
 
-		DType = DriverTypeStruct[i];
-
-		for (UINT j = 0; j < NumOfFeatuereLevels; j++)
+		for (int i = 0; i < NumOfFeatuereLevels; i++)
 		{
 
-			FLevel = FeatureLevelStruct[j];
+			HR = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, 0, DeviceFlags, nullptr, 0, D3D11_SDK_VERSION,
+				&this->Device, &FeatureLevelStruct[i], &this->DeviceContext);
 
-			hr = D3D11CreateDevice(0, DType, 0, createDeviceFlags, 0, 0, D3D11_SDK_VERSION, &dxDevice, &FLevel, &dxDeviceCon);
+			if (SUCCEEDED(HR))
+				break;
 
-			if (SUCCEEDED(hr))
+		}
+
+		if (FAILED(HR))
+		{
+			MessageBox(this->HWnd, "Your Video Adapter and DirectX Version are not Compatible!", "Create Device Error", MB_ICONERROR);
+			return false;
+		}
+
+	}
+	else
+	{
+		for (int i = 0; i < NumOfFeatuereLevels; i++)
+		{
+			for (int j = 0; j < NumOfDriverTypes; j++)
+			{
+				HR = D3D11CreateDevice(nullptr, DriverTypeStruct[j], 0, DeviceFlags, nullptr, 0, D3D11_SDK_VERSION,
+					&this->Device, &FeatureLevelStruct[i], &this->DeviceContext);
+
+				if (SUCCEEDED(HR))
+					break;
+			}
+
+			if (SUCCEEDED(HR))
 				break;
 		}
-		if (SUCCEEDED(hr))
-			break;
+
+		if (FAILED(HR))
+		{
+			MessageBox(this->HWnd, "Your Video Adapters and DirectX Version are not Compatible!", "Create Device Error", MB_ICONERROR);
+			return false;
+		}
+
+		IDXGIDevice* DXDevice = nullptr;
+		this->Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&DXDevice);
+		DXDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&this->CurrentAdapter);
+		D3DRelease(DXDevice);
 
 	}
-
-	if (FAILED(hr))
-	{
-		MessageBox(this->HWnd, "Device failed!", "", MB_ICONERROR);
-		this->ReleaseDefault();
-		return false;
-	}
-	
-	this->m4xMsaaQuality();
-
-	DXGI_SWAP_CHAIN_DESC scd;
-	ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
-	
-	scd.BufferCount = 1;
-	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	scd.Windowed = isWindowed;
-	if (!isWindowed)
-	{
-
-		this->WinSizes.ClientWWidth = this->GetScreenSizes().x;
-		this->WinSizes.ClientWHeight = this->GetScreenSizes().y;
-
-	}
-	scd.BufferDesc.Height = this->WinSizes.ClientWHeight;
-	scd.BufferDesc.Width = this->WinSizes.ClientWWidth;
-	scd.BufferDesc.RefreshRate.Numerator = 0;
-	scd.BufferDesc.RefreshRate.Denominator = 1;
-	scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scd.OutputWindow = this->HWnd;
-	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	//scd.SampleDesc.Count = 2;
-	//scd.SampleDesc.Quality = 0;
-	if (this->MMsaa > 1)
-		scd.SampleDesc.Count = 4;
-	else
-		scd.SampleDesc.Count = 1;
-	scd.SampleDesc.Quality = this->MMsaa - 1;
-	scd.Flags = 0;
-
-	IDXGIDevice* dxgiDevice = 0;
-	dxDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
-
-	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
-
-	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-
-
-	hr = dxgiFactory->CreateSwapChain(dxDevice, &scd, &dxSwapChain);
-
-	if (FAILED(hr))
-	{
-
-		MessageBox(HWnd, "Swap chain failed!", "", MB_ICONERROR);
-		this->ReleaseDefault();
-		return false;
-
-	}
-
-	D3DRelease(dxgiFactory);
-	D3DRelease(dxgiAdapter);
-	D3DRelease(dxgiDevice);
-
-	//this->UpdateWindowRect();
 
 	return true;
 
 }
 
-bool D3DAPP::DXCreateTargetViewAndDepthView(const int sampleDescCount)
+bool D3DAPP::CreateSwapChain(INT numOfCounts, bool isInWindow)
 {
-	ID3D11Texture2D *TargetBuffer;
-	dxSwapChain->GetBuffer(0,
-		__uuidof(ID3D11Texture2D), 
-		reinterpret_cast<void**>(&TargetBuffer));
-	
-	HRESULT hr = S_OK;
 
-	hr = dxDevice->CreateRenderTargetView(TargetBuffer, 0, &dxRenderTargetView);
+	HRESULT HR = S_OK;
 
-	if (FAILED(hr))
+	if (this->CurrentAdapter)
 	{
 
-		MessageBox(this->HWnd, "Render targer view failed!", "Create DX error!", MB_ICONERROR);
+		this->NumOfCounts = this->GetMaxMSQuality(DXGI_FORMAT_R8G8B8A8_UNORM, numOfCounts);
 
+		IDXGIDevice* DXDevice = nullptr;
+		IDXGIFactory* DXFactory = nullptr;
+		this->CurrentAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&DXFactory);
+		
+		//////////////////////////////////////
+		//**SwapChain DESC
+		//////////////////////////////////////
+		DXGI_SWAP_CHAIN_DESC scd;
+		ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
+
+		scd.BufferCount = 1;
+		scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		scd.Windowed = true;
+		if (!isInWindow)
+		{
+
+			this->WinSizes.ClientWWidth = this->GetScreenSizes().x;
+			this->WinSizes.ClientWHeight = this->GetScreenSizes().y;
+
+		}
+		scd.BufferDesc.Height = this->WinSizes.ClientWHeight;
+		scd.BufferDesc.Width = this->WinSizes.ClientWWidth;
+		scd.BufferDesc.RefreshRate.Numerator = 0;
+		scd.BufferDesc.RefreshRate.Denominator = 1;
+		scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		scd.OutputWindow = this->HWnd;
+		scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		if (this->MMsaa)
+		{
+			scd.SampleDesc.Count = this->NumOfCounts;
+			scd.SampleDesc.Quality = this->MMsaa - 1;
+		}
+			
+		else
+		{
+			scd.SampleDesc.Count = 1;
+			scd.SampleDesc.Quality = 0;
+		}
+			
+		scd.Flags = 0;
+
+		//////////////////////////////////////
+		//**Create SwapChain
+		//////////////////////////////////////
+		HR = DXFactory->CreateSwapChain(this->Device, &scd, &this->SwapChain);
+
+		D3DRelease(DXDevice);
+		D3DRelease(DXFactory);
+
+		if (FAILED(HR))
+		{
+
+			MessageBox(this->HWnd, "Failed To Create SwapChain!", "Create SwapChain Error!", MB_ICONERROR);
+			return false;
+
+		}
+
+
+	}
+
+	return true;
+
+}
+
+bool D3DAPP::CreateMainRenderTargetAndDepthStencilViews()
+{
+
+	HRESULT HR = S_OK;
+
+	/////////////////////////////////////////////
+	//**Create Main Render Target View
+	/////////////////////////////////////////////
+
+	ID3D11Texture2D *TargetBuffer;
+	D3D11_TEXTURE2D_DESC TD;
+	HR = this->SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&TargetBuffer));
+	if (FAILED(HR))
+	{
+
+		MessageBox(this->HWnd, "Failed to create Render Target Buffer!", "Create Render Target Error!", MB_ICONERROR);
+		D3DRelease(TargetBuffer);
+		return false;
+
+	}
+	TargetBuffer->GetDesc(&TD);
+	D3D11_RENDER_TARGET_VIEW_DESC RTVD;
+	ZeroMemory(&RTVD, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+	RTVD.Format = TD.Format;
+	RTVD.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+	RTVD.Texture2DMS.UnusedField_NothingToDefine = 0;
+	RTVD.Texture2D.MipSlice = 0;
+
+	HR = Device->CreateRenderTargetView(TargetBuffer, nullptr, &MainRenderTarget);
+	D3DRelease(TargetBuffer);
+	if (FAILED(HR))
+	{
+
+		MessageBox(this->HWnd, "Failed to create Main Render Target!", "Create Render Target Error!", MB_ICONERROR);
 		return false;
 
 	}
 
+	/////////////////////////////////////////////
+	//**Create Main Depth View
+	/////////////////////////////////////////////
 	D3D11_TEXTURE2D_DESC DepthTextureDesc;
 	//ZeroMemory(&DepthTextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	this->NumOfCounts = this->GetMaxMSQuality(DXGI_FORMAT_D24_UNORM_S8_UINT, this->NumOfCounts);
 
 	DepthTextureDesc.ArraySize = 1;
 	DepthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	DepthTextureDesc.CPUAccessFlags = NULL;
 	DepthTextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	DepthTextureDesc.Height = this->WinSizes.ClientWHeight;
+	DepthTextureDesc.Width = this->WinSizes.ClientWWidth;
 	DepthTextureDesc.MipLevels = 1;
 	DepthTextureDesc.MiscFlags = NULL;
-	//DepthTextureDesc.SampleDesc.Count = 1;
-	//DepthTextureDesc.SampleDesc.Quality = 1;
-	if (this->MMsaa > 1)
-		DepthTextureDesc.SampleDesc.Count = 4;
-	else
-		DepthTextureDesc.SampleDesc.Count = 1;
-	DepthTextureDesc.SampleDesc.Quality = this->MMsaa - 1;
-	DepthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	DepthTextureDesc.Width = this->WinSizes.ClientWWidth;
 
-	dxDevice->CreateTexture2D(&DepthTextureDesc, 0, &DepthBuffer);
+	if (this->MMsaa)
+	{
+		DepthTextureDesc.SampleDesc.Count = this->NumOfCounts;
+		DepthTextureDesc.SampleDesc.Quality = this->MMsaa - 1;
+	}
+	
+	else
+	{
+		DepthTextureDesc.SampleDesc.Count = 1;
+		DepthTextureDesc.SampleDesc.Quality = 0;
+	}
+	DepthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	
+
+	ID3D11Texture2D* DepthBuffer;
+
+	Device->CreateTexture2D(&DepthTextureDesc, 0, &DepthBuffer);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	ZeroMemory(&descDSV, sizeof(descDSV));
 	descDSV.Format = DepthTextureDesc.Format;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	descDSV.Texture2DMS.UnusedField_NothingToDefine = 0;
 	descDSV.Texture2D.MipSlice = 0;
+
+	HR = Device->CreateDepthStencilView(DepthBuffer, &descDSV, &MainDepth);
+	D3DRelease(DepthBuffer);
+
+	if (FAILED(HR))
+	{
+
+		MessageBox(this->HWnd, "Failed to create Depth Stancil View!", "create Depth Stancil View Error!", MB_ICONERROR);
+		return false;
+
+	}
+
+	return true;
+
+}
+
+bool D3DAPP::CreateMainDepthStencilStates()
+{
+
+	bool Status = true;
 
 	////////////////////////////////////////////////////
 	//Create Depth stencil state (3d)
@@ -337,13 +555,13 @@ bool D3DAPP::DXCreateTargetViewAndDepthView(const int sampleDescCount)
 	Dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	//Dsd.FrontFace.
 
-	std::string Name = "DepthRenderState";
-	this->DXCreateDepthStencilState(Dsd, Name);
+	if (!this->CreateDepthStencilState(Dsd, std::string("DepthRenderState")))
+		Status =  false;
 
 	////////////////////////////////////////////////////
 	//Create Depth stencil state (3d)
 	////////////////////////////////////////////////////
-	ZeroMemory(&Dsd,sizeof(D3D11_DEPTH_STENCIL_DESC));
+	ZeroMemory(&Dsd, sizeof(D3D11_DEPTH_STENCIL_DESC));
 
 	Dsd.DepthEnable = FALSE;
 	Dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -363,19 +581,12 @@ bool D3DAPP::DXCreateTargetViewAndDepthView(const int sampleDescCount)
 	Dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	//Dsd.FrontFace.
 
-	Name.clear();
-	Name = "2DRenderState";
-	this->DXCreateDepthStencilState(Dsd, Name);
-
-	dxDevice->CreateDepthStencilView(DepthBuffer, &descDSV, &dxDepthView);
-
-	dxDeviceCon->OMSetRenderTargets(1, &dxRenderTargetView, dxDepthView);
-
-	D3DRelease(TargetBuffer);
+	if(!this->CreateDepthStencilState(Dsd, std::string("2DRenderState")))
+		Status =  false;
 
 	this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, 1.f, 0.f);
 
-	return true;
+	return Status;
 
 }
 
@@ -387,7 +598,7 @@ ID3D11RenderTargetView* D3DAPP::CreateRenderTarget(ID3D11Texture2D* textureRende
 
 	ID3D11RenderTargetView* NewRTV;
 
-	HRESULT HR = this->dxDevice->CreateRenderTargetView(textureRenderTo, 0, &NewRTV);
+	HRESULT HR = this->Device->CreateRenderTargetView(textureRenderTo, 0, &NewRTV);
 	
 	if (FAILED(HR))
 		return nullptr;
@@ -396,55 +607,95 @@ ID3D11RenderTargetView* D3DAPP::CreateRenderTarget(ID3D11Texture2D* textureRende
 
 }
 
-UINT D3DAPP::CreateViewPort(const FLOAT topLeftX, const FLOAT topLeftY, 
-	const FLOAT width, const FLOAT height, const FLOAT maxDepth, const FLOAT minDepth, SHORT indexOfNewVPort)
+void D3DAPP::ResetMainCOM()
 {
 
-	if (indexOfNewVPort < 0 || indexOfNewVPort > ARRAYSIZE(this->ViewPorts))
+	this->DeviceContext->OMSetRenderTargets(0, 0, 0);
+
+	this->DeleteAllDepthStencilStates();
+
+
+	D3DRelease(this->MainRenderTarget);
+	D3DRelease(this->MainDepth);
+	this->DeviceContext->Flush();
+
+	for (int i = 0; i < this->NumOfVPorts; i++)
 	{
 
-		MessageBox(this->HWnd, "View Port array overflow!", "Create View Port error!", MB_ICONERROR);
-		return false;
+		D3DRelease(this->ViewPorts[i].RTView);
+		D3DDelete(this->ViewPorts[i].MaterialToRender);
 
 	}
-		
-	indexOfNewVPort = (indexOfNewVPort != 0) ? indexOfNewVPort : this->NumOfVPorts;
 
+	D3DRelease(this->Device);
+	D3DRelease(this->DeviceContext);
+
+	D3DRelease(this->StandartRastState);
+
+	if (this->SwapChain)
+		this->SwapChain->SetFullscreenState(false, NULL);
+	D3DRelease(this->SwapChain);
+
+
+}
+
+void D3DAPP::ResetAllAdapters()
+{
+
+	for (int i = 0; i < this->Adapters.size(); i++)
+	{
+
+		D3DRelease(this->Adapters.at(i));
+		D3DRelease(this->Outputs.at(i));
+
+	}
+	this->CurrentAdapter = nullptr;
+	this->CurrentOutput = nullptr;
+
+}
+
+UINT D3DAPP::CreateViewPort(const FLOAT topLeftX, const FLOAT topLeftY, 
+	const FLOAT width, const FLOAT height, const FLOAT maxDepth, const FLOAT minDepth, char* shaderName)
+{
+
+	if (this->NumOfVPorts >= 8)
+		return 1;
+		
 	Vector2d Pos;
 	Pos.X = (topLeftX + width * 0.5f);
 	Pos.Y = (topLeftY + height * 0.5f);
 
-	this->ViewPorts[indexOfNewVPort].WinPos = Pos;
+	this->ViewPorts[this->NumOfVPorts].WinPos = Pos;
 
 	Pos.X = Pos.X - this->WinSizes.ClientWWidth * 0.5f;
 	Pos.Y = -Pos.Y + this->WinSizes.ClientWHeight * 0.5f;
 
-	this->ViewPorts[indexOfNewVPort].WorldPos = Pos;
+	this->ViewPorts[this->NumOfVPorts].WorldPos = Pos;
 
-	this->ViewPorts[indexOfNewVPort].VPort.Height = height;
-	this->ViewPorts[indexOfNewVPort].VPort.Width = width;
-	this->ViewPorts[indexOfNewVPort].VPort.TopLeftX = 0;
-	this->ViewPorts[indexOfNewVPort].VPort.TopLeftY = 0;
-	this->ViewPorts[indexOfNewVPort].VPort.MaxDepth = maxDepth;
-	this->ViewPorts[indexOfNewVPort].VPort.MinDepth = minDepth;
+	this->ViewPorts[this->NumOfVPorts].VPort.Height = height;
+	this->ViewPorts[this->NumOfVPorts].VPort.Width = width;
+	this->ViewPorts[this->NumOfVPorts].VPort.TopLeftX = 0;
+	this->ViewPorts[this->NumOfVPorts].VPort.TopLeftY = 0;
+	this->ViewPorts[this->NumOfVPorts].VPort.MaxDepth = maxDepth;
+	this->ViewPorts[this->NumOfVPorts].VPort.MinDepth = minDepth;
 
-	D3DXMatrixOrthoLH(&this->ViewPorts[indexOfNewVPort].PMatrix, this->ViewPorts[indexOfNewVPort].VPort.Width,
-		this->ViewPorts[indexOfNewVPort].VPort.Height, 0, 1);
+	D3DXMatrixOrthoLH(&this->ViewPorts[this->NumOfVPorts].PMatrix, this->ViewPorts[this->NumOfVPorts].VPort.Width,
+		this->ViewPorts[this->NumOfVPorts].VPort.Height, 0, 1);
 
 	ID3D11Texture2D* Texture = this->CreateSTexture2D(width, height, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, DXGI_FORMAT_R32G32B32A32_FLOAT);
 
-	this->ViewPorts[indexOfNewVPort].MaterialToRender = new Material;
+	this->ViewPorts[this->NumOfVPorts].MaterialToRender = new Material;
 
-	this->ViewPorts[indexOfNewVPort].MaterialToRender->Texture = this->CreateSShaderResourceView(Texture, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	
-	this->ViewPorts[indexOfNewVPort].RTView = this->CreateRenderTarget(Texture);
+	this->ViewPorts[this->NumOfVPorts].MaterialToRender->Texture = this->CreateSShaderResourceView(Texture, DXGI_FORMAT_R32G32B32A32_FLOAT);
+
+	if (shaderName)
+	this->ViewPorts[this->NumOfVPorts].MaterialToRender->ShaderName = shaderName;
+
+	this->ViewPorts[this->NumOfVPorts].RTView = this->CreateRenderTarget(Texture);
 
 	this->NumOfVPorts++;
 
-	if (indexOfNewVPort != 0)
-		return indexOfNewVPort;
-	else
-		return this->NumOfVPorts - 1;
+	return this->NumOfVPorts;
 
 }
 
@@ -454,7 +705,7 @@ bool D3DAPP::SetViewPort(const SHORT indexOfVPort)
 	if (indexOfVPort < 0 || indexOfVPort > ARRAYSIZE(this->ViewPorts))
 		return false;
 
-	this->dxDeviceCon->RSSetViewports(1, &this->ViewPorts[indexOfVPort].VPort);
+	this->DeviceContext->RSSetViewports(1, &this->ViewPorts[indexOfVPort].VPort);
 
 	return true;
 
@@ -506,7 +757,7 @@ void D3DAPP::SetRenderTarget(ID3D11RenderTargetView* renderTV)
 	if (!renderTV)
 		return;
 
-	this->dxDeviceCon->OMSetRenderTargets(1, &renderTV, this->dxDepthView);
+	this->DeviceContext->OMSetRenderTargets(1, &renderTV, this->MainDepth);
 
 }
 
@@ -520,12 +771,12 @@ VPortStruct& D3DAPP::GetVPStruct(const short indexOfVPort)
 
 }
 
-bool D3DAPP::DXCreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC & dsd, std::string & name)
+bool D3DAPP::CreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC & dsd, std::string & name)
 {
 
 	DepthStencilState DSS;
 
-	HRESULT hr = this->dxDevice->CreateDepthStencilState(&dsd, &DSS.PDepthStencilState);
+	HRESULT hr = this->Device->CreateDepthStencilState(&dsd, &DSS.PDepthStencilState);
 	if (FAILED(hr))
 	{
 
@@ -537,7 +788,7 @@ bool D3DAPP::DXCreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC & dsd, std::stri
 
 	DSS.Name = name;
 
-	this->dxDepthState.push_back(DSS);
+	this->DepthStencilStates.push_back(DSS);
 
 	return true;
 
@@ -546,13 +797,13 @@ bool D3DAPP::DXCreateDepthStencilState(D3D11_DEPTH_STENCIL_DESC & dsd, std::stri
 bool D3DAPP::SetDepthStencilStateByName(std::string & name)
 {
 
-	for (int i = 0; i < this->dxDepthState.size(); i++)
+	for (int i = 0; i < this->DepthStencilStates.size(); i++)
 	{
 
-		if (this->dxDepthState.at(i).Name == name)
+		if (this->DepthStencilStates.at(i).Name == name)
 		{
 
-			this->dxDeviceCon->OMSetDepthStencilState(this->dxDepthState.at(i).PDepthStencilState, 1);
+			this->DeviceContext->OMSetDepthStencilState(this->DepthStencilStates.at(i).PDepthStencilState, 1);
 			return true;
 
 		}
@@ -571,6 +822,7 @@ bool D3DAPP::SetDepthStencilStateByName(std::string & name)
 ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT height, UINT bindFlags, DXGI_FORMAT format)
 {
 
+	this->NumOfCounts = this->GetMaxMSQuality(format, this->NumOfCounts);
 	ID3D11Texture2D* RenderBufferTexture;
 	D3D11_TEXTURE2D_DESC T2DD;
 	ZeroMemory(&T2DD, sizeof(D3D11_TEXTURE2D_DESC));
@@ -583,10 +835,10 @@ ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT height, UINT bindFlag
 	T2DD.Width = width;
 	T2DD.MipLevels = 1;
 	T2DD.MiscFlags = 0;
-	T2DD.SampleDesc.Count = 1;
-	T2DD.SampleDesc.Quality = 0;
+	T2DD.SampleDesc.Count = this->NumOfCounts;
+	T2DD.SampleDesc.Quality = this->MMsaa - 1;
 	T2DD.Usage = D3D11_USAGE_DEFAULT;
-	HRESULT hr = this->dxDevice->CreateTexture2D(&T2DD, 0, &RenderBufferTexture);
+	HRESULT hr = this->Device->CreateTexture2D(&T2DD, 0, &RenderBufferTexture);
 
 	if (SUCCEEDED(hr))
 		return RenderBufferTexture;
@@ -622,7 +874,7 @@ ID3D11Buffer* D3DAPP::CreateSVertexBuffer(bool dynamic, UINT size, UINT numOfEle
 	//ZeroMemory(&VSRD, sizeof(D3D11_SUBRESOURCE_DATA));
 	//VSRD.pSysMem = &this->Vertices[0];
 
-	HRESULT hr = this->dxDevice->CreateBuffer(&VBD, 0, &VBuffer);
+	HRESULT hr = this->Device->CreateBuffer(&VBD, 0, &VBuffer);
 	if (SUCCEEDED(hr))
 		return VBuffer;
 
@@ -641,16 +893,16 @@ ID3D11ShaderResourceView* D3DAPP::CreateSShaderResourceView(ID3D11Texture2D* ren
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVD;
 	ZeroMemory(&SRVD, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
 	SRVD.Format = format;
-	SRVD.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	SRVD.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 	SRVD.Buffer.ElementOffset = 0;
 	SRVD.Buffer.FirstElement = 0;
 	SRVD.Buffer.NumElements = 1;
 	SRVD.BufferEx.FirstElement = 0;
 	SRVD.BufferEx.Flags = 0;
-	SRVD.BufferEx.NumElements = 1;
+	SRVD.BufferEx.NumElements = 1;/*
 	SRVD.Texture2D.MipLevels = 1;
-	SRVD.Texture2D.MostDetailedMip = 0;
-	HRESULT hr = this->dxDevice->CreateShaderResourceView(renderBufferTexture, &SRVD, &ResourceView);
+	SRVD.Texture2D.MostDetailedMip = 0;*/
+	HRESULT hr = this->Device->CreateShaderResourceView(renderBufferTexture, &SRVD, &ResourceView);
 	if (SUCCEEDED(hr))
 		return ResourceView;
 
@@ -672,7 +924,7 @@ ID3D11Buffer* D3DAPP::CreateSIndexBuffer(std::vector<UINT>& indexBuffer)
 
 	D3D11_SUBRESOURCE_DATA SRD;
 	SRD.pSysMem = &indexBuffer.at(0);
-	HRESULT hr = this->dxDevice->CreateBuffer(&IBD, &SRD, &IBuffer);
+	HRESULT hr = this->Device->CreateBuffer(&IBD, &SRD, &IBuffer);
 
 	if (SUCCEEDED(hr))
 		return IBuffer;
@@ -693,7 +945,7 @@ ID3D11Buffer* D3DAPP::CreateSConstantBuffer(UINT size)
 	CBD.StructureByteStride = 0;
 	CBD.Usage = D3D11_USAGE_DEFAULT;
 
-	HRESULT hr = this->dxDevice->CreateBuffer(&CBD, 0, &CBuffer);
+	HRESULT hr = this->Device->CreateBuffer(&CBD, 0, &CBuffer);
 
 	if (SUCCEEDED(hr))
 		return CBuffer;
@@ -705,10 +957,10 @@ ID3D11Buffer* D3DAPP::CreateSConstantBuffer(UINT size)
 bool D3DAPP::SetDepthStencilStateByIndex(UINT index)
 {
 
-	if (index >= 0 && index < this->dxDepthState.size())
+	if (index >= 0 && index < this->DepthStencilStates.size())
 	{
 
-		this->dxDeviceCon->OMSetDepthStencilState(this->dxDepthState.at(index).PDepthStencilState, 1);
+		this->DeviceContext->OMSetDepthStencilState(this->DepthStencilStates.at(index).PDepthStencilState, 1);
 		return true;
 
 	}
@@ -721,51 +973,78 @@ bool D3DAPP::SetDepthStencilStateByIndex(UINT index)
 	}
 }
 
-void D3DAPP::OnResize()
+void D3DAPP::DeleteAllDepthStencilStates()
 {
 
-	if (this->dxRenderTargetView != NULL)
+	for (int i = 0; i < this->DepthStencilStates.size(); i++)
+	{
+		D3DRelease(this->DepthStencilStates.at(i).PDepthStencilState);
+	}
+	this->DepthStencilStates.clear();
+	this->DepthStencilStates.shrink_to_fit();
+
+}
+
+void D3DAPP::Resize()
+{
+
+	if (this->MainRenderTarget != NULL)
 	{
 
-		this->dxDeviceCon->OMSetRenderTargets(0, 0, 0);
+		this->DeviceContext->OMSetRenderTargets(0, 0, 0);
 
-		this->dxRenderTargetView->Release();
-		D3DRelease(this->dxDepthView);
-		this->dxDeviceCon->Flush();
+		D3DRelease(this->MainRenderTarget);
+		D3DRelease(this->MainDepth);
+
+		this->DeleteAllDepthStencilStates();
+
+		this->DeviceContext->Flush();
 
 		this->UpdateWindowRect();
 
-		this->dxSwapChain->ResizeBuffers(1, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+		this->SwapChain->ResizeBuffers(1, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 
-		this->DXCreateTargetViewAndDepthView(4);
+		this->CreateMainRenderTargetAndDepthStencilViews();
 
 		//this->DXCreateViewPort(this->WinSizes.mWindowHeight, this->WinSizes.mWindowWidth, 1.0f, 0.0f, 0, 0);
 	}
 }
 
-void D3DAPP::m4xMsaaQuality()
+UINT D3DAPP::GetMaxMSQuality(enum DXGI_FORMAT format, INT numOfCounts)
 {
 
-	if (this->MMsaa == NULL)
+	if (numOfCounts >= 0)
 	{
-		HRESULT hr = dxDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R32G32B32A32_UINT, 4, &this->MMsaa);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL, "Quality faild!", "ERROR", MB_ICONERROR);
-			this->MMsaa = 1;
-		}
+
+		numOfCounts =(numOfCounts < D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT ? numOfCounts : D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT);
+
 	}
+	else
+	{
+
+		numOfCounts = D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
+
+	}
+
+	HRESULT hr = Device->CheckMultisampleQualityLevels(format, numOfCounts, &this->MMsaa);
+	if (FAILED(hr))
+	{
+		this->MMsaa = 1;
+	}
+
+	return numOfCounts;
+
 }
 
 D3DAPP::~D3DAPP()
 {
 
-	/*this->dxSwapChain->SetFullscreenState(false, NULL);
-	this->dxDepthView->Release();
-	this->dxDevice->Release();
-	this->dxDeviceCon->Release();
-	this->dxRenderTargetView->Release();
-	this->dxSwapChain->Release();*/
+	/*this->SwapChain->SetFullscreenState(false, NULL);
+	this->MainDepth->Release();
+	this->Device->Release();
+	this->DeviceContext->Release();
+	this->MainRenderTarget->Release();
+	this->SwapChain->Release();*/
 
 }
 
@@ -802,63 +1081,29 @@ XMFLOAT2 & D3DAPP::GetScreenSizes()
 
 void D3DAPP::ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
-	dxDeviceCon->ClearRenderTargetView(rtv, (float*)&color);
+	DeviceContext->ClearRenderTargetView(rtv, (float*)&color);
 	if (dsv)
-		dxDeviceCon->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, NULL);
+		DeviceContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, NULL);
 }
 
 void D3DAPP::Draw()
 {
-	dxSwapChain->Present(0, 0);
+	SwapChain->Present(0, 0);
 }
 
 void D3DAPP::ReleaseDefault()
 {
 
-	if (this->dxSwapChain)
-	this->dxSwapChain->SetFullscreenState(false, NULL);
+	if (this->SwapChain)
+	this->SwapChain->SetFullscreenState(false, NULL);
 	
 	this->DeleteAllMaterials();
 
-	for (int i = 0; i < this->NumOfVPorts; i++)
-	{
-
-		D3DRelease(this->ViewPorts[i].RTView);
-		D3DDelete(this->ViewPorts[i].MaterialToRender);
-
-	}
-
-	D3DRelease(this->dxDepthView);
-	D3DRelease(this->dxDevice);
-	D3DRelease(this->dxDeviceCon);
-	D3DRelease(this->dxRenderTargetView);
-	D3DRelease(this->dxSwapChain);
-	D3DRelease(this->dxDepthView);
-	D3DRelease(this->DepthBuffer);
-	D3DRelease(this->StandartRastState);
+	this->ResetAllAdapters();
+	this->ResetMainCOM();
 
 	D3DDelete(this->Timer);
 
-}
-
-HWND D3DAPP::GetWindow()
-{
-	return HWnd;
-}
-
-float D3DAPP::GetWindowPosX()
-{
-	return this->WindowCoorX;
-}
-
-float D3DAPP::GetWindowPosY()
-{
-	return this->WindowCoorY;
-}
-
-std::string& D3DAPP::GetCatalogName()
-{
-	return this->Catalog;
 }
 
 void D3DAPP::SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cmode)
@@ -871,37 +1116,33 @@ void D3DAPP::SetStandartRenderSettings(D3D11_FILL_MODE fmode, D3D11_CULL_MODE cm
 	rsDesc.CullMode = cmode;
 	rsDesc.FrontCounterClockwise = true;
 	rsDesc.DepthClipEnable = true;
-	rsDesc.AntialiasedLineEnable = true;
-	rsDesc.MultisampleEnable = true;
+	rsDesc.AntialiasedLineEnable = false;
+	rsDesc.MultisampleEnable = false;
 
-	this->dxDevice->CreateRasterizerState(&rsDesc, &this->StandartRastState);
+	this->Device->CreateRasterizerState(&rsDesc, &this->StandartRastState);
 
 }
 
 bool D3DAPP::SInit(int bufferCount, int sampleDestCount, bool windowed)
 {
 
-	if (!this->DXCreateDeviceAndSwapChain(1, 4, true))
-	{
-
-		MessageBox(this->GetWindow(), "Create device failed!", "Device error!", MB_ICONERROR);
-
+	if (!this->InitAdapters())
 		return false;
 
-	}
-
-	if (!this->DXCreateTargetViewAndDepthView(4))
-	{
-
-		MessageBox(this->GetWindow(), "Create target view failed!", "Target view error!", MB_ICONERROR);
-
+	if (!this->CreateOutput())
 		return false;
 
-	}
+	if (!this->CreateDevice(nullptr))
+		return false;
 
-	//this->DXCreateViewPort(this->GetWindowHeight(), this->GetWindowWidth(), 1.0f, 0.f, 0.f, 0.f);
+	if (!this->CreateSwapChain(2))
+		return false;
 
-	//this->SetRenderSettings(D3D11_FILL_SOLID, D3D11_CULL_NONE, this->mRastStateSolidBack);
+	if (!this->CreateMainRenderTargetAndDepthStencilViews())
+		return false;
+
+	if (!this->CreateMainDepthStencilStates())
+		return false;
 
 	return true;
 
@@ -911,34 +1152,7 @@ bool D3DAPP::SInitMaterials()
 {
 
 	FileManager* FManager = new FileManager();
-	std::vector<std::string> TextureFileList;
 	std::vector<std::string> MaterialFileList;
-
-	///////////////////////////////////////////////
-	//**Load Textures
-	///////////////////////////////////////////////
-
-	std::vector<TextureStruct*> Textures;
-
-	TextureFileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.dds");
-
-	//for (int i = 0; i < TextureFileList.size(); i++)
-	//{
-
-		//Textures.push_back(this->LoadTexture(TextureFileList.at(i), this->GetCatalogName() + "\\Textures\\"));
-
-	//}
-
-
-	//for (int i = 0; i < FileList.size(); i++)
-	//{
-	//
-	//	Textures.push_back(this->LoadTexture(FileList.at(i), this->GetCatalogName() + "\\Textures\\"));
-	//
-	//}
-	//
-	//FileList.clear();
-	//FileList.shrink_to_fit();
 
 	////////////////////////////////////////////////
 	//**Init Materials
@@ -973,17 +1187,6 @@ bool D3DAPP::SInitMaterials()
 
 				NewMaterial->Texture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
 
-				//for (int j = 0; j < TextureFileList.size(); j++)
-				//{
-				//	if (Textures.at(j)->TextureName == Line) // <-
-				//	{
-				//		NewMaterial.Texture = Textures.at(j)->Texture;
-				//		if (NewMaterial.Name == "")
-				//			NewMaterial.Name = Textures.at(j)->TextureName;
-				//		break;
-				//	}
-				//}
-
 			}
 			else if (!Line.compare("$ATexture:"))
 			{
@@ -991,15 +1194,6 @@ bool D3DAPP::SInitMaterials()
 				Line = FManager->GetStringFromFile();
 
 				NewMaterial->AdditionalTexture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
-
-				//for (int j = 0; j < Textures.size(); j++)
-				//{
-				//	if (this->TextureNames.at(i) == Line)
-				//	{
-				//		NewMaterial.AdditionalTexture = Textures.at(i)->Texture;
-				//		break;
-				//	}
-				//}
 
 			}
 			else if (!Line.compare("$TextureScale:"))
@@ -1044,10 +1238,6 @@ bool D3DAPP::SInitMaterials()
 		FManager->Close();
 
 	}
-
-	//Textures.clear();
-
-	//MateFileList.clear();
 
 	FManager->Close();
 	D3DDelete(FManager);
@@ -1094,7 +1284,7 @@ ID3D11ShaderResourceView* D3DAPP::LoadTexture(std::string& textureName, std::str
 
 	path = path + textureName;
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(this->dxDevice, path.c_str(),
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(this->Device, path.c_str(),
 		NULL, NULL, &SRV, NULL);
 
 	if (FAILED(hr))
@@ -1125,6 +1315,23 @@ bool D3DAPP::GetIsInVPort(XMFLOAT2& pos, const short indexOfVPort)
 		return false;
 
 	return true;
+
+}
+
+ID3D11SamplerState* D3DAPP::SCreateSampler(enum D3D11_TEXTURE_ADDRESS_MODE adress, enum D3D11_FILTER filter, UINT maxAnisotropy)
+{
+
+	ID3D11SamplerState* NewSampler;
+	D3D11_SAMPLER_DESC SD;
+	ZeroMemory(&SD, sizeof(D3D11_SAMPLER_DESC));
+	SD.AddressU = adress;
+	SD.AddressV = adress;
+	SD.AddressW = adress;
+	SD.Filter = filter;
+	SD.MaxAnisotropy = maxAnisotropy;
+	HRESULT hr = this->Device->CreateSamplerState(&SD, &NewSampler);
+
+	return NewSampler;
 
 }
 
