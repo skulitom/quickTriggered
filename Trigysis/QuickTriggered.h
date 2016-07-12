@@ -14,6 +14,9 @@
 
 #include "TestPipeline.h"
 
+#define BOARD_SIZE 240
+#define BOARD_INTERVAL 60
+
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
 class QTButton : public ButtonInterface
@@ -53,6 +56,8 @@ private:
 	/////////////////////////////
 
 	//TestPipeline* TPipeline;
+	void createFigure(int x, int y);
+	void setBoard();
 
 	Figure* Fig1;
 

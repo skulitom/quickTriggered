@@ -76,25 +76,7 @@ bool QuickTriggered::InitApp()
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(-100, -100), 1);
-
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(100, -100), 1);
-
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(100, 100), 1);
-
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(-100, 100), 1);
+		setBoard();
 
 		return true;
 
@@ -102,6 +84,27 @@ bool QuickTriggered::InitApp()
 
 	return false;
 }
+
+void QuickTriggered::setBoard()
+{
+	for (int i = -BOARD_SIZE; i <= BOARD_SIZE; i += BOARD_INTERVAL)
+	{
+		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
+		{
+			createFigure(i, j);
+		}
+	}
+}
+
+
+void QuickTriggered::createFigure(int x, int y)
+{
+	this->Fig1 = new Figure(this);
+	this->Fig1->SetFigureSuperType(0);
+	this->Fig1->SetFigureType(0);
+	this->Fig1->Spawn(Vector2d(x, y), 1);
+}
+
 
 void QuickTriggered::Update()
 {
@@ -111,9 +114,11 @@ void QuickTriggered::Update()
 	////////////////////////////////////////////////
 
 	if (GetAsyncKeyState('1'))
-		this->Resize(DX_DISPLAY_MODE_1360_768);
-	else if (GetAsyncKeyState('2'))
 		this->Resize(DX_DISPLAY_MODE_800_600);
+	else if (GetAsyncKeyState('2'))
+		this->Resize(DX_DISPLAY_MODE_1360_768);
+	else if (GetAsyncKeyState('3'))
+		this->Resize(DX_DISPLAY_MODE_1920_1080);
 
 	Vector2d Pos;
 	if (GetAsyncKeyState(VK_SPACE))
