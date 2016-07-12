@@ -24,6 +24,7 @@ bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 
 	return true;
 }
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, int cmd)
 {
 	MSG msg = { 0 };
