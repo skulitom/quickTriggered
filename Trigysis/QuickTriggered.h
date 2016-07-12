@@ -45,6 +45,8 @@ public:
 	void ReleaseDefault() override;
 	bool InitApp();
 	void Update();
+	void InitVPorts();
+	void Resize(enum EDisplayModes mode) override;
 private:
 	/////////////////////////////
 	//**Functions for buttons

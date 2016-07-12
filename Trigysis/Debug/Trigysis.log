@@ -1,9 +1,9 @@
-﻿Build started 11.07.2016 13:05:36.
+﻿Build started 12.07.2016 13:45:04.
      1>Project "C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Trigysis\Trigysis.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Trigysis.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt D3DAPP.cpp
-         D3DAPP.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cpp QuickTriggered.cpp
+         QuickTriggered.cpp
      1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\dxinclude\dxgitype.h(12): warning C4005: 'DXGI_STATUS_OCCLUDED' : macro redefinition
                  c:\program files (x86)\windows kits\8.1\include\shared\winerror.h(50092) : see previous definition of 'DXGI_STATUS_OCCLUDED'
      1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\dxinclude\dxgitype.h(13): warning C4005: 'DXGI_STATUS_CLIPPED' : macro redefinition
@@ -62,27 +62,15 @@
                  c:\program files (x86)\windows kits\8.1\include\shared\winerror.h(50454) : see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
      1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\stringhelper.h(15): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\timer.h(34): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(134): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(202): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(224): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(307): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(327): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(329): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(385): warning C4244: '=' : conversion from 'FLOAT' to 'UINT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(386): warning C4244: '=' : conversion from 'FLOAT' to 'UINT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(587): warning C4244: 'argument' : conversion from 'UINT' to 'const FLOAT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(645): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(685): warning C4244: 'argument' : conversion from 'const FLOAT' to 'UINT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(768): warning C4172: returning address of local variable or temporary
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(800): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(979): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(1058): warning C4244: 'argument' : conversion from 'LONG' to 'FLOAT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(1075): warning C4244: '=' : conversion from 'LONG' to 'FLOAT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(1076): warning C4244: '=' : conversion from 'LONG' to 'FLOAT', possible loss of data
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(1252): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(1461): warning C4172: returning address of local variable or temporary
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(820): warning C4715: 'D3DAPP::SetDepthStencilStateByName' : not all control paths return a value
-     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.cpp(974): warning C4715: 'D3DAPP::SetDepthStencilStateByIndex' : not all control paths return a value
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\basicelement.h(50): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\basicelement.h(59): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\basicelement.h(65): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\mathhelper.h(120): warning C4244: 'return' : conversion from 'float' to 'INT', possible loss of data
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\button.h(64): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\sagit\desktop\quicktriggered\quicktriggered\trigysis\quicktriggered.cpp(139): warning C4244: 'argument' : conversion from 'UINT' to 'const FLOAT', possible loss of data
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         Application.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" d3d11.lib d3dcompiler.lib d3dx11d.lib d3dx9d.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Effects11.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Basic2DDraw.obj
@@ -106,4 +94,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:07.27
+Time Elapsed 00:00:16.63

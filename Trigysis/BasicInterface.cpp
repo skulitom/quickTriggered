@@ -47,6 +47,13 @@ void BasicInterface::InitVPShaders()
 
 }
 
+void BasicInterface::Resize(enum EDisplayModes mode)
+{
+
+	D3DAPP::Resize(mode);
+
+}
+
 void BasicInterface::Draw()
 {
 

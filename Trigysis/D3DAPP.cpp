@@ -42,6 +42,18 @@ HWND D3DAPP::CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC
 
 	RegisterClassEx(&WC);
 
+	Vector2d Sizes = this->GetWindowModeSize(mode);
+
+	this->HWnd = CreateWindowEx(NULL, classname, winname, winType, xPos, yPos, Sizes.X, Sizes.Y, NULL, NULL, hInstance, NULL);
+	
+	this->UpdateWindowRect();
+
+	return this->HWnd;
+}
+
+Vector2d& D3DAPP::GetWindowModeSize(enum EDisplayModes mode)
+{
+
 	Vector2d Sizes;
 
 	switch (mode)
@@ -131,11 +143,8 @@ HWND D3DAPP::CreateD3DWindow(const HINSTANCE hInstance, LRESULT CALLBACK WINPROC
 
 	}
 
-	this->HWnd = CreateWindowEx(NULL, classname, winname, winType, xPos, yPos, Sizes.X, Sizes.Y, NULL, NULL, hInstance, NULL);
-	
-	this->UpdateWindowRect();
+	return Sizes;
 
-	return this->HWnd;
 }
 
 void D3DAPP::ShowD3DWindow(int cmd)
@@ -328,7 +337,7 @@ bool D3DAPP::CreateDevice(IDXGIAdapter* pAdapter)
 		{
 			for (int j = 0; j < NumOfDriverTypes; j++)
 			{
-				HR = D3D11CreateDevice(nullptr, DriverTypeStruct[j], 0, DeviceFlags, nullptr, 0, D3D11_SDK_VERSION,
+				HR = D3D11CreateDevice(this->CurrentAdapter, DriverTypeStruct[j], 0, DeviceFlags, nullptr, 0, D3D11_SDK_VERSION,
 					&this->Device, &FeatureLevelStruct[i], &this->DeviceContext);
 
 				if (SUCCEEDED(HR))
@@ -351,6 +360,8 @@ bool D3DAPP::CreateDevice(IDXGIAdapter* pAdapter)
 		D3DRelease(DXDevice);
 
 	}
+
+	this->CurrentAdapter->GetDesc(&this->AdapterDesc);
 
 	return true;
 
@@ -614,7 +625,6 @@ void D3DAPP::ResetMainCOM()
 
 	this->DeleteAllDepthStencilStates();
 
-
 	D3DRelease(this->MainRenderTarget);
 	D3DRelease(this->MainDepth);
 	this->DeviceContext->Flush();
@@ -629,8 +639,6 @@ void D3DAPP::ResetMainCOM()
 
 	D3DRelease(this->Device);
 	D3DRelease(this->DeviceContext);
-
-	D3DRelease(this->StandartRastState);
 
 	if (this->SwapChain)
 		this->SwapChain->SetFullscreenState(false, NULL);
@@ -651,6 +659,12 @@ void D3DAPP::ResetAllAdapters()
 	}
 	this->CurrentAdapter = nullptr;
 	this->CurrentOutput = nullptr;
+
+	this->Adapters.clear();
+	this->Adapters.shrink_to_fit();
+
+	this->Outputs.clear();
+	this->Outputs.shrink_to_fit();
 
 }
 
@@ -830,7 +844,6 @@ ID3D11Texture2D* D3DAPP::CreateSTexture2D(UINT width, UINT height, UINT bindFlag
 	T2DD.BindFlags = bindFlags;
 	T2DD.CPUAccessFlags = 0;
 	T2DD.Format = format;
-	//T2DD.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
 	T2DD.Height = height;
 	T2DD.Width = width;
 	T2DD.MipLevels = 1;
@@ -899,9 +912,7 @@ ID3D11ShaderResourceView* D3DAPP::CreateSShaderResourceView(ID3D11Texture2D* ren
 	SRVD.Buffer.NumElements = 1;
 	SRVD.BufferEx.FirstElement = 0;
 	SRVD.BufferEx.Flags = 0;
-	SRVD.BufferEx.NumElements = 1;/*
-	SRVD.Texture2D.MipLevels = 1;
-	SRVD.Texture2D.MostDetailedMip = 0;*/
+	SRVD.BufferEx.NumElements = 1;
 	HRESULT hr = this->Device->CreateShaderResourceView(renderBufferTexture, &SRVD, &ResourceView);
 	if (SUCCEEDED(hr))
 		return ResourceView;
@@ -985,49 +996,73 @@ void D3DAPP::DeleteAllDepthStencilStates()
 
 }
 
-void D3DAPP::Resize()
+void D3DAPP::DeleteAllVPorts()
 {
 
-	if (this->MainRenderTarget != NULL)
+	for (int i = 0; i < this->NumOfVPorts; i++)
+	{
+		this->ViewPorts[i].MaterialToRender->EffectShader = nullptr;
+		D3DRelease(this->ViewPorts[i].MaterialToRender->Texture);
+		D3DRelease(this->ViewPorts[i].RTView);
+		D3DDelete(this->ViewPorts[i].MaterialToRender);
+	}
+
+	this->NumOfVPorts = 0;
+
+}
+
+void D3DAPP::Resize(enum EDisplayModes mode)
+{
+
+	if (this->Device)
 	{
 
-		this->DeviceContext->OMSetRenderTargets(0, 0, 0);
+		////////////////////////////////////////////////////
+		//**Release
+		////////////////////////////////////////////////////
+		this->DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
-		D3DRelease(this->MainRenderTarget);
 		D3DRelease(this->MainDepth);
-
+		D3DRelease(this->MainRenderTarget);
+		
+		this->DeleteAllVPorts();
 		this->DeleteAllDepthStencilStates();
 
-		this->DeviceContext->Flush();
-
+		////////////////////////////////////////////////////
+		//**Resize
+		////////////////////////////////////////////////////
+		Vector2d Sizes = this->GetWindowModeSize(mode);
+		
+		MoveWindow(this->HWnd, 0, 0, Sizes.X, Sizes.Y, false);
 		this->UpdateWindowRect();
 
 		this->SwapChain->ResizeBuffers(1, this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 
 		this->CreateMainRenderTargetAndDepthStencilViews();
+		this->CreateMainDepthStencilStates();
 
-		//this->DXCreateViewPort(this->WinSizes.mWindowHeight, this->WinSizes.mWindowWidth, 1.0f, 0.0f, 0, 0);
 	}
+
 }
 
 UINT D3DAPP::GetMaxMSQuality(enum DXGI_FORMAT format, INT numOfCounts)
 {
 
-	if (numOfCounts >= 0)
+	HRESULT HR = S_OK;
+
+	while (numOfCounts > 0)
 	{
 
-		numOfCounts =(numOfCounts < D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT ? numOfCounts : D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT);
+		HR = Device->CheckMultisampleQualityLevels(format, numOfCounts, &this->MMsaa);
+
+		if (SUCCEEDED(HR) && this->MMsaa > 0)
+			break;
+
+		numOfCounts = numOfCounts / 2;
 
 	}
-	else
-	{
 
-		numOfCounts = D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
-
-	}
-
-	HRESULT hr = Device->CheckMultisampleQualityLevels(format, numOfCounts, &this->MMsaa);
-	if (FAILED(hr))
+	if (FAILED(HR) || numOfCounts < 1)
 	{
 		this->MMsaa = 1;
 	}
@@ -1065,7 +1100,7 @@ void D3DAPP::UpdateWindowRect()
 
 }
 
-XMFLOAT2 & D3DAPP::GetScreenSizes()
+XMFLOAT2& D3DAPP::GetScreenSizes()
 {
 	
 	RECT sRc;
@@ -1088,7 +1123,7 @@ void D3DAPP::ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11Dep
 
 void D3DAPP::Draw()
 {
-	SwapChain->Present(0, 0);
+	SwapChain->Present(1, 0);
 }
 
 void D3DAPP::ReleaseDefault()
@@ -1098,8 +1133,10 @@ void D3DAPP::ReleaseDefault()
 	this->SwapChain->SetFullscreenState(false, NULL);
 	
 	this->DeleteAllMaterials();
-
+	this->DeleteAllVPorts();
 	this->ResetAllAdapters();
+
+	D3DRelease(this->StandartRastState);
 	this->ResetMainCOM();
 
 	D3DDelete(this->Timer);
@@ -1135,7 +1172,7 @@ bool D3DAPP::SInit(int bufferCount, int sampleDestCount, bool windowed)
 	if (!this->CreateDevice(nullptr))
 		return false;
 
-	if (!this->CreateSwapChain(2))
+	if (!this->CreateSwapChain(4))
 		return false;
 
 	if (!this->CreateMainRenderTargetAndDepthStencilViews())

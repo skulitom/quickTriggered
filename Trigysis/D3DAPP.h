@@ -40,7 +40,7 @@ enum EDisplayModes
 	DX_DISPLAY_MODE_1280_768,
 	DX_DISPLAY_MODE_1280_1024,
 	DX_DISPLAY_MODE_1360_768,
-	DX_DISLPAY_MODE_1366_768,
+	DX_DISPLAY_MODE_1366_768,
 	DX_DISPLAY_MODE_1440_900,
 	DX_DISPLAY_MODE_1600_900,
 	DX_DISPLAY_MODE_1600_1024,
@@ -184,7 +184,7 @@ public:
 	inline HWND GetWindow() { return HWnd; }
 	UINT GetMaxMSQuality(enum DXGI_FORMAT, INT numOfCounts = -1);
 	void SetRenderTarget(ID3D11RenderTargetView* renderTV);
-	virtual void Resize();
+	virtual void Resize(enum EDisplayModes mode);
 	void UpdateWindowRect();
 	void ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
 	virtual void Draw();
@@ -195,8 +195,6 @@ public:
 	bool SetDepthStencilStateByName(std::string& name);
 	bool SetDepthStencilStateByIndex(UINT index);
 	void DeleteAllDepthStencilStates();
-	//float GetWindowPosX() { return this->WindowCoorX; }
-	//float GetWindowPosY() { return this->WindowCoorY; }
 	inline WindowSizes& GetWindowSizes() { return this->WinSizes; }
 	virtual XMFLOAT2& GetScreenSizes();
 	bool SetViewPort(SHORT indexOfVPort);
@@ -212,6 +210,8 @@ public:
 	inline ID3D11RasterizerState* GetStandartRastState() { return this->StandartRastState; }
 	inline D3DAPPTIMER* GetTimer() { return this->Timer; }
 	inline UINT GetMSAA() { return this->MMsaa; }
+	Vector2d& GetWindowModeSize(enum EDisplayModes mode);
+	void DeleteAllVPorts();
 
 	///////////////////////////////////////////////
 	//**SIMPLE-CREATION METHODS
@@ -244,6 +244,7 @@ protected:
 	/////////////////////////////////////
 	std::vector<IDXGIAdapter*> Adapters;
 	IDXGIAdapter* CurrentAdapter;
+	DXGI_ADAPTER_DESC AdapterDesc;
 	std::vector<IDXGIOutput*> Outputs;
 	IDXGIOutput* CurrentOutput;
 	UINT FeatureLevel;

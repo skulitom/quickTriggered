@@ -26,6 +26,7 @@ public:
 	void Draw() override;
 
 	virtual void ReleaseDefault() override;
+	virtual void Resize(enum EDisplayModes mode) override;
 
 	//D3DAPPTIMER* GetTimer() { return this->Timer; }
 

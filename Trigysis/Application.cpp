@@ -14,7 +14,7 @@ bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 {
 	QuickTriggered* TAA = new QuickTriggered(HWnd, Input);
 	
-	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, DX_DISPLAY_MODE_1024_768,
+	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, DX_DISPLAY_MODE_800_600,
 		"HDWND", "QuickTriggered", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
 	if (!TAA->SInit(1, 4, true))
 		return false;
@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, 
 	
 	while (TRUE)
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
