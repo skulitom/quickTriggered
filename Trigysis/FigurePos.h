@@ -8,6 +8,7 @@ public:
 	~FigurePos();
 protected:
 private:
+	
 
 };
 

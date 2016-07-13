@@ -13,9 +13,7 @@
 #include "Files.h"
 
 #include "TestPipeline.h"
-
-#define BOARD_SIZE 240
-#define BOARD_INTERVAL 60
+#include "Grid.h"
 
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
