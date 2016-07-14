@@ -7,18 +7,11 @@
 #include <stdlib.h>
 #include "FigureB.h"
 
-
-#define HOLOCAUST 0
-#define FEMINIST 1
-#define I_HAVE_A_DREAM 2
-#define CHILD_POLICY 3
-#define JIHAD 4
-
-#define HOLOCAUST_PROB 50
-#define FEMINIST_PROB 200
-#define I_HAVE_A_DREAM_PROB 50
-#define CHILD_POLICY_PROB 50
-#define JIHAD_PROB 50
+#define HOLOCAUST_PROB 1.5
+#define FEMINIST_PROB 3
+#define I_HAVE_A_DREAM_PROB 1.5
+#define CHILD_POLICY_PROB 1.5
+#define JIHAD_PROB 1.5
 
 class FigureDrop{
 

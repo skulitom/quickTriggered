@@ -29,19 +29,19 @@ void FigureDrop::analyseAction(FigureB *figure, int action)
  	switch (action)
  	{
  	case HOLOCAUST:
- 		
+		holocaust(figure);
  		break;
  	case CHILD_POLICY:
- 		
+		ChildPolicy(figure);
  		break;
  	case JIHAD:
- 		
+		Jihad(figure);
  		break;
  	case FEMINIST:
- 		
+		femWave(figure);
  		break;
  	case I_HAVE_A_DREAM:
- 		
+		iHaveADream(figure);
  		break;
 
  	default:
@@ -67,7 +67,7 @@ void FigureDrop::ChildPolicy(FigureB *figure)
  		
  		break;
  	case ASIAN:
-		figure->setProb(figure->getProb() - CHILD_POLICY_PROB);
+		figure->setProb(figure->getProb() * -CHILD_POLICY_PROB);
 		break;
  	case WHITE_SUPREME:
  		
@@ -98,7 +98,7 @@ void FigureDrop::Jihad(FigureB *figure)
 		
 		break;
 	case WHITE_SUPREME:
-		figure->setProb(figure->getProb() - JIHAD_PROB);
+		figure->setProb(figure->getProb() * - JIHAD_PROB);
 		break;
 	default:
 		throw FigureTypeException();
@@ -117,7 +117,7 @@ void FigureDrop::femWave(FigureB *figure)
 
 		break;
 	case WOMEN:
-		figure->setProb(figure->getProb() + FEMINIST_PROB);
+		figure->setProb(figure->getProb() * FEMINIST_PROB);
 		break;
 	case BLACK:
 
@@ -142,7 +142,7 @@ void FigureDrop::holocaust(FigureB *figure)
 
 		break;
 	case JEWS:
-		figure->setProb(figure->getProb() + HOLOCAUST_PROB);
+		figure->setProb(figure->getProb() * HOLOCAUST_PROB);
 		break;
 	case WOMEN:
 
@@ -176,7 +176,7 @@ void FigureDrop::iHaveADream(FigureB *figure)
 
 		break;
 	case BLACK:
-		figure->setProb(figure->getProb() + I_HAVE_A_DREAM_PROB);
+		figure->setProb(figure->getProb() * I_HAVE_A_DREAM_PROB);
 		break;
 	case ASIAN:
 		

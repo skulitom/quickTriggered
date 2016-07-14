@@ -12,6 +12,12 @@
 #define MAX_FIGURE_NUM 6
 #define MIN_FIGURE_NUM 0
 
+#define HOLOCAUST 0
+#define FEMINIST 1
+#define I_HAVE_A_DREAM 2
+#define CHILD_POLICY 3
+#define JIHAD 4
+
 #define MEXICANS 0
 #define JEWS 1
 #define WOMEN 2
