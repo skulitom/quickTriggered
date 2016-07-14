@@ -78,9 +78,6 @@
     <ClInclude Include="FigureDrop.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
-    <ClInclude Include="FigurePos.h">
-      <Filter>QuickTriggered\BackEnd</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgress.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
@@ -91,6 +88,12 @@
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
     <ClInclude Include="Grid.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureMorale.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureB.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,9 +143,6 @@
     <ClCompile Include="FigureDrop.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
-    <ClCompile Include="FigurePos.cpp">
-      <Filter>QuickTriggered\BackEnd</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgress.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
@@ -153,6 +153,12 @@
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="FigureMorale.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="FigureB.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>

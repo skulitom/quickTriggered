@@ -99,8 +99,9 @@
     <ClInclude Include="D3DAPP.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ElementBaseManager.h" />
+    <ClInclude Include="FigureB.h" />
     <ClInclude Include="FigureDrop.h" />
-    <ClInclude Include="FigurePos.h" />
+    <ClInclude Include="FigureMorale.h" />
     <ClInclude Include="GameProgress.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GUIFigures.h" />
@@ -124,8 +125,9 @@
     <ClCompile Include="D3DAPP.cpp" />
     <ClCompile Include="BasicElement.cpp" />
     <ClCompile Include="Element.cpp" />
+    <ClCompile Include="FigureB.cpp" />
     <ClCompile Include="FigureDrop.cpp" />
-    <ClCompile Include="FigurePos.cpp" />
+    <ClCompile Include="FigureMorale.cpp" />
     <ClCompile Include="GameProgress.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="GUIFigure.cpp" />
