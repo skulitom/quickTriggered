@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "Basic2DDraw.h"
 #include "MathHelper.h"
+#include "Font.h"
 
 class BasicInterface : public D3DAPP
 {
@@ -22,6 +23,7 @@ public:
 	Basic2DDraw* GetDraw2D() { return this->Draw2D; }
 	ElementsMLand* GetElementBase() { return this->ElementBase; }
 	D3DAPPINPUT* GetInput() { return this->Input; }
+	FontManager* GetFont2D() { return this->Font2D; }
 
 	void Draw() override;
 
@@ -42,6 +44,8 @@ protected:
 protected:
 	Basic2DDraw* Draw2D;
 	ElementsMLand* ElementBase;
+	FontManager* Font2D;
+
 
 	D3DAPPINPUT* Input;
 	//D3DAPPTIMER* Timer;

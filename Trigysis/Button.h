@@ -54,10 +54,19 @@ struct ButtonSettings
 	bool IsLongTerm;
 };
 
+struct IndName
+{
+	IndName() { this->Name = 0; this->PtrNext = nullptr; }
+	char* Name;
+	IndName* PtrNext;
+};
+
 class ButtonInterface : public Element
 {
 public:
 	ButtonInterface(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
+	virtual ~ButtonInterface(){ this->ReleaseIndNames(); }
+	void ReleaseIndNames();
 	void SetSettings(ButtonSettings& bSettings);
 	ButtonSettings& GetSettings() { return this->Settings; }
 	FLOAT GetPressTime() { return this->PressTime - 1.f; }
@@ -72,6 +81,8 @@ public:
 	virtual void SetColor(unsigned __int8 DX_BUTTON_COLOR_STYLE_, XMFLOAT4 color);
 	void Disable(bool visibleOnEneble = true);
 	void SetDone();
+	void SetIndName(UINT prevLevel, char* name);
+	char* GetIndName(UINT prevLevel);
 private:
 	bool CheckIsSelected();
 	bool CheckIsPress(FLOAT deltaTime);
@@ -90,5 +101,34 @@ protected:
 	unsigned __int8 Feature;
 	unsigned __int8 MButtonUsed;
 	bool IsCircle;
+	IndName* IName;
 };
+
+//template<class BClass>
+//class BOptionInterface : public Element
+//{
+//
+//public:
+//
+//	BOptionInterface(BasicInterface* super);
+//	virtual ~BOptionInterface();
+//
+//	void Show();
+//	void Hide();
+//
+//	void Enable();
+//	void Disable();
+//
+//	void EnableButton(UINT indexOfButton);
+//	void DisableButton(UINT indexOfButton);
+//
+//	void AddButton(ButtonSettings bs, )
+//
+//private:
+//
+//	BClass* MButton;
+//	std::vector<BClass*> Buttons;
+//
+//};
+
 #endif //BUTTON_H

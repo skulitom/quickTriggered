@@ -12,11 +12,11 @@
 //#include "Link.h"
 #include "Files.h"
 
-#include "TestPipeline.h"
+//#include "TestPipeline.h"
 
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
-class QTButton : public ButtonInterface
+class QTButton : public ButtonInterface 
 {
 public:
 	QTButton(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
@@ -54,9 +54,17 @@ private:
 
 	//TestPipeline* TPipeline;
 
+	void WorkWithButtons();
+
+	void BExit();
+	void BToggleResButtons();
+	void CheckResButtons();
+
 	Figure* Fig1;
 
 private:
+
+	std::vector<QTButton*> Buttons;
 
 };
 #endif //QuickTriggered_H

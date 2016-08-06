@@ -1,0 +1,12 @@
+$Name:
+GUIFontTiny
+$Texture:
+GUIFontTiny.dds
+$Alpha
+$GlobalTexCoords
+$TextureScale:
+50
+$Shader:
+FontPS
+
+

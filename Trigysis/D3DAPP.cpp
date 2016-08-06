@@ -5,7 +5,6 @@
 
 #define GetCurrentDir _getcwd
 
-
 D3DAPP::D3DAPP(bool Paused, bool Resizing, HWND hWnd)
 {
 	this->HWnd = hWnd;
@@ -996,6 +995,135 @@ void D3DAPP::DeleteAllDepthStencilStates()
 
 }
 
+void D3DAPP::CreateBasicBlendState()
+{
+
+	D3D11_BLEND_DESC BD = { 0 };
+	BD.AlphaToCoverageEnable = false;
+	BD.IndependentBlendEnable = false;
+	BD.RenderTarget[0].BlendEnable = true;
+	BD.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	BD.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	BD.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	BD.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	BD.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	BD.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	BD.RenderTarget[0].RenderTargetWriteMask = 0x0F;
+
+	D3DAPP::CreateBlendState(BD, "Basic");
+
+	BD.AlphaToCoverageEnable = false;
+	BD.IndependentBlendEnable = false;
+	BD.RenderTarget[0].BlendEnable = true;
+	BD.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	BD.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	BD.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	BD.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	BD.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	BD.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	BD.RenderTarget[0].RenderTargetWriteMask = 0x0F;
+
+	D3DAPP::CreateBlendState(BD, "Trans");
+
+}
+
+void D3DAPP::CreateBlendState(D3D11_BLEND_DESC desc, char* name)
+{
+
+	BlendState NBS;
+	this->Device->CreateBlendState(&desc, &NBS.PBlendState);
+	NBS.Name = name;
+	this->BlendStates.push_back(NBS);
+
+}
+
+void D3DAPP::DeleteAllBlendStates()
+{
+
+	for (int i = 0; i < this->BlendStates.size(); i++)
+	{
+		D3DRelease(this->BlendStates.at(i).PBlendState);
+		//D3DDelete(this->BlendStates.at(i).Name);
+	}
+
+}
+
+BlendState* D3DAPP::GetBlendState(UINT index)
+{
+
+	if (index >= this->BlendStates.size())
+		return nullptr;
+
+	return &this->BlendStates.at(index);
+
+}
+BlendState* D3DAPP::GetBlendState(char* name)
+{
+
+	for (int i = 0; i < this->BlendStates.size(); i++)
+	{
+
+		if (!strcmp(name, this->BlendStates.at(i).Name))
+			return &this->BlendStates.at(i);
+
+	}
+
+	return nullptr;
+
+}
+
+void D3DAPP::SetBlendState(BlendState* bState, float bFactors[4])
+{
+
+	if (bState != this->CurrBlendState)
+	{
+		this->CurrBlendState = bState;
+		this->DeviceContext->OMSetBlendState(this->CurrBlendState->PBlendState, bFactors, 0xffffffff);
+	}
+
+}
+
+bool D3DAPP::SetBlendState(BlendState* pBlendState)
+{
+
+	float BFactors[4] = { 0, 0, 0, 0 };
+
+	D3DAPP::SetBlendState(pBlendState, BFactors);
+
+	return true;
+	
+}
+
+bool D3DAPP::SetBlendState(UINT index)
+{
+	float BFactors[4] = { 0, 0, 0, 0 };
+
+	if (index >= this->BlendStates.size())
+		return false;
+
+	BlendState* BS = this->GetBlendState(index);
+
+	D3DAPP::SetBlendState(BS, BFactors);
+
+	return true;
+
+}
+bool D3DAPP::SetBlendState(char* name)
+{
+
+	float BFactors[4] = { 0, 0, 0, 0 };
+
+	BlendState* BS = this->GetBlendState(name);
+
+	if (!BS)
+		return false;
+
+	D3DAPP::SetBlendState(BS, BFactors);
+
+	return true;
+
+}
+
 void D3DAPP::DeleteAllVPorts()
 {
 
@@ -1135,6 +1263,7 @@ void D3DAPP::ReleaseDefault()
 	this->DeleteAllMaterials();
 	this->DeleteAllVPorts();
 	this->ResetAllAdapters();
+	this->DeleteAllBlendStates();
 
 	D3DRelease(this->StandartRastState);
 	this->ResetMainCOM();
@@ -1172,7 +1301,7 @@ bool D3DAPP::SInit(int bufferCount, int sampleDestCount, bool windowed)
 	if (!this->CreateDevice(nullptr))
 		return false;
 
-	if (!this->CreateSwapChain(4))
+	if (!this->CreateSwapChain(1))
 		return false;
 
 	if (!this->CreateMainRenderTargetAndDepthStencilViews())
@@ -1180,6 +1309,8 @@ bool D3DAPP::SInit(int bufferCount, int sampleDestCount, bool windowed)
 
 	if (!this->CreateMainDepthStencilStates())
 		return false;
+
+	this->CreateBasicBlendState();
 
 	return true;
 
@@ -1223,6 +1354,11 @@ bool D3DAPP::SInitMaterials()
 				Line = FManager->GetStringFromFile();
 
 				NewMaterial->Texture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
+
+				D3D11_SHADER_RESOURCE_VIEW_DESC DS;
+				NewMaterial->Texture->GetDesc(&DS);
+				//NewMaterial->LSize = DS.Texture2D.
+
 
 			}
 			else if (!Line.compare("$ATexture:"))
@@ -1268,6 +1404,22 @@ bool D3DAPP::SInitMaterials()
 			else if (!Line.compare("$ATextureMoveRight:"))
 			{
 				NewMaterial->TextureMove.z = -FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$TextureOffSetRight:"))
+			{
+				NewMaterial->TextureOffset.x = -FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$TextureOffSetUp:"))
+			{
+				NewMaterial->TextureOffset.y = FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$ATextureOffSetRight:"))
+			{
+				NewMaterial->TextureOffset.z = -FManager->GetINTFromFile() / 100.f;
+			}
+			else if (!Line.compare("$ATextureOffSetUp:"))
+			{
+				NewMaterial->TextureOffset.w = FManager->GetINTFromFile() / 100.f;
 			}
 		}
 

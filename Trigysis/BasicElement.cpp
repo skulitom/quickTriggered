@@ -64,19 +64,9 @@ void ElementsMLand::UpdateAndDraw(FLOAT deltaTime)
 				{
 					if (!this->IsLoadMode)
 						this->Elements.at(i).at(Index)->Update(deltaTime);
-					if (this->Elements.at(i).at(Index)->GetIsNeedRender())
-					{
-						if (this->Elements.at(i).at(Index)->GetShapeType() == EL_SHAPE_TYPE_RECTANGLE)
-							this->Draw2D->DrawRectangle(this->Elements.at(i).at(Index)->GetPosition(), 
-							this->Elements.at(i).at(Index)->GetSizes(), this->Elements.at(i).at(Index)->GetIndexOfViewPort(),
-							this->Elements.at(i).at(Index)->GetCustomVars(),
-							this->Elements.at(i).at(Index)->GetColors(), this->Elements.at(i).at(Index)->GetMaterial());
-						else if (this->Elements.at(i).at(Index)->GetShapeType() == EL_SHAPE_TYPE_HEXAGON)
-							this->Draw2D->DrawHexagon(this->Elements.at(i).at(Index)->GetPosition(),
-							this->Elements.at(i).at(Index)->GetSizes(), this->Elements.at(i).at(Index)->GetIndexOfViewPort(),
-							this->Elements.at(i).at(Index)->GetCustomVars(),
-							this->Elements.at(i).at(Index)->GetColors(), this->Elements.at(i).at(Index)->GetMaterial());
-					}
+
+					this->Elements.at(i).at(Index)->Render();
+
 				}
 				Index++;
 			}
@@ -206,6 +196,32 @@ ElementInterface::ElementInterface(D3DAPP* d3dApp, Vector2d& position, Vector2d&
 	this->IsNeedRender = isNeedRender;
 	this->IndexOfViewPort = indexOfVPort;
 	this->Color = XMFLOAT4(0, 0, 0, 0);
+}
+
+void ElementInterface::Render()
+{
+
+	if (this->IsNeedRender)
+	{
+
+		if (!this->BState)
+			this->BState = this->PMLand->GetD3DApp()->GetBlendState((UINT)DX_BS_BASIC);
+
+		this->PMLand->GetD3DApp()->SetBlendState(this->BState);
+
+		if (this->ShapeType == EL_SHAPE_TYPE_RECTANGLE)
+		{
+			this->PMLand->GetDraw2D()->DrawRectangle(this->Position, this->Sizes, this->IndexOfViewPort, this->CustomVars, this->Color,
+				this->MaterialPtr, this->Color);
+		}
+		else if (this->ShapeType == EL_SHAPE_TYPE_HEXAGON)
+		{
+			this->PMLand->GetDraw2D()->DrawHexagon(this->Position, this->Sizes, this->IndexOfViewPort, this->CustomVars, this->Color,
+				this->MaterialPtr, this->Color);
+		}
+
+	}
+
 }
 
 bool ElementInterface::SetMaterial(std::string& materialName)

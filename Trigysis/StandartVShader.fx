@@ -1,3 +1,4 @@
+
 struct VSInput
 {
 	float2 Pos : POSITION;
@@ -41,19 +42,23 @@ VSOut VSMain(VSInput input)
     VOut.PosW = VOut.PosH.xy;
     VOut.PosH = mul(VOut.PosH, ViewMatrix);
     VOut.PosH = mul(VOut.PosH, ProjMatrix);
+
     if(!UseGlobalCoords)
     {
-        VOut.TexCoord = input.TexPos + TextureOffset.xy;
-        VOut.ATexCoord = input.TexPos + TextureOffset.zw;
+        VOut.TexCoord = input.TexPos / Scale.xx + TextureOffset.xy;
+        VOut.ATexCoord = input.TexPos / Scale.yy + TextureOffset.zw;
     }
     else
     {
-        VOut.TexCoord = VOut.PosH.xy + TextureOffset.xy;
-        VOut.ATexCoord = VOut.PosH.xy + TextureOffset.zw;
+        VOut.TexCoord.x = input.TexPos.x * WorldMatrix._11 / (512 * Scale.x)+ TextureOffset.x;
+        VOut.TexCoord.y = input.TexPos.y * WorldMatrix._22 / (512 * Scale.x) + TextureOffset.y;
+
+        VOut.ATexCoord.x = input.TexPos.x * WorldMatrix._11 / (512 * Scale.y) + TextureOffset.z;
+        VOut.ATexCoord.y = input.TexPos.y * WorldMatrix._22 / (512 * Scale.y) + TextureOffset.w;
     }
 
-    VOut.TexCoord = VOut.TexCoord / float2(Scale.x, Scale.x);
-    VOut.ATexCoord = VOut.ATexCoord / float2(Scale.y, Scale.y);
+    VOut.TexCoord = VOut.TexCoord ;
+    VOut.ATexCoord = VOut.ATexCoord ;
 
 	return VOut;
 }

@@ -20,12 +20,24 @@
 
 #pragma comment(lib, "dxgi.lib")
 //#include "Shader.h"
-
+#pragma warning(disable : 4996)
 #define D3DRelease(x){if(x) {x->Release() ; x = 0;}}
 #define D3DDelete(x){if(x) {delete x; x = NULL;}}
 
 #define DX_RS_DEPTH_RENDER_STATE 0
 #define DX_RS_2D_RENDER_STATE 1
+
+#define DX_BS_BASIC 0
+#define DX_BS_TRANSPARENCY 1
+
+#define COLOR_BLACK_3 XMFLOAT3(0,0,0)
+#define COLOR_RED_3 XMFLOAT3(1,0,0)
+#define COLOR_GREEN_3 XMFLOAT3(0,1,0)
+#define COLOR_BLUE_3 XMFLOAT3(0,0,1)
+#define COLOR_YELLOW_3 XMFLOAT3(1,1,0)
+#define COLOR_PURPLE_3 XMFLOAT3(1,0,1)
+#define COLOR_LBLUE_3 XMFLOAT3(0,1,1)
+#define COLOR_WHITE_3 XMFLOAT3(1,1,1)
 
 enum EDisplayModes
 {
@@ -69,6 +81,7 @@ struct Material
 		Scale = XMFLOAT2(1,1);
 		UseGlobalCoords = false;
 		UseAlpha = false;
+		LSize = XMFLOAT2(0, 0);
 	}
 
 	~Material()
@@ -86,6 +99,7 @@ struct Material
 	std::string ShaderName;
 	std::string Name;
 	XMFLOAT2 Scale;
+	XMFLOAT2 LSize;
 	bool UseGlobalCoords;
 	bool UseAlpha;
 
@@ -110,6 +124,15 @@ struct DepthStencilState
 	ID3D11DepthStencilState* PDepthStencilState;
 	std::string Name;
 
+};
+
+struct BlendState
+{
+
+	BlendState() { this->PBlendState = nullptr; this->Name = nullptr; }
+
+	ID3D11BlendState* PBlendState;
+	char* Name;
 };
 
 struct WindowSizes
@@ -212,6 +235,15 @@ public:
 	inline UINT GetMSAA() { return this->MMsaa; }
 	Vector2d& GetWindowModeSize(enum EDisplayModes mode);
 	void DeleteAllVPorts();
+	void CreateBasicBlendState();
+	void CreateBlendState(D3D11_BLEND_DESC desc, char* name);
+	void DeleteAllBlendStates();
+	BlendState* GetBlendState(UINT index);
+	BlendState* GetBlendState(char* name);
+	bool SetBlendState(BlendState* pBlendState);
+	bool SetBlendState(UINT index);
+	bool SetBlendState(char* name);
+	bool SetBlendState(ID3D11BlendState* bState);
 
 	///////////////////////////////////////////////
 	//**SIMPLE-CREATION METHODS
@@ -229,6 +261,8 @@ private:
 
 	void DeleteAllMaterials();
 	ID3D11ShaderResourceView* LoadTexture(std::string& textureName, std::string& path);
+
+	void SetBlendState(BlendState* bState, float bFactors[4]);
 
 private:
 
@@ -255,6 +289,8 @@ protected:
 	ID3D11RenderTargetView* MainRenderTarget;
 	ID3D11DepthStencilView* MainDepth;
 	std::vector <DepthStencilState> DepthStencilStates;
+	std::vector <BlendState> BlendStates;
+	BlendState* CurrBlendState;
 
 	unsigned short NumOfVPorts;
 

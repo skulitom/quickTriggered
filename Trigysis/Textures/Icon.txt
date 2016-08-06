@@ -10,3 +10,7 @@ $TextureScale:
 50
 $TextureMoveRight:
 10
+$Alpha
+//$GlobalTexCoords
+
+

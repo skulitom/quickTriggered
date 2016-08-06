@@ -7,6 +7,11 @@
 
 #include "D3DAPP.h"
 
+#define PrepareShader(pMaterial, pSManager){										 \
+	if(pMaterial->ShaderName != "")	{												 \
+		pMaterial->EffectShader = pSManager->GetPixelShader(pMaterial->ShaderName);  \
+		pMaterial->ShaderName = ""; }}	
+
 struct CBUserVars
 {
 
@@ -79,6 +84,8 @@ public:
 		XMFLOAT4& aColor = XMFLOAT4(0,0,0,0));
 
 	void SetFilter();
+
+	UINT GetIndexOfVP() { return this->IndexOfVP; }
 
 public:
 

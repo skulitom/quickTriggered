@@ -13,6 +13,7 @@ void BasicInterface::ReleaseDefault()
 
 	D3DDelete(this->ElementBase);
 	D3DDelete(this->Draw2D);
+	D3DDelete(this->Font2D);
 
 	D3DAPP::ReleaseDefault();
 
@@ -28,8 +29,11 @@ BasicInterface::~BasicInterface()
 void BasicInterface::Init()
 {
 
+	this->SInitMaterials();
+
 	this->Draw2D = new Basic2DDraw(this);
 	this->ElementBase = new ElementsMLand(this, this->Input, Draw2D);
+	this->Font2D = new FontManager(this, this->Draw2D, "ArialFontTiny.txt");
 
 	MathHelp::InitRand();
 

@@ -69,9 +69,6 @@
     <ClInclude Include="GUIFigures.h">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
-    <ClInclude Include="TestPipeline.h">
-      <Filter>QuickTriggered\FrontEnd</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
@@ -86,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="Progress.h">
       <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>FrameWork\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,9 +125,6 @@
     <ClCompile Include="GUIFigure.cpp">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClCompile>
-    <ClCompile Include="TestPipeline.cpp">
-      <Filter>QuickTriggered\FrontEnd</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
@@ -140,6 +137,9 @@
     <ClCompile Include="GameProgress.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="StandartVShader.fx">
@@ -149,6 +149,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="SmoothPS.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="FontPS.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="FigurePS.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

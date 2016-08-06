@@ -78,6 +78,9 @@ void D3DAPPTIMER::ComputeSecondsPerCount()
 	QueryPerformanceFrequency((LARGE_INTEGER*)&this->CountsPerSecond);
 	this->SecondsPerCount = 1.0 / (double)CountsPerSecond * TimeScale;
 
+	//clock();
+	//this->SecondsPerCount = 1.f / CLOCKS_PER_SEC * this->TimeScale;
+
 }
 
 float D3DAPPTIMER::GetPauseTime()

@@ -2,6 +2,7 @@
 #define D3DAPPTIMER_H
 
 #include <Windows.h>
+#include <time.h>
 
 class D3DAPPTIMER
 {
@@ -39,7 +40,7 @@ public:
 	//Return seconds in one cycle
 	float GetDeltaTime() { return this->DeltaTime; }
 	
-	void ComputeCurrTime() { QueryPerformanceCounter((LARGE_INTEGER*)&this->CurrTime); }
+	void ComputeCurrTime() { /*this->CurrTime = clock(); }*/QueryPerformanceCounter((LARGE_INTEGER*)&this->CurrTime); }
 	
 	//Return Time (Processor cycles) 
 	__int64& GetCurrTime() { return this->CurrTime; }

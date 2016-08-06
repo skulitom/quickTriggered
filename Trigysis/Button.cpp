@@ -13,6 +13,75 @@ void ButtonInterface::Disable(bool visibleOnEneble)
 	this->SetIsNeedRender(this->GetStatus(DX_BUTTON_STATUS_IS_ACTIVE) * visibleOnEneble);
 }
 
+void ButtonInterface::ReleaseIndNames()
+{
+
+	IndName* INToDelete = this->IName;
+	IndName* T = nullptr;
+	while (true)
+	{
+
+		if (INToDelete)
+			if (INToDelete->PtrNext)
+				T = INToDelete->PtrNext;
+		D3DDelete(INToDelete);
+		if (T)
+		{
+			INToDelete = T;
+			T = nullptr;
+		}
+		else
+			break;
+
+	}
+
+}
+
+void ButtonInterface::SetIndName(UINT prevLevel, char* name)
+{
+
+	//IName->NPtr->NPtr->NPtr;
+	//NPtr = new 
+
+	IndName* CIName = this->IName;
+	if (!prevLevel)
+	{
+		CIName = new IndName();
+		this->IName = CIName;
+	}
+	else
+	{
+		IndName* T;
+		for (int i = 0; i < prevLevel; i++)
+		{
+			T = new IndName();
+			CIName->PtrNext = T;
+			CIName = CIName->PtrNext;
+		}
+	}
+
+	CIName->Name = name;
+
+}
+
+char* ButtonInterface::GetIndName(UINT prev)
+{
+
+	IndName* CIName = this->IName;
+	if (!CIName)
+		return "";
+	for (int i = 0; i < prev; i++)
+	{
+		if (!CIName)
+			return "";
+		CIName = CIName->PtrNext;
+
+	}
+
+	return CIName->Name;
+
+}
+
 void ButtonInterface::SetSettings(ButtonSettings& bSettings)
 {
 	this->Settings = bSettings;
@@ -42,7 +111,7 @@ bool ButtonInterface::CheckIsSelected()
 			return false;
 		}
 
-		if (Radius - BRadius <= 0)
+		if (Radius - BRadius * 2.f <= 0)
 		{
 			if (MousePos.X < this->GetPosition().X - this->GetSizes().X * 0.5f || MousePos.X > this->GetPosition().X + this->GetSizes().X * 0.5f)
 				return false;

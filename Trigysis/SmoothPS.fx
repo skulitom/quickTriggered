@@ -40,7 +40,7 @@ float4 PSMain(PSInput input) : SV_Target
     //if(UseAlpha)
         //clip(PTexture - 0.5f);
     float Smooth;
-    Smooth = clamp(UVal3, 0, 1);
+    Smooth = clamp(0.5f, 0, 1);
     if(input.TexCoord.x < Sizes.x * 0.5f)
     {
         

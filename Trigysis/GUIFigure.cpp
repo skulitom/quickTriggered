@@ -15,7 +15,7 @@ FButton::FButton(BasicInterface* super, Figure* pFigureClass)
 	BS.SuppressColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.f);
 	BS.IsActive = true;
 	BS.IsLongTerm = true;
-	BS.IsVisible = true;
+	BS.IsVisible = false;
 	
 	this->SetSettings(BS);
 
@@ -66,13 +66,14 @@ Figure::Figure(BasicInterface* super)
 
 	DeclareElementName(Figure, this->EName);
 	this->Sizes = Vector2d(GUIF_SIZE, GUIF_SIZE);
-	this->Color = XMFLOAT4(1, 1, 1, 1);
+	this->Color = XMFLOAT4(1, 1, 1, 0);
 
 	this->FrontButton = new FButton(super, this);
 	this->FrontButton->SetFunc(DX_BUTTON_FUNC_TYPE_ONCLICK, &Figure::DeleteMeBFunc);
 	Figure::SetFigureSuperType(0);
 
-	this->ShapeType = EL_SHAPE_TYPE_HEXAGON;
+	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
+	this->SetBlendState((UINT)DX_BS_TRANSPARENCY);
 
 }
 
@@ -105,7 +106,7 @@ void Figure::SetFigureSuperType(UINT sType)
 			case 0:
 			{
 
-				TName = "DonaldLow";
+				TName = "DTFig";
 				break;
 
 			}
@@ -116,7 +117,7 @@ void Figure::SetFigureSuperType(UINT sType)
 
 		}
 
-		this->FrontButton->SetMaterial(TName);
+		this->SetMaterial(TName);
 
 	}
 
@@ -130,14 +131,14 @@ void Figure::SetFigureType(UINT type)
 	switch (this->Type)
 	{
 
-		case 0:
+		/*case 0:
 		{
 			this->Color = XMFLOAT4(1, 0, 0, 1);
 			break;
-		}
+		}*/
 		default :
 		{
-			this->Color = XMFLOAT4(1, 1, 1, 1);
+			this->Color = XMFLOAT4(0, 0, 0, 0);
 			break;
 		}
 
@@ -162,8 +163,6 @@ void Figure::Move(Vector2d& dest, float deltaTime)
 	const float Delta = deltaTime * this->MoveSpeed;
 
 	Vector2d NDest = dest - this->Position;
-	//NDest.X = NDest.X / abs(NDest.X);
-	//NDest.Y = NDest.Y / abs(NDest.Y);
 	NDest.Normalize();
 	
 	short Ind = 0;
@@ -203,6 +202,9 @@ bool Figure::Update(float deltaTime)
 
 	if (!Element::Update(deltaTime))
 		return false;
+
+	this->Color = this->FrontButton->GetColors();
+
 	this->Move(this->DestPos, deltaTime);
 	this->FrontButton->SetPosition(this->Position);
 

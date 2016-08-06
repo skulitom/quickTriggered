@@ -9,6 +9,7 @@ QTButton::QTButton(BasicInterface* super, ButtonSettings& bs)
 	DeclareElementName(CCButton, this->EName);
 	this->Sizes = Vector2d(50, 30);
 	this->PQTClass = dynamic_cast<QuickTriggered*>(this->D3dApp);
+	//this->SetShapeType(DX_)
 }
 
 void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
@@ -44,6 +45,44 @@ void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
 //////////////////////////////////////////////////////
 //**QuickTriggered
 //////////////////////////////////////////////////////
+void QuickTriggered::BExit()
+{
+
+	PostQuitMessage(0);
+
+}
+
+void QuickTriggered::BToggleResButtons()
+{
+
+	for (int i = 0; i < this->Buttons.size(); i++)
+	{
+
+		if (!strcmp(this->Buttons.at(i)->GetIndName(0), "R"))
+		{
+			this->Buttons.at(i)->ToggleVisible();
+		}
+	}
+
+}
+
+void QuickTriggered::CheckResButtons()
+{
+
+	for (int i = 0; i < this->Buttons.size(); i++)
+	{
+
+		if (!strcmp(this->Buttons.at(i)->GetIndName(0), "R"))
+		{
+			if (!strcmp(this->Buttons.at(i)->GetIndName(1), "86") && this->Buttons.at(i)->GetStatus(DX_BUTTON_STATUS_CLICKED))
+				this->Resize(DX_DISPLAY_MODE_800_600);
+			else if (!strcmp(this->Buttons.at(i)->GetIndName(1), "1276") && this->Buttons.at(i)->GetStatus(DX_BUTTON_STATUS_CLICKED))
+				this->Resize(DX_DISPLAY_MODE_1280_768);
+		}
+	}
+
+}
+
 bool QuickTriggered::InitApp()
 {
 	if (this->Device)
@@ -62,7 +101,7 @@ bool QuickTriggered::InitApp()
 		/////////////////////////////////////
 		//**Load Textures
 		/////////////////////////////////////
-		this->SInitMaterials();
+		//this->SInitMaterials();
 		/////////////////////////////////////
 		//**Create BackGrounds
 		/////////////////////////////////////
@@ -76,10 +115,11 @@ bool QuickTriggered::InitApp()
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(-100, -100), 1);
+		NE = new Element(this);
+		NE->SetSizes(Vector2d(64, 64));
+		NE->SetMaterial(std::string("DTFig"));
+		NE->SetBlendState(DX_BS_TRANSPARENCY);
+		NE->Spawn(Vector2d(100, 100), 1);
 
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
@@ -89,13 +129,44 @@ bool QuickTriggered::InitApp()
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
 		this->Fig1->SetFigureType(0);
-		this->Fig1->Spawn(Vector2d(100, 100), 1);
+		this->Fig1->Spawn(Vector2d(-100, -100), 1);
 
 		this->Fig1 = new Figure(this);
 		this->Fig1->SetFigureSuperType(0);
 		this->Fig1->SetFigureType(0);
 		this->Fig1->Spawn(Vector2d(-100, 100), 1);
 
+		/////////////////////////////////////
+		//**InitButtons
+		/////////////////////////////////////
+		ButtonSettings SBS;
+		SBS.IdleColor = XMFLOAT4(0, 0, 0, 0);
+		SBS.InActiveColor = XMFLOAT4(0, 0, 0.25f, 0);
+		SBS.MaterialName = std::string("Button");
+		SBS.ReadyColor = XMFLOAT4(0.25, 0.25, 0.25, 0);
+		SBS.SuppressColor = XMFLOAT4(0.5, 0.5, 0.5, 0);
+		QTButton* NB = new QTButton(this, SBS);
+		this->Buttons.push_back(NB);
+		NB->SetSizes(Vector2d(80, 30));
+		NB->SetFunc(DX_BUTTON_FUNC_TYPE_ONCLICK, &QuickTriggered::BToggleResButtons);
+		NB->Spawn(Vector2d(0, 0), 1);
+		NB->RenderText(Vector2d(-20, 0), COLOR_WHITE_3, 1, "12345");
+		SBS.IsActive = false;
+		SBS.IsVisible = false;
+		NB = new QTButton(this, SBS);
+		this->Buttons.push_back(NB);
+		NB->SetSizes(Vector2d(80, 30));
+		NB->Spawn(Vector2d(0, -30), 1);
+		NB->RenderText(Vector2d(-20, 0), COLOR_BLACK_3, 1, "12345");//800600
+		NB->SetIndName(0, "R");
+		NB->SetIndName(1, "86");
+		NB = new QTButton(this, SBS);
+		this->Buttons.push_back(NB);
+		NB->SetSizes(Vector2d(80, 30));
+		NB->Spawn(Vector2d(0, -60), 1);
+		NB->RenderText(Vector2d(-20, 0), COLOR_RED_3, 1, "12345");//1280768
+		NB->SetIndName(0, "R");
+		NB->SetIndName(1, "1276");
 		return true;
 
 	}
@@ -109,7 +180,6 @@ void QuickTriggered::Update()
 	////////////////////////////////////////////////
 	//**Render Update
 	////////////////////////////////////////////////
-
 	if (GetAsyncKeyState('1'))
 		this->Resize(DX_DISPLAY_MODE_1360_768);
 	else if (GetAsyncKeyState('2'))
@@ -127,9 +197,20 @@ void QuickTriggered::Update()
 
 	}
 
+	this->CheckResButtons();
+
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
 
+	//this->Font2D->Draw(Vector2d(-100, 0), COLOR_WHITE_3, "%d", this->Timer->GetFPS());
+
 	QuickTriggered::Draw();
+
+}
+
+void QuickTriggered::WorkWithButtons()
+{
+
+
 
 }
 

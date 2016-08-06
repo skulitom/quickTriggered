@@ -55,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <ExpandAttributedSource>true</ExpandAttributedSource>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -65,6 +66,10 @@
       <ShaderModel>4.0</ShaderModel>
       <ShaderType>Effect</ShaderType>
     </FxCompile>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -101,6 +106,7 @@
     <ClInclude Include="ElementBaseManager.h" />
     <ClInclude Include="FigureDrop.h" />
     <ClInclude Include="FigurePos.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GameProgress.h" />
     <ClInclude Include="GUIFigures.h" />
     <ClInclude Include="Files.h" />
@@ -110,7 +116,6 @@
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
-    <ClInclude Include="TestPipeline.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2d.h" />
   </ItemGroup>
@@ -124,19 +129,23 @@
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="FigureDrop.cpp" />
     <ClCompile Include="FigurePos.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameProgress.cpp" />
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="TestPipeline.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="FigurePS.fx" />
+    <FxCompile Include="FontPS.fx" />
     <FxCompile Include="SmoothPS.fx" />
     <FxCompile Include="StandartPShader.fx" />
-    <FxCompile Include="StandartVShader.fx" />
+    <FxCompile Include="StandartVShader.fx">
+      <DeploymentContent>false</DeploymentContent>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSave.txt" />

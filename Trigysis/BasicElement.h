@@ -21,12 +21,7 @@ class ElementInterface;
 #define ProtectPtr(ptr) {if(ptr!=nullptr) ptr = nullptr;}
 #define ProtectPtrArray(ptr, arraySize) \
 	for(int i = 0; i < arraySize; i++) \
-		ProtectPtr(ptr[i]);
-
-#define PrepareShader(pMaterial, pSManager){										 \
-	if(pMaterial->ShaderName != "")	{												 \
-		pMaterial->EffectShader = pSManager->GetPixelShader(pMaterial->ShaderName);  \
-		pMaterial->ShaderName = ""; }}												
+		ProtectPtr(ptr[i]);											
 	 
 
 #define EL_SHAPE_TYPE_RECTANGLE 0
@@ -68,6 +63,8 @@ public:
 	void SetShapeType(__int8 shapeType) { this->ShapeType = shapeType; }
 	XMFLOAT4& GetCustomVars(){ return this->CustomVars; }
 	void SetCustomVars(XMFLOAT4& customVars){ this->CustomVars = customVars; }
+	virtual void Render();
+	void SetBlendState(UINT index) { this->BState = this->D3dApp->GetBlendState((UINT)index); }
 protected:
 	Material* MaterialPtr;
 	Vector2d Position;
@@ -83,6 +80,7 @@ protected:
 	BOOL IsSpawned;
 	__int8 ShapeType;
 	XMFLOAT4 CustomVars;
+	BlendState* BState;
 };
 
 //////////////////////////////////////////////
