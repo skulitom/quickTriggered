@@ -58,7 +58,7 @@ public:
 	//**Get What type of the super persona this type is belogs to
 	UINT GetFigureSuperType() { return this->SType; }
 
-	bool Update(float deltaTime) override;
+	bool Update() override;
 
 	void MoveDirect(Vector2d& dest, float moveSpeed);
 

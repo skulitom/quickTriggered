@@ -5,6 +5,7 @@
 #include "Basic2DDraw.h"
 #include "Files.h"
 #include <vector>
+#include <map>
 class ElementsMLand;
 class ElementInterface;
 
@@ -17,6 +18,9 @@ class ElementInterface;
 
 #define DeclareElementName(classTypeName, returnName) \
 	returnName = #classTypeName;
+
+#define Precache(element) \
+	if(element) if(element->GetPMLand()) element->GetPMLand()->EPrecache(element);
 
 #define ProtectPtr(ptr) {if(ptr!=nullptr) ptr = nullptr;}
 #define ProtectPtrArray(ptr, arraySize) \
@@ -50,7 +54,7 @@ public:
 	bool SetMaterial(std::string& materialName);
 	bool SetMaterial(Material* pMaterial);
 	Material* GetMaterial() { return this->MaterialPtr; }
-	virtual bool Update(FLOAT deltaTime) { return true; }
+	virtual bool Update() { return true; }
 	bool GetIsFired() { return this->IsFired; }
 	void SetIsFired(bool isFired) { this->IsFired = isFired; }
 	std::string& GetEName() { return this->EName; }
@@ -65,10 +69,22 @@ public:
 	void SetCustomVars(XMFLOAT4& customVars){ this->CustomVars = customVars; }
 	virtual void Render();
 	void SetBlendState(UINT index) { this->BState = this->D3dApp->GetBlendState((UINT)index); }
+	void SetRotation(float rotation) { this->Rotation = rotation; }
+	float GetRotation() { return this->Rotation; }
+	void SetIndexInCache(UINT index) { this->IndexInCache = index; }
+	UINT GetIndexInCache() { return this->IndexInCache; }
+	void SetPrevIndexFound(int index) { this->IndexInCache = index; }
+	int GetPrevIndexFound() { return this->PrevIndexFound; }
+	void SetIsNeedUpdate(bool needUpdate) { this->IsNeedUpdate = needUpdate; }
+	bool GetIsNeedUpdate() { return this->IsNeedUpdate; }
+private:
+	UINT IndexInCache;
+	int PrevIndexFound;
 protected:
 	Material* MaterialPtr;
 	Vector2d Position;
 	Vector2d Sizes;
+	float Rotation;
 	XMFLOAT4 Color;
 	INT IndexOfViewPort; //short
 	BOOL IsNeedRender;
@@ -81,11 +97,13 @@ protected:
 	__int8 ShapeType;
 	XMFLOAT4 CustomVars;
 	BlendState* BState;
+	bool IsNeedUpdate;
 };
 
 //////////////////////////////////////////////
 //**ElementsMLand
 //////////////////////////////////////////////
+
 class ElementsMLand
 {
 public:
@@ -101,12 +119,18 @@ public:
 	bool GetIsLoadMode() { return this->IsLoadMode; }
 	FileManager* GetFManager() { return this->FManager; }
 	void LoadShaders();
+	void EPrecache(ElementInterface* element);
+	void ReleaseFromCache(ElementInterface* element);
+	std::vector<ElementInterface*>& Find(std::string& eName);
+	void ReleaseCache(/*char* key = nullptr*/);
 	
 private:
 
 	void LoadElements();
 
 private:
+
+	std::map<std::string, std::vector<ElementInterface*>> Cache;
 
 	D3DAPP* D3dApp;
 	std::vector<std::vector<ElementInterface*>> Elements;

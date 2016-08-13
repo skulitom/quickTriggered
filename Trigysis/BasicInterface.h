@@ -42,6 +42,7 @@ protected:
 	void InitVPShaders();
 
 protected:
+
 	Basic2DDraw* Draw2D;
 	ElementsMLand* ElementBase;
 	FontManager* Font2D;

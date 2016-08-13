@@ -5,6 +5,7 @@ ButtonInterface::ButtonInterface(BasicInterface* super, ButtonSettings& bs)
 {
 	DeclareElementName(ButtonInterface, this->EName);
 	this->SetSettings(bs);
+	this->TIsConstant = true;
 }
 
 void ButtonInterface::Disable(bool visibleOnEneble)
@@ -214,9 +215,9 @@ void ButtonInterface::SetColor(unsigned __int8 DX_BUTTON_COLOR_STYLE_, XMFLOAT4 
 		this->Settings.SuppressColor = color;
 }
 
-bool ButtonInterface::Update(FLOAT deltaTime)
+bool ButtonInterface::Update()
 {
-	if (!ElementInterface::Update(deltaTime))
+	if (!ElementInterface::Update())
 		return false;
 	if (!this->GetStatus(DX_BUTTON_STATUS_IS_ACTIVE))
 	{
@@ -225,7 +226,7 @@ bool ButtonInterface::Update(FLOAT deltaTime)
 	}
 	this->SetStatus(DX_BUTTON_STATUS_WAS_SELECT, this->GetStatus(DX_BUTTON_STATUS_IS_SELECT));
 	this->SetStatus(DX_BUTTON_STATUS_IS_SELECT | DX_BUTTON_STATUS_WORKING, this->CheckIsSelected());
-	if (this->CheckIsPress(deltaTime))
+	if (this->CheckIsPress(this->D3dApp->GetTimer()->GetDeltaTime()))
 	{
 		this->SetColors(this->Settings.SuppressColor);
 		if (this->Feature & DX_BUTTON_FEATURE_ONPRESS)

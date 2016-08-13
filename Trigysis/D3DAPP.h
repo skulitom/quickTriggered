@@ -7,7 +7,6 @@
 #include "DXInclude\D3DX10.h"
 #include "DXInclude\D3DX11.h"
 #include "DXInclude\xnamath.h"
-#include "DXInclude\d3dx11effect.h"
 
 #include <iostream>
 #include <sstream>
@@ -17,6 +16,7 @@
 #include "Vector2d.h"
 #include "Files.h"
 #include "Timer.h"
+#include "Camera.h"
 
 #pragma comment(lib, "dxgi.lib")
 //#include "Shader.h"
@@ -91,7 +91,6 @@ struct Material
 	{
 		D3DRelease(Texture);
 		D3DRelease(AdditionalTexture);
-		D3DRelease(EffectShader);
 	}
 
 	ID3D11ShaderResourceView* Texture;
@@ -124,6 +123,7 @@ struct VPortStruct
 	ID3D11RenderTargetView* RTView;
 	Vector2d WinPos;
 	Vector2d WorldPos;
+	Camera VPCamera;
 };
 
 struct DepthStencilState
@@ -254,6 +254,7 @@ public:
 	bool SetBlendState(UINT index);
 	bool SetBlendState(char* name);
 	bool SetBlendState(ID3D11BlendState* bState);
+	float GetSizeKoeff() { return this->SizeKoeff; }
 
 	///////////////////////////////////////////////
 	//**SIMPLE-CREATION METHODS
@@ -330,6 +331,7 @@ protected:
 
 	VPortStruct ViewPorts[8];
 
+	float SizeKoeff;
 };
 
 #define DX_MOUSE_RELEASE 0x0

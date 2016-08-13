@@ -68,7 +68,7 @@ void BasicInterface::Draw()
 	for (UINT i = 1; i < this->NumOfVPorts; i++)
 	{
 
-		this->Draw2D->DrawRectangle(this->ViewPorts[i].WorldPos, Vector2d(this->ViewPorts[i].VPort.Width, this->ViewPorts[i].VPort.Height),
+		this->Draw2D->DrawRectangle(this->ViewPorts[i].WorldPos, 0, Vector2d(this->ViewPorts[i].VPort.Width, this->ViewPorts[i].VPort.Height),
 			0, XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 1), this->ViewPorts[i].MaterialToRender);
 
 	}

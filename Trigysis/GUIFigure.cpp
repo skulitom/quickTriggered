@@ -197,15 +197,15 @@ void Figure::MoveDirect(Vector2d& dest, float moveSpeed)
 
 }
 
-bool Figure::Update(float deltaTime)
+bool Figure::Update()
 {
 
-	if (!Element::Update(deltaTime))
+	if (!Element::Update())
 		return false;
 
 	this->Color = this->FrontButton->GetColors();
 
-	this->Move(this->DestPos, deltaTime);
+	this->Move(this->DestPos, this->D3dApp->GetTimer()->GetDeltaTime());
 	this->FrontButton->SetPosition(this->Position);
 
 	this->CustomVars.x = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->IndexOfViewPort)).X;

@@ -333,7 +333,7 @@ ID3D11PixelShader* ShaderManager::GetPixelShader(std::string& shaderName)
 
 }
 
-void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vector2d& size, Material* pMaterial,
+void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, float rotation, Vector2d& size, Material* pMaterial,
 	XMFLOAT4& userVars, XMFLOAT4& aColor)
 {
 
@@ -353,6 +353,12 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vect
 	D3DXMatrixIdentity(&this->WorldMatrix);
 	D3DXMatrixTranslation(&this->WorldMatrix, pos.X, pos.Y, 0);
 	D3DXMatrixScaling(&this->ScaleMatrix, size.X, size.Y, 1);
+
+	if (rotation)
+	{
+		D3DXMatrixRotationZ(&this->RotateMatrix, rotation);
+		D3DXMatrixMultiply(&this->WorldMatrix, &this->RotateMatrix, &this->WorldMatrix);
+	}
 
 	D3DXMatrixMultiply(&this->WorldMatrix, &this->ScaleMatrix, &this->WorldMatrix);
 

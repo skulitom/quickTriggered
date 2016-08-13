@@ -1226,6 +1226,8 @@ void D3DAPP::UpdateWindowRect()
 	this->WinSizes.TCOffSet = cRc.top - wRc.top;
 	this->WinSizes.BCOffSet = wRc.bottom - cRc.bottom;
 
+	this->SizeKoeff = float(this->WinSizes.ClientWWidth) / (800 - this->WinSizes.LCOffSet - this->WinSizes.RCOffSet);
+
 }
 
 XMFLOAT2& D3DAPP::GetScreenSizes()
@@ -1251,7 +1253,7 @@ void D3DAPP::ClearScreen(XMFLOAT4& color, ID3D11RenderTargetView* rtv, ID3D11Dep
 
 void D3DAPP::Draw()
 {
-	SwapChain->Present(1, 0);
+	SwapChain->Present(0, 0);
 }
 
 void D3DAPP::ReleaseDefault()

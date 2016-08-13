@@ -2,8 +2,12 @@
 
 Basic2DDraw::Basic2DDraw(D3DAPP* d3dApp)
 {
+
+	this->Shader = nullptr;
+	this->D3dApp = nullptr;
+
 	this->D3dApp = d3dApp;
-	ShaderManager* RS = new ShaderManager(this->D3dApp, SHADER_MODEL_5_0);
+	ShaderManager* RS = new ShaderManager(this->D3dApp, SHADER_MODEL_4_0);
 
 	this->Shader = RS;
 	if (!this->D3dApp->SetDepthStencilStateByIndex(DX_RS_2D_RENDER_STATE))
@@ -120,7 +124,7 @@ void Basic2DDraw::UpdateMaterial(Material* pMaterial)
 
 }
 
-void Basic2DDraw::DrawRectangle(Vector2d& pos, Vector2d& sizes, short indexOfVP, XMFLOAT4& userVars,
+void Basic2DDraw::DrawRectangle(Vector2d& pos, float rotation, Vector2d& sizes, short indexOfVP, XMFLOAT4& userVars,
 	XMFLOAT4& color, Material* pMaterial, XMFLOAT4& aColor)
 {
 
@@ -128,7 +132,7 @@ void Basic2DDraw::DrawRectangle(Vector2d& pos, Vector2d& sizes, short indexOfVP,
 	{
 
 		this->UpdateMaterial(pMaterial);
-		this->Shader->Render(indexOfVP, color, pos, sizes, pMaterial, userVars, aColor);
+		this->Shader->Render(indexOfVP, color, pos, rotation, sizes, pMaterial, userVars, aColor);
 
 		this->D3dApp->DeviceContext->DrawIndexed(BASIC_2DDRAWP_RECTANGLE_I_NUM, BASIC_2DDRAWP_RECTANGLE_I_START, 0);
 
@@ -144,7 +148,7 @@ void Basic2DDraw::DrawHexagon(Vector2d& pos, Vector2d& sizes, short indexOfVP, X
 	{
 
 		this->UpdateMaterial(pMaterial);
-		this->Shader->Render(indexOfVP, color, pos, sizes, pMaterial, userVars, aColor);
+		this->Shader->Render(indexOfVP, color, pos,0 , sizes, pMaterial, userVars, aColor);
 
 		this->D3dApp->DeviceContext->DrawIndexed(BASIC_2DDRAWP_HEXAGON_I_NUM, BASIC_2DDRAWP_HEXAGON_I_START, 0);
 

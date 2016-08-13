@@ -4,6 +4,7 @@
 //////////////////////////////////////////////////
 ElementsMLand::ElementsMLand(D3DAPP* d3dApp, D3DAPPINPUT* input, Basic2DDraw* draw2D, std::string& saveBufferName)
 {
+
 	this->D3dApp = d3dApp;
 	this->Input = input;
 	this->Draw2D = draw2D;
@@ -42,6 +43,8 @@ void ElementsMLand::DeleteElement(const UINT indexOfVP, const UINT indexOfElemen
 	if (indexOfVP > this->D3dApp->GetNumOfVPorts() || indexOfVP < 0)
 		return;
 
+	this->ReleaseFromCache(this->Elements.at(indexOfVP).at(indexOfElement));
+
 	D3DDelete(this->Elements.at(indexOfVP).at(indexOfElement));
 	this->Elements.at(indexOfVP).erase(this->Elements.at(indexOfVP).begin() + indexOfElement);
 
@@ -62,8 +65,8 @@ void ElementsMLand::UpdateAndDraw(FLOAT deltaTime)
 			{
 				if (this->Elements.at(i).at(Index)->GetIsSpawned())
 				{
-					if (!this->IsLoadMode)
-						this->Elements.at(i).at(Index)->Update(deltaTime);
+					if (!this->IsLoadMode && this->Elements.at(i).at(Index)->GetIsNeedUpdate())
+						this->Elements.at(i).at(Index)->Update();
 
 					this->Elements.at(i).at(Index)->Render();
 
@@ -128,6 +131,89 @@ void ElementsMLand::LoadShaders()
 
 }
 
+void ElementsMLand::EPrecache(ElementInterface* element)
+{
+
+	if (!element)
+		return;
+
+	if (element->GetEName() == "")
+		return;
+
+	auto& It = this->Cache.find(std::string(element->GetEName()));
+	if (It != std::end(this->Cache))
+	{
+		It->second.push_back(element);
+		element->SetIndexInCache(It->second.size() - 1);
+	}
+	else
+	{
+		std::vector<ElementInterface*> NewBranch = { element };
+		this->Cache.insert(std::pair<std::string, std::vector<ElementInterface*>>(element->GetEName(), NewBranch));
+		element->SetIndexInCache(0);
+	}
+
+
+}
+
+void ElementsMLand::ReleaseFromCache(ElementInterface* element)
+{
+
+	if (!element)
+		return;
+	if (!element->GetEName().compare(""))
+		return;
+
+	auto& It = this->Cache.find(std::string(element->GetEName()));
+	if (It != std::end(this->Cache))
+	{
+		//It->second.erase(It->second.begin() + element->GetIndexInCache());
+		It->second.at(element->GetIndexInCache()) = nullptr;
+	}
+
+}
+
+std::vector<ElementInterface*>& ElementsMLand::Find(std::string& eName)
+{
+
+	if (!eName.compare(""))
+		return std::vector<ElementInterface*>();
+
+	auto& It = this->Cache.find(std::string(eName));
+	if (It != std::end(this->Cache))
+	{
+		return It->second;
+	}
+
+	return std::vector<ElementInterface*>();
+
+}
+
+void ElementsMLand::ReleaseCache(/*char* key*/)
+{
+
+	//if (key)
+	//{
+
+	//	auto& It = this->Cache.find(std::string(key));
+	//	if (It != std::end(this->Cache))
+	//	{
+	//		for (int i = 0; i < It->second.size(); i++)
+	//			It->second.at(i) = nullptr;
+
+	//		It->second.clear();
+	//		It->second.shrink_to_fit();
+
+	//	}
+
+	//	return;
+
+	//}
+	//else
+		this->Cache.clear();
+
+}
+
 ///////////////////////////////////////////////////
 //**ElementInterface
 ///////////////////////////////////////////////////
@@ -135,6 +221,7 @@ ElementInterface::ElementInterface(ElementsMLand* ptrToMotherLand)
 {
 
 	this->IsNeedRender = 1;
+	this->IsNeedUpdate = 1;
 
 	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
 
@@ -211,7 +298,7 @@ void ElementInterface::Render()
 
 		if (this->ShapeType == EL_SHAPE_TYPE_RECTANGLE)
 		{
-			this->PMLand->GetDraw2D()->DrawRectangle(this->Position, this->Sizes, this->IndexOfViewPort, this->CustomVars, this->Color,
+			this->PMLand->GetDraw2D()->DrawRectangle(this->Position, this->Rotation, this->Sizes, this->IndexOfViewPort, this->CustomVars, this->Color,
 				this->MaterialPtr, this->Color);
 		}
 		else if (this->ShapeType == EL_SHAPE_TYPE_HEXAGON)
@@ -250,6 +337,13 @@ bool ElementInterface::SetMaterial(Material* pMaterial)
 	return false;
 
 }
+
+//void ElementInterface::SetEName(std::string& eName)
+//{
+//
+//	this->EName = eName;
+//
+//}
 
 //////////////////////////////////////////////////////////////////////
 //**

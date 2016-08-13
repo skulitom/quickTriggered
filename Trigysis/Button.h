@@ -71,7 +71,7 @@ public:
 	ButtonSettings& GetSettings() { return this->Settings; }
 	FLOAT GetPressTime() { return this->PressTime - 1.f; }
 	bool GetStatus(unsigned __int16 DX_BUTTON_STATUS_) { return this->Status & DX_BUTTON_STATUS_; }
-	bool Update(FLOAT deltaTime) override;
+	bool Update() override;
 	virtual void EventOnSelect(){};
 	virtual void EventOnClick(){};
 	virtual void EventOnPress(){};

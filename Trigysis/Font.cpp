@@ -164,7 +164,7 @@ const char* FontManager::GetLocText(const char* key)
 void FontManager::Render(Vector2d& pos, XMFLOAT3& color, float scale, const char* buffer)
 {
 
-	if (this->Error)
+	if (this->Error || !buffer)
 		return;
 
 	if (*buffer == '@')
@@ -204,7 +204,8 @@ void FontManager::Render(Vector2d& pos, XMFLOAT3& color, float scale, const char
 				this->FontMaterial->TextureOffset.x = this->Decoder.at(i).GUISym->TexCoords.x * (this->Size);
 				this->FontMaterial->TextureOffset.y = this->Decoder.at(i).GUISym->TexCoords.y * (this->Size);
 
-				this->Draw2d->DrawRectangle(pos + Vector2d( this->Decoder.at(i).GUISym->Sizes.X*0.5f, this->Decoder.at(i).GUISym->Sizes.Y - FirstHeight - this->Decoder.at(i).GUISym->YOffSet)*0.5f*scale + PrevSizes, this->Decoder.at(i).GUISym->Sizes * scale, this->Draw2d->GetShaderManager()->GetIndexOfVP(),
+				this->Draw2d->DrawRectangle(pos + Vector2d( this->Decoder.at(i).GUISym->Sizes.X*0.5f, this->Decoder.at(i).GUISym->Sizes.Y - FirstHeight - this->Decoder.at(i).GUISym->YOffSet)*0.5f*scale + PrevSizes,
+					0, this->Decoder.at(i).GUISym->Sizes * scale, this->Draw2d->GetShaderManager()->GetIndexOfVP(),
 					XMFLOAT4(0, 0, 0, 0), XMFLOAT4(color.x, color.y, color.z, 0), this->FontMaterial);
 				PrevSizes = PrevSizes + Vector2d((this->Decoder.at(i).GUISym->Sizes.X*0.5f + 7) * scale, 0);
 				//+Vector2d(this->Decoder.at(i).GUISym->XOffSet, 0)

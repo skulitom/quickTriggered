@@ -80,7 +80,7 @@ public:
 
 	void InitAllShaders();
 
-	void Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, Vector2d& size, Material* pMaterial, XMFLOAT4& userVars,
+	void Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, float rotation, Vector2d& size, Material* pMaterial, XMFLOAT4& userVars,
 		XMFLOAT4& aColor = XMFLOAT4(0,0,0,0));
 
 	void SetFilter();
@@ -111,6 +111,7 @@ protected:
 	D3DXMATRIX ScaleMatrix;
 	D3DXMATRIX ProjectMatrix;
 	D3DXMATRIX ViewMatrix;
+	D3DXMATRIX RotateMatrix;
 
 	D3DAPP* D3dApp;
 	ID3D11Buffer* VertexBuffer; //<-Ch
