@@ -1,0 +1,7 @@
+$Name:
+DonaldHD
+$Texture:
+DTHD.dds
+$Alpha
+//$Shader:
+//SmoothPS

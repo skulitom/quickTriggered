@@ -14,7 +14,7 @@ public:
 
 	virtual void Spawn(Vector2d& position, short indexOfVPort) override;
 
-	virtual void RenderText(Vector2d& pos, XMFLOAT3& color, float scale, char* text, ...);
+	virtual void RenderText(Vector2d& pos, XMFLOAT3& color, float scale, const char* text, ...);
 
 	virtual void Render() override;
 

@@ -1,0 +1,5 @@
+$Loc
+$StartDec
+@B_RES|Resolutions
+@B_QUIT|Quit
+$StopDec

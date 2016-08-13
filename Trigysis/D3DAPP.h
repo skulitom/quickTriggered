@@ -82,6 +82,9 @@ struct Material
 		UseGlobalCoords = false;
 		UseAlpha = false;
 		LSize = XMFLOAT2(0, 0);
+		Animate = XMSHORT4((short)0, (short)0, (short)0, (short)0);
+		LFrameTime = 0;
+		LFrameIndex = 0;
 	}
 
 	~Material()
@@ -100,6 +103,13 @@ struct Material
 	std::string Name;
 	XMFLOAT2 Scale;
 	XMFLOAT2 LSize;
+	//NumOfFrames
+	//FrameSize
+	//FrameTime
+	//Size
+	XMSHORT4 Animate;
+	float LFrameTime;
+	UINT LFrameIndex;
 	bool UseGlobalCoords;
 	bool UseAlpha;
 

@@ -1,0 +1,12 @@
+$Name:
+GUIFont
+$Texture:
+GUIFont.dds
+$Alpha
+$GlobalTexCoords
+$TextureScale:
+50
+$Shader:
+FontPS
+
+

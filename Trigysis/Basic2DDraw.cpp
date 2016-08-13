@@ -71,8 +71,40 @@ void Basic2DDraw::UpdateMaterial(Material* pMaterial)
 		if (pMaterial->Texture)
 		{
 
-			pMaterial->TextureOffset.x = pMaterial->TextureOffset.x + pMaterial->TextureMove.x * this->D3dApp->GetTimer()->GetDeltaTime();
-			pMaterial->TextureOffset.y = pMaterial->TextureOffset.y + pMaterial->TextureMove.y * this->D3dApp->GetTimer()->GetDeltaTime();
+			if (pMaterial->Animate.w)
+			{
+
+				pMaterial->LFrameTime = pMaterial->LFrameTime + this->D3dApp->GetTimer()->GetDeltaTime();
+
+				if (pMaterial->LFrameTime >= (float)(pMaterial->Animate.z) / 1000.f)
+				{
+					pMaterial->LFrameTime = 0;
+
+					pMaterial->LFrameIndex++;
+					pMaterial->LFrameIndex = pMaterial->LFrameIndex % pMaterial->Animate.x;
+
+					//Надо занести в TAS
+					INT DIndex = (pMaterial->Animate.w / pMaterial->Animate.y);
+					pMaterial->TextureOffset.x = (float)(pMaterial->Animate.y * (pMaterial->LFrameIndex % DIndex)) / pMaterial->Animate.w;
+					pMaterial->TextureOffset.y = (float)(pMaterial->Animate.y * (pMaterial->LFrameIndex / DIndex)) / pMaterial->Animate.w;
+
+					//XMMATRIX MM = XMMatrixSet(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, TexAnimSettings.Coord.x / TexAnimSettings.Size.x, TexAnimSettings.Coord.y / TexAnimSettings.Size.y, 0.f, 1.f);
+
+					//this->TexAnimSettings.Transform._41 = 0;
+					//this->TexAnimSettings.Transform._42 = 0;
+
+					//XMStoreFloat4x4(&this->TexAnimSettings.Transform, XMMatrixMultiply(XMLoadFloat4x4(&this->TexAnimSettings.Transform), MM));
+
+				}
+
+			}
+			else
+			{
+
+				pMaterial->TextureOffset.x = pMaterial->TextureOffset.x + pMaterial->TextureMove.x * this->D3dApp->GetTimer()->GetDeltaTime();
+				pMaterial->TextureOffset.y = pMaterial->TextureOffset.y + pMaterial->TextureMove.y * this->D3dApp->GetTimer()->GetDeltaTime();
+
+			}
 
 		}
 

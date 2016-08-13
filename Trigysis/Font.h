@@ -11,6 +11,8 @@ struct GUIChar
 
 	Vector2d Sizes;
 	XMFLOAT2 TexCoords;
+	INT XOffSet;
+	INT YOffSet;
 
 };
 
@@ -29,20 +31,19 @@ class FontManager
 
 public:
 
-	FontManager(D3DAPP* d3dApp, Basic2DDraw* draw2d, char* fntFile);
+	FontManager(D3DAPP* d3dApp, Basic2DDraw* draw2d, char* fntFile, char* loc = "en");
 	~FontManager();
 
-	void DrawA(Vector2d& pos, XMFLOAT3& color, float scale, char* text, ...);
-	void Draw(Vector2d& pos, XMFLOAT3& color, float scale, char* buffer);
+	void DrawA(Vector2d& pos, XMFLOAT3& color, float scale, const char* text, ...);
+	void Draw(Vector2d& pos, XMFLOAT3& color, float scale, const char* buffer);
 
 private:
 
-	void Render(Vector2d& pos, XMFLOAT3& color, float scale, char* buffer);
+	void Render(Vector2d& pos, XMFLOAT3& color, float scale, const char* buffer);
+	const char* GetLocText(const char* key);
 
 	bool CompileFile(char* fntFile);
 	bool InitConstTexts();
-
-	FileManager* CTFManager;
 
 	std::vector<SDecoder> Decoder;
 
@@ -63,6 +64,9 @@ private:
 
 	bool NeedRender;
 	bool Error;
+
+	std::map<std::string, std::string> LocMap;
+	char* Locale;
 
 };
 

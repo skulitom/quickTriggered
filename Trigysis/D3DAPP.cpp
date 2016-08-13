@@ -1326,12 +1326,12 @@ bool D3DAPP::SInitMaterials()
 	//**Init Materials
 	////////////////////////////////////////////////
 
-	MaterialFileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Textures\\*.txt");
+	MaterialFileList = FileHelp::FindFiles(this->GetCatalogName() + "\\Resources\\Materials\\*.txt");
 
 	for (size_t i = 0; i < MaterialFileList.size(); i++)
 	{
 
-		FManager->Open(this->GetCatalogName() + "\\Textures\\" + MaterialFileList.at(i));
+		FManager->Open(this->GetCatalogName() + "\\Resources\\Materials\\" + MaterialFileList.at(i));
 
 		Material* NewMaterial = new Material();
 
@@ -1353,12 +1353,13 @@ bool D3DAPP::SInitMaterials()
 
 				Line = FManager->GetStringFromFile();
 
-				NewMaterial->Texture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
+				NewMaterial->Texture = this->LoadTexture(Line, this->GetCatalogName() + "\\Resources\\Textures\\");
 
-				D3D11_SHADER_RESOURCE_VIEW_DESC DS;
-				NewMaterial->Texture->GetDesc(&DS);
-				//NewMaterial->LSize = DS.Texture2D.
-
+				if (NewMaterial->Texture)
+				{
+					D3D11_SHADER_RESOURCE_VIEW_DESC DS;
+					NewMaterial->Texture->GetDesc(&DS);
+				}
 
 			}
 			else if (!Line.compare("$ATexture:"))
@@ -1366,7 +1367,7 @@ bool D3DAPP::SInitMaterials()
 
 				Line = FManager->GetStringFromFile();
 
-				NewMaterial->AdditionalTexture = this->LoadTexture(Line, this->GetCatalogName() + "\\Textures\\");
+				NewMaterial->AdditionalTexture = this->LoadTexture(Line, this->GetCatalogName() + "\\Resources\\Textures\\");
 
 			}
 			else if (!Line.compare("$TextureScale:"))
@@ -1421,9 +1422,30 @@ bool D3DAPP::SInitMaterials()
 			{
 				NewMaterial->TextureOffset.w = FManager->GetINTFromFile() / 100.f;
 			}
+			else if (!Line.compare("$NumOfFrames:"))
+			{
+				NewMaterial->Animate.x = FManager->GetINTFromFile();
+			}
+			else if (!Line.compare("$FrameSize:"))
+			{
+				NewMaterial->Animate.y = FManager->GetINTFromFile();
+			}
+			else if (!Line.compare("$FrameTime:"))
+			{
+				NewMaterial->Animate.z = FManager->GetINTFromFile();
+			}
+			else if (!Line.compare("$Size:"))
+			{
+				NewMaterial->Animate.w = FManager->GetINTFromFile();
+			}
 		}
 
-		this->Materials.push_back(NewMaterial);
+		if (!NewMaterial->Animate.x || !NewMaterial->Animate.y || !NewMaterial->Animate.w)
+			NewMaterial->Animate = XMSHORT4((short)0, (short)0, (short)0, (short)0);
+
+		if (NewMaterial->Name != "" && NewMaterial->Texture)
+			this->Materials.push_back(NewMaterial);
+
 		FManager->Close();
 
 	}

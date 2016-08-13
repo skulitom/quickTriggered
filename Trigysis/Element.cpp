@@ -31,7 +31,7 @@ void Element::Render()
 	}
 }
 
-void Element::RenderText(Vector2d& pos, XMFLOAT3& color, float scale, char* text, ...)
+void Element::RenderText(Vector2d& pos, XMFLOAT3& color, float scale, const char* text, ...)
 {
 	if (!this->TBuffer)
 	{
