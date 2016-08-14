@@ -128,21 +128,21 @@ void Figure::SetFigureType(UINT type)
 
 	this->Type = type;
 
-	switch (this->Type)
-	{
+	//switch (this->Type)
+	//{
 
-		/*case 0:
-		{
-			this->Color = XMFLOAT4(1, 0, 0, 1);
-			break;
-		}*/
-		default :
-		{
-			this->Color = XMFLOAT4(0, 0, 0, 0);
-			break;
-		}
+	//	/*case 0:
+	//	{
+	//		this->Color = XMFLOAT4(1, 0, 0, 1);
+	//		break;
+	//	}*/
+	//	default :
+	//	{
+	//		this->Color = XMFLOAT4(0, 0, 0, 0);
+	//		break;
+	//	}
 
-	}
+	//}
 
 }
 
@@ -203,7 +203,7 @@ bool Figure::Update()
 	if (!Element::Update())
 		return false;
 
-	this->Color = this->FrontButton->GetColors();
+	//this->Color = this->FrontButton->GetColors();
 
 	this->Move(this->DestPos, this->D3dApp->GetTimer()->GetDeltaTime());
 	this->FrontButton->SetPosition(this->Position);

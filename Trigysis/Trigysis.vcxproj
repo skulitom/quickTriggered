@@ -104,10 +104,11 @@
     <ClInclude Include="D3DAPP.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ElementBaseManager.h" />
-    <ClInclude Include="FigureDrop.h" />
-    <ClInclude Include="FigurePos.h" />
+    <ClInclude Include="FigureB.h" />
+    <ClInclude Include="FigureManager.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameProgress.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="GUIFigures.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
@@ -127,10 +128,11 @@
     <ClCompile Include="D3DAPP.cpp" />
     <ClCompile Include="BasicElement.cpp" />
     <ClCompile Include="Element.cpp" />
-    <ClCompile Include="FigureDrop.cpp" />
-    <ClCompile Include="FigurePos.cpp" />
+    <ClCompile Include="FigureB.cpp" />
+    <ClCompile Include="FigureManager.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameProgress.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
