@@ -35,7 +35,7 @@ float4 PSMain(PSInput input) : SV_Target
     uint2 Sizes;
     Texture.GetDimensions(Sizes.x, Sizes.y);
 
-    float4 PTexture = Texture.Sample(Sampler, input.TexCoord);
+    float4 PTexture = Texture.Sample(Sampler, input.TexCoord)+ input.Color;
 
     //if(UseAlpha)
         //clip(PTexture - 0.5f);

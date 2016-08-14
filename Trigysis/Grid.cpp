@@ -9,6 +9,8 @@ struct FigureTypeException : public std::exception
 
 Grid::Grid(BasicInterface* super)
 {
+	this->fmanager = new FigureManager();
+
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
 	{
 		std::vector<int> hold;
@@ -19,6 +21,21 @@ Grid::Grid(BasicInterface* super)
 		}
 		hold.clear();
 	}
+
+	figure0 = new FigureB(MEXICANS, INITIAL_PROB, INITIAL_MORALE);
+	figure1 = new FigureB(JEWS, INITIAL_PROB, INITIAL_MORALE);
+	figure2 = new FigureB(WOMEN, INITIAL_PROB, INITIAL_MORALE);
+	figure3 = new FigureB(BLACK, INITIAL_PROB, INITIAL_MORALE);
+	figure4 = new FigureB(ASIAN, INITIAL_PROB, INITIAL_MORALE);
+	figure5 = new FigureB(WHITE_SUPREME, INITIAL_PROB, INITIAL_MORALE);
+
+	list.push_back(figure0);
+	list.push_back(figure1);
+	list.push_back(figure2);
+	list.push_back(figure3);
+	list.push_back(figure4);
+	list.push_back(figure5);
+
 }
 
 void Grid::setBoard(BasicInterface* super)
@@ -27,25 +44,12 @@ void Grid::setBoard(BasicInterface* super)
 	{
 		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
 		{
-//			createFigure(super,drop->FigureToDrop(figure0,figure1,figure2,figure3,figure4,figure5), i, j);
+			generateFig(super, i, j);
 		}
 	}
 }
 
-Figure Grid::getGUIfigure(FigureB *figureB)
-{
 
-}
-
-
-
-void Grid::createFigure(BasicInterface* super,Figure *fig, int x, int y)
-{
-	fig = new Figure(super);
-	fig->SetFigureSuperType(0);
-	fig->SetFigureType(0);
-	fig->Spawn(Vector2d(x, y), 1);
-}
 
 Grid::~Grid()
 {
@@ -56,4 +60,7 @@ Grid::~Grid()
 	delete figure4;
 	delete figure5;
 	net.clear();
+	net.shrink_to_fit();
+	list.clear();
+	list.shrink_to_fit();
 }

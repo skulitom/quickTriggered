@@ -87,13 +87,8 @@ bool QuickTriggered::InitApp()
 
 void QuickTriggered::setBoard()
 {
-	for (int i = -BOARD_SIZE; i <= BOARD_SIZE; i += BOARD_INTERVAL)
-	{
-		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
-		{
-			createFigure(i, j);
-		}
-	}
+	this->grid = new Grid(this);
+	this->grid->setBoard(this);
 }
 
 

@@ -75,9 +75,6 @@
     <ClInclude Include="ShaderManager.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="FigureDrop.h">
-      <Filter>QuickTriggered\BackEnd</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgress.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
@@ -90,10 +87,10 @@
     <ClInclude Include="Grid.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
-    <ClInclude Include="FigureMorale.h">
+    <ClInclude Include="FigureB.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
-    <ClInclude Include="FigureB.h">
+    <ClInclude Include="FigureManager.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,9 +137,6 @@
     <ClCompile Include="ShaderManager.cpp">
       <Filter>FrameWork\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="FigureDrop.cpp">
-      <Filter>QuickTriggered\BackEnd</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgress.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
@@ -155,10 +149,10 @@
     <ClCompile Include="Grid.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
-    <ClCompile Include="FigureMorale.cpp">
+    <ClCompile Include="FigureB.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
-    <ClCompile Include="FigureB.cpp">
+    <ClCompile Include="FigureManager.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>

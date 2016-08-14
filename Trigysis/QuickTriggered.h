@@ -59,6 +59,8 @@ private:
 
 	Figure* Fig1;
 
+	Grid* grid;
+
 private:
 
 };

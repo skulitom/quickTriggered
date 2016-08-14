@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "FigureB.h"
-#include "FigureDrop.h"
+#include "FigureManager.h"
 
 #include "D3DAPP.h"
 #include "Element.h"
@@ -28,30 +28,25 @@ public:
 	Grid(BasicInterface* super);
 	~Grid();
 
+	void setBoard(BasicInterface* super);
+
 protected:
 private:
+	inline void generateFig(BasicInterface* super,int i, int j){ list.at(fmanager->FigureToDrop(list))->createFigure(super, i, j); };
 
-	void setBoard(BasicInterface* super);
-	void createFigure(BasicInterface* super,Figure *fig, int x, int y);
-	Figure getGUIfigure(FigureB *figureB);
 
 	
-	FigureDrop *drop = new FigureDrop();
+	FigureManager *fmanager;
 
 	std::vector<std::vector<int> > net;
-	FigureB *figure0 = new FigureB(MEXICANS,INITIAL_PROB,INITIAL_MORALE);
-	FigureB *figure1 = new FigureB(JEWS, INITIAL_PROB, INITIAL_MORALE);
-	FigureB *figure2 = new FigureB(WOMEN, INITIAL_PROB, INITIAL_MORALE);
-	FigureB *figure3 = new FigureB(BLACK, INITIAL_PROB, INITIAL_MORALE);
-	FigureB *figure4 = new FigureB(ASIAN, INITIAL_PROB, INITIAL_MORALE);
-	FigureB *figure5 = new FigureB(WHITE_SUPREME, INITIAL_PROB, INITIAL_MORALE);
+	std::vector<FigureB*> list;
+	FigureB *figure0;
+	FigureB *figure1;
+	FigureB *figure2;
+	FigureB *figure3;
+	FigureB *figure4;
+	FigureB *figure5;
 
-	Figure *fig0;
-	Figure *fig1;
-	Figure *fig2;
-	Figure *fig3;
-	Figure *fig4;
-	Figure *fig5;
 };
 
 #endif

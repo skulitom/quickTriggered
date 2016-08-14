@@ -14,7 +14,49 @@ FigureB::FigureB(int type, int prob, int morale)
 	}
 }
 
-FigureB::~FigureB()
+void FigureB::createFigure(BasicInterface* super, int x, int y)
+{
+	this->fig = new Figure(super);
+	this->fig->SetFigureSuperType(0);
+	this->fig->SetFigureType(0);
+	this->fig->Spawn(Vector2d(x, y), 1);
+
+	this->fig->SetColors(colorPicker());
+
+	this->list.push_back(fig);
+}
+
+XMFLOAT4& FigureB::colorPicker()
+{
+	switch(type)
+	{
+	case MEXICANS:
+		return XMFLOAT4(0.5, 0.5, 0, 0);
+	case JEWS:
+		return XMFLOAT4(0.2, 0.2, 0.2, 0);
+	case WOMEN:
+		return XMFLOAT4(0.2, 0.7, 0, 0);
+	case BLACK:
+		return XMFLOAT4(0,0,0,0);
+	case ASIAN:
+		return XMFLOAT4(1, 0, 0, 0);
+	case WHITE_SUPREME:
+		return XMFLOAT4(1, 1, 1, 0);
+	default:
+		return XMFLOAT4(1, 1, 0, 0);
+
+	}
+}
+
+void FigureB::deleteFigure(int index)
 {
 	
+	this->list.erase(this->list.begin() + index);
+}
+
+FigureB::~FigureB()
+{
+	delete fig;
+	list.clear();
+	list.shrink_to_fit();
 }

@@ -2,6 +2,9 @@
 #define FigureB_H
 
 #include <iostream>
+#include <vector>
+#include "BasicInterface.h"
+#include "GUIFigures.h"
 
 #define MAX_PROB 600
 #define MIN_PROB 0
@@ -40,11 +43,19 @@ public:
 	inline int getProb() { return this->prob; }
 	inline int getType() { return this->type; }
 	inline int getMorale() { return this->morale; }
+
+	void createFigure(BasicInterface* super, int x, int y);
+	void deleteFigure(int index);
 protected:
 private:
+
+	XMFLOAT4& colorPicker();
 	int type;
 	int prob;
 	int morale;
+
+	Figure *fig;
+	std::vector<Figure*> list;
 };
 
 #endif
