@@ -79,6 +79,8 @@ bool QuickTriggered::InitApp()
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 
+	//	this->fontManager = new FontManager();
+
 		setBoard();
 
 		
@@ -93,15 +95,8 @@ void QuickTriggered::setBoard()
 {
 	this->grid = new Grid(this);
 	this->grid->setBoard(this);
-}
-
-
-void QuickTriggered::createFigure(int x, int y)
-{
-	this->Fig1 = new Figure(this);
-	this->Fig1->SetFigureSuperType(0);
-	this->Fig1->SetFigureType(0);
-	this->Fig1->Spawn(Vector2d(x, y), 1);
+	// start turns with standard time and num of turns
+	this->turns = new Turns(SD_MAX_TURNS,SD_MAX_TIME);
 }
 
 
@@ -122,16 +117,6 @@ void QuickTriggered::Update()
 		this->Resize(DX_DISPLAY_MODE_1920_1080);
 
 	Vector2d Pos;
-	if (GetAsyncKeyState(VK_SPACE))
-	{
-
-		this->Fig1 = new Figure(this);
-		this->Fig1->SetFigureSuperType(0);
-		this->Fig1->SetFigureType(0);
-		Vector2d Pos = this->Input->GetMousePosCenterVPort(this->GetVPStruct(1));
-		this->Fig1->Spawn(Pos, 1);
-
-	}
 
 	grid->Update();
 

@@ -11,6 +11,8 @@
 #include "Basic2DDraw.h"
 //#include "Link.h"
 #include "Files.h"
+#include "Turns.h"
+#include "Font.h"
 
 #include "Grid.h"
 
@@ -56,9 +58,10 @@ private:
 	void createFigure(int x, int y);
 	void setBoard();
 
-	Figure* Fig1;
-
 	Grid* grid;
+	Turns* turns;
+
+	FontManager* fontManager;
 
 private:
 

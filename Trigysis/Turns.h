@@ -4,10 +4,13 @@
 #include <conio.h>
 #include <time.h>
 
+#define SD_MAX_TURNS 10
+#define SD_MAX_TIME 40
+
 
 /*
-Abstract Class that could be used to retrieve
-data from either current game or saved game
+Turns keeps track of the time and the current
+Turn in game
 */
 
 class Turns {
@@ -20,6 +23,7 @@ public:
 	void stopClock();
 	void resetClock();
 	inline bool runningClock(){ return this->running; };
+	inline bool isEndGame(){ return this->endGame; }
 	bool endTime(unsigned long seconds);
 	void endTurn();
 	unsigned long getTime();
@@ -34,6 +38,7 @@ private:
 	unsigned long eTime;
 	unsigned long maxTime;
 	bool isEndTurn;
+	bool endGame;
 };
 
 #endif

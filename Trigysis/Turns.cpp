@@ -10,6 +10,7 @@ Turns::Turns(unsigned int maxTurns, unsigned long maxTime)
 	this->sTime = 0;
 	this->eTime = 0;
 	this->isEndTurn = false;
+	this->endGame = false;
 
 	startClock();
 }
@@ -18,12 +19,20 @@ void Turns::Update()
 {
 	if (isEndTurn)
 	{
-		this->numberOfTurns++;
-		this->isEndTurn = false;
-		resetClock();
+		if (numberOfTurns >= maxTurns)
+		{
+			this->endGame = true;
+		}
+		else
+		{
+			this->numberOfTurns++;
+			this->isEndTurn = false;
+			resetClock();
+		}
 	}
 	else if (getTime() >= this->maxTime)
 	{
+		// if run out of time, end turn
 		endTurn();
 	}
 }
