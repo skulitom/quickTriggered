@@ -118,6 +118,7 @@
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Turns.h" />
     <ClInclude Include="Vector2d.h" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,7 @@
     <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Turns.cpp" />
     <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>

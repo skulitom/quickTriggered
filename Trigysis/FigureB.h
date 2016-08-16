@@ -28,6 +28,9 @@
 #define ASIAN 4
 #define WHITE_SUPREME 5
 
+#define BOARD_INTERVAL 60
+#define BOARD_SIZE 240
+
 
 
 
@@ -45,7 +48,10 @@ public:
 	inline int getMorale() { return this->morale; }
 
 	void createFigure(BasicInterface* super, int x, int y);
-	void deleteFigure(int index);
+	void deleteFigAt(int x, int y);
+	void deleteFigure(Figure* fig);
+	Vector2d& getFigAt(int x, int y);
+
 protected:
 private:
 
@@ -56,6 +62,7 @@ private:
 
 	Figure *fig;
 	std::vector<Figure*> list;
+	std::vector<std::vector<int> > *track;
 };
 
 #endif

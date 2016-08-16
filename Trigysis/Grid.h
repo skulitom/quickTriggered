@@ -15,8 +15,6 @@
 
 #define GRID_FIGURE_WIDTH 9
 #define GRID_FIGURE_HEIGHT 9
-#define BOARD_SIZE 240
-#define BOARD_INTERVAL 60
 
 #define INITIAL_PROB 100
 #define INITIAL_MORALE 100
@@ -29,22 +27,25 @@ public:
 
 	void setBoard(BasicInterface* super);
 
+	void deleteAt(int x, int y);
+
 protected:
 private:
-	inline void generateFig(BasicInterface* super,int i, int j){ list.at(fmanager->FigureToDrop(list))->createFigure(super, i, j); };
+	void generateFig(BasicInterface* super, int i, int j);
 
 
 	
 	FigureManager *fmanager;
 
-	std::vector<std::vector<int> > net;
-	std::vector<FigureB*> list;
+	std::vector<std::vector<FigureB*> > *net;
+	std::vector<FigureB*> listB;
 	FigureB *figure0;
 	FigureB *figure1;
 	FigureB *figure2;
 	FigureB *figure3;
 	FigureB *figure4;
 	FigureB *figure5;
+
 
 };
 

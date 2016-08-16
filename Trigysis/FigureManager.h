@@ -36,8 +36,6 @@ private:
 	void ChildPolicy(FigureB *figure);
 	void Jihad(FigureB *figure);
 
-	int process;
-
 
 };
 

@@ -90,6 +90,9 @@
     <ClInclude Include="FigureManager.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="Turns.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -144,6 +147,9 @@
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
     <ClCompile Include="FigureManager.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Turns.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>

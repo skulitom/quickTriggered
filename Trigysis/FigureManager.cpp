@@ -196,27 +196,26 @@ void FigureManager::iHaveADream(FigureB *figure)
 
 int FigureManager::FigureToDrop(std::vector<FigureB*> list)
 {
-	//int totalProb = 0;
-	//int j = 0;
-	//srand(time(NULL));
-	//std::array<int, 6> figureProbabilities = { list.at(0)->getProb() , list.at(1)->getProb() , list.at(2)->getProb() , list.at(3)->getProb() , list.at(4)->getProb() , list.at(5)->getProb() };
-	//for (int i = 0; i < figureProbabilities.size(); i++)
-	//{
-	//	totalProb += figureProbabilities.at(i);
-	//	j = i;
-	//}
-	//int random = rand() % (totalProb + 1);
+	int totalProb = 0;
+	int j = 0;
+	std::array<int, 6> figureProbabilities = { list.at(0)->getProb() , list.at(1)->getProb() , list.at(2)->getProb() , list.at(3)->getProb() , list.at(4)->getProb() , list.at(5)->getProb() };
+	for (int i = 0; i < figureProbabilities.size(); i++)
+	{
+		totalProb += figureProbabilities.at(i);
+		j = i;
+	}
+	int random = MathHelp::GetRandom(totalProb, 0, false);
 
-	//while (totalProb > 0)
-	//{
-	//	totalProb -= figureProbabilities.at(j);
-	//	if (random >= totalProb)
-	//	{
-	//		break;
-	//	}
-	//	j--;
-	//}
+	while (totalProb > 0)
+	{
+		totalProb -= figureProbabilities.at(j);
+		if (random >= totalProb)
+		{
+			break;
+		}
+		j--;
+	}
 
-	return MathHelp::GetRandom(5,0,false);
+	return j;
 
 }
