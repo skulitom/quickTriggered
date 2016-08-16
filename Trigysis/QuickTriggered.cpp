@@ -133,6 +133,8 @@ void QuickTriggered::Update()
 
 	}
 
+	grid->Update();
+
 
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());

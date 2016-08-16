@@ -7,6 +7,18 @@
 #include <stdlib.h>
 #include "FigureB.h"
 
+#define MAX_PROB 600
+#define MIN_PROB 0
+
+#define MAX_MORALE 600
+#define MIN_MORALE 0
+
+#define HOLOCAUST 0
+#define FEMINIST 1
+#define I_HAVE_A_DREAM 2
+#define CHILD_POLICY 3
+#define JIHAD 4
+
 #define HOLOCAUST_PROB 1.5
 #define FEMINIST_PROB 3
 #define I_HAVE_A_DREAM_PROB 1.5

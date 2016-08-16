@@ -19,15 +19,18 @@ Grid::Grid(BasicInterface* super)
 
 }
 
-void Grid::update()
+void Grid::Update()
 {
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
 	{
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			if (net->at(i).at(j)->isClicked())
+			if (!(this->net->at(i).at(j) == nullptr))
 			{
-				net->at(i).at(j)->Delete();
+				if (this->net->at(i).at(j)->isClicked())
+				{
+					deleteAt(i,j);
+				}
 			}
 		}
 	}
@@ -40,6 +43,7 @@ void Grid::setBoard(BasicInterface* super)
 		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
 		{
 			generateFig(super, i, j);
+
 		}
 	}
 }
@@ -47,20 +51,23 @@ void Grid::setBoard(BasicInterface* super)
 void Grid::generateFig(BasicInterface* super, int i, int j)
 {
 	int drop = fmanager->FigureToDrop();
-	fig = new FigureB(super, drop);
-	
+	this->fig = new FigureB(super, drop);	
+	this->fig->Spawn(Vector2d(i,j),1); 
+	insertAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, this->fig);
+}
 
-	fig->Spawn(Vector2d(i,j),1); 
-	net->at((i + BOARD_SIZE) / BOARD_INTERVAL).at((j + BOARD_SIZE) / BOARD_INTERVAL) = fig;
+void Grid::insertAt(int x, int y, FigureB* fig)
+{
+	net->at(x).at(y) = fig;
 }
 
 void Grid::deleteAt(int x, int y)
 {
-
-	net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL)->Delete();
-	net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL) = nullptr;
-
+	this->net->at(x).at(y)->Delete();
+	this->net->at(x).at(y) = nullptr;
 }
+
+
 
 
 
@@ -68,6 +75,6 @@ void Grid::deleteAt(int x, int y)
 
 Grid::~Grid()
 {
-	D3DDelete(fig);
+	ElementDelete(fig);
 	D3DDelete(net);
 }

@@ -19,6 +19,9 @@
 #define INITIAL_PROB 100
 #define INITIAL_MORALE 100
 
+#define BOARD_INTERVAL 60
+#define BOARD_SIZE 240
+
 
 class Grid {
 public:
@@ -27,8 +30,9 @@ public:
 
 	void setBoard(BasicInterface* super);
 
+	void insertAt(int x, int y, FigureB* fig);
 	void deleteAt(int x, int y);
-	void update();
+	virtual void Update();
 
 protected:
 private:
