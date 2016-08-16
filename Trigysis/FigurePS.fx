@@ -34,7 +34,12 @@ float4 PSMain(PSInput input) : SV_Target
     float4 PHex = Texture.Sample(Sampler, input.TexCoord);
     float4 PFig = ATexture.Sample(Sampler, input.TexCoord) + input.Color;
 
-    PFig.rgb = PFig.rgb * PHex.rgb;
+    
+    //if (PHex.r < 1.f)
+    //{
+    //    PFig.rgb = lerp(float3(0.2, 0.8, 0.2), PFig.rgb, PHex.r);
+    //}
+
     PFig.a = PHex.a;
 
     //if(PFig.a < 1.f)

@@ -64,6 +64,8 @@ public:
 
 	void DeleteMeBFunc();
 
+	FButton* GetButton() { return this->FrontButton; }
+
 private:
 
 	UINT Type;
