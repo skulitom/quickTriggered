@@ -34,35 +34,23 @@
 
 
 
-class FigureB {
+class FigureB : public Element{
 public:
-	FigureB(int type, int prob, int morale);
-	~FigureB();
+	FigureB(BasicInterface* super, int type);
+	virtual ~FigureB();
 
-	inline void setProb(int prob) { this->prob = prob; };
 	inline void setType(int type) { this->type = type; };
-	inline void setMorale(int morale) { this->morale = morale; };
-
-	inline int getProb() { return this->prob; }
 	inline int getType() { return this->type; }
-	inline int getMorale() { return this->morale; }
-
-	void createFigure(BasicInterface* super, int x, int y);
-	void deleteFigAt(int x, int y);
-	void deleteFigure(Figure* fig);
-	Vector2d& getFigAt(int x, int y);
+	virtual bool Update() override;
+	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
+	inline bool isClicked(){return this->fig->GetButton()->GetStatus(DX_BUTTON_FUNC_TYPE_ONCLICK) ?  true : false;}
 
 protected:
 private:
 
 	XMFLOAT4 colorPicker();
 	int type;
-	int prob;
-	int morale;
-
 	Figure *fig;
-	std::vector<Figure*> list;
-	std::vector<std::vector<int> > *track;
 };
 
 #endif

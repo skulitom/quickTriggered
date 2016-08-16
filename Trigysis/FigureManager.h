@@ -18,24 +18,30 @@
 #define I_HAVE_A_DREAM_MORALE 4
 #define JIHAD_MORALE -1.5
 
+#define NUM_TYPES 6
+
 class FigureManager {
 
 public:
 	FigureManager();
 	~FigureManager();
 
-	int FigureToDrop(std::vector<FigureB*> list);
+	int FigureToDrop();
+	void analyseAction(int type, int action);
 
-	void analyseAction(FigureB *figure, int action);
+	inline void setProb(int type, int prob){ this->prob.at(type) = prob; }
+	inline void setMorale(int type, int morale){ this->morale.at(type) = morale; }
 
 protected:
 private:
-	void holocaust(FigureB *figure);
-	void femWave(FigureB *figure);
-	void iHaveADream(FigureB *figure);
-	void ChildPolicy(FigureB *figure);
-	void Jihad(FigureB *figure);
+	void holocaust(int type);
+	void femWave(int type);
+	void iHaveADream(int type);
+	void ChildPolicy(int type);
+	void Jihad(int type);
 
+	std::vector<int> prob;
+	std::vector<int> morale;
 
 };
 

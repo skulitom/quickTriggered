@@ -28,23 +28,16 @@ public:
 	void setBoard(BasicInterface* super);
 
 	void deleteAt(int x, int y);
+	void update();
 
 protected:
 private:
-	void generateFig(BasicInterface* super, int i, int j);
-
-
-	
+	void generateFig(BasicInterface* super, int i, int j);	
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;
-	std::vector<FigureB*> listB;
-	FigureB *figure0;
-	FigureB *figure1;
-	FigureB *figure2;
-	FigureB *figure3;
-	FigureB *figure4;
-	FigureB *figure5;
+	FigureB *fig;
+
 
 
 };

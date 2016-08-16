@@ -14,34 +14,45 @@ struct FigureTypeException : public std::exception
 	}
 };
 
+
 FigureManager::FigureManager()
 {
-	
+	prob.resize(NUM_TYPES);
+	morale.resize(NUM_TYPES);
+
+	for (int i = 0; i < NUM_TYPES; i++)
+	{
+		prob.at(i) = 100;
+		morale.at(i) = 100;
+	}
 }
 
 FigureManager::~FigureManager()
 {
-	
+	prob.clear();
+	prob.shrink_to_fit();
+	morale.clear();
+	morale.shrink_to_fit();
 }
 
-void FigureManager::analyseAction(FigureB *figure, int action)
+void FigureManager::analyseAction(int type, int action)
 {
 	switch (action)
 	{
 	case HOLOCAUST:
-		holocaust(figure);
+		holocaust(type);
 		break;
 	case CHILD_POLICY:
-		ChildPolicy(figure);
+		ChildPolicy(type);
 		break;
 	case JIHAD:
-		Jihad(figure);
+		Jihad(type);
 		break;
 	case FEMINIST:
-		femWave(figure);
+		femWave(type);
 		break;
 	case I_HAVE_A_DREAM:
-		iHaveADream(figure);
+		iHaveADream(type);
 		break;
 
 	default:
@@ -50,9 +61,9 @@ void FigureManager::analyseAction(FigureB *figure, int action)
 	}
 }
 
-void FigureManager::ChildPolicy(FigureB *figure)
+void FigureManager::ChildPolicy(int type)
 {
-	switch (figure->getType())
+	switch (type)
 	{
 	case MEXICANS:
 
@@ -67,7 +78,7 @@ void FigureManager::ChildPolicy(FigureB *figure)
 
 		break;
 	case ASIAN:
-		figure->setProb(figure->getProb() * -CHILD_POLICY_PROB);
+		this->setProb(type,this->prob.at(type) * -CHILD_POLICY_PROB);
 		break;
 	case WHITE_SUPREME:
 
@@ -78,9 +89,9 @@ void FigureManager::ChildPolicy(FigureB *figure)
 	}
 }
 
-void FigureManager::Jihad(FigureB *figure)
+void FigureManager::Jihad(int type)
 {
-	switch (figure->getType())
+	switch (type)
 	{
 	case MEXICANS:
 
@@ -98,8 +109,8 @@ void FigureManager::Jihad(FigureB *figure)
 
 		break;
 	case WHITE_SUPREME:
-		figure->setProb(figure->getProb() * JIHAD_PROB);
-		figure->setMorale(figure->getMorale() * JIHAD_MORALE);
+		this->setProb(type, this->prob.at(type) * JIHAD_PROB);
+		this->setMorale(type, this->morale.at(type) * JIHAD_MORALE);
 		break;
 	default:
 		throw FigureTypeException();
@@ -107,9 +118,9 @@ void FigureManager::Jihad(FigureB *figure)
 	}
 }
 
-void FigureManager::femWave(FigureB *figure)
+void FigureManager::femWave(int type)
 {
-	switch (figure->getType())
+	switch (type)
 	{
 	case MEXICANS:
 
@@ -118,37 +129,8 @@ void FigureManager::femWave(FigureB *figure)
 
 		break;
 	case WOMEN:
-		figure->setProb(figure->getProb() * FEMINIST_PROB);
-		figure->setMorale(figure->getMorale() * FEMINIST_MORALE);
-		break;
-	case BLACK:
-
-		break;
-	case ASIAN:
-
-		break;
-	case WHITE_SUPREME:
-
-		break;
-	default:
-		throw FigureTypeException();
-
-	}
-}
-
-void FigureManager::holocaust(FigureB *figure)
-{
-	switch (figure->getType())
-	{
-	case MEXICANS:
-
-		break;
-	case JEWS:
-		figure->setProb(figure->getProb() * HOLOCAUST_PROB);
-		figure->setMorale(figure->getMorale() * HOLOCAUST_MORALE);
-		break;
-	case WOMEN:
-
+		this->setProb(type, this->prob.at(type) * FEMINIST_PROB);
+		this->setMorale(type, this->morale.at(type) * FEMINIST_MORALE);
 		break;
 	case BLACK:
 
@@ -165,22 +147,22 @@ void FigureManager::holocaust(FigureB *figure)
 	}
 }
 
-void FigureManager::iHaveADream(FigureB *figure)
+void FigureManager::holocaust(int type)
 {
-	switch (figure->getType())
+	switch (type)
 	{
 	case MEXICANS:
 
 		break;
 	case JEWS:
-
+		this->setProb(type, this->prob.at(type) * HOLOCAUST_PROB);
+		this->setMorale(type, this->morale.at(type) * HOLOCAUST_MORALE);
 		break;
 	case WOMEN:
 
 		break;
 	case BLACK:
-		figure->setProb(figure->getProb() * I_HAVE_A_DREAM_PROB);
-		figure->setProb(figure->getProb() * I_HAVE_A_DREAM_MORALE);
+
 		break;
 	case ASIAN:
 
@@ -194,21 +176,49 @@ void FigureManager::iHaveADream(FigureB *figure)
 	}
 }
 
-int FigureManager::FigureToDrop(std::vector<FigureB*> list)
+void FigureManager::iHaveADream(int type)
+{
+	switch (type)
+	{
+	case MEXICANS:
+
+		break;
+	case JEWS:
+
+		break;
+	case WOMEN:
+
+		break;
+	case BLACK:
+		this->setProb(type, this->prob.at(type) * I_HAVE_A_DREAM_PROB);
+		this->setMorale(type, this->morale.at(type) * I_HAVE_A_DREAM_MORALE);
+		break;
+	case ASIAN:
+
+		break;
+	case WHITE_SUPREME:
+
+		break;
+	default:
+		throw FigureTypeException();
+
+	}
+}
+
+int FigureManager::FigureToDrop()
 {
 	int totalProb = 0;
 	int j = 0;
-	std::array<int, 6> figureProbabilities = { list.at(0)->getProb() , list.at(1)->getProb() , list.at(2)->getProb() , list.at(3)->getProb() , list.at(4)->getProb() , list.at(5)->getProb() };
-	for (int i = 0; i < figureProbabilities.size(); i++)
+	for (int i = 0; i < prob.size(); i++)
 	{
-		totalProb += figureProbabilities.at(i);
+		totalProb += this->prob.at(i);
 		j = i;
 	}
 	int random = MathHelp::GetRandom(totalProb, 0, false);
 
 	while (totalProb > 0)
 	{
-		totalProb -= figureProbabilities.at(j);
+		totalProb -= this->prob.at(j);
 		if (random >= totalProb)
 		{
 			break;

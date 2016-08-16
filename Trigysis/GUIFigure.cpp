@@ -14,7 +14,7 @@ FButton::FButton(BasicInterface* super, Figure* pFigureClass)
 	BS.ReadyColor = XMFLOAT4(0.3f, 0.3f, 0.3f, 0.f);
 	BS.SuppressColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.f);
 	BS.IsActive = true;
-	BS.IsLongTerm = true;
+	BS.IsLongTerm = false;
 	BS.IsVisible = false;
 	
 	this->SetSettings(BS);
@@ -69,7 +69,8 @@ Figure::Figure(BasicInterface* super)
 	this->Color = XMFLOAT4(1, 1, 1, 0);
 
 	this->FrontButton = new FButton(super, this);
-	this->FrontButton->SetFunc(DX_BUTTON_FUNC_TYPE_ONCLICK, &Figure::DeleteMeBFunc);
+//	this->FrontButton->SetFunc(DX_BUTTON_FUNC_TYPE_ONCLICK, &Figure::DeleteMeBFunc);
+
 	Figure::SetFigureSuperType(0);
 
 	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
@@ -146,13 +147,7 @@ void Figure::SetFigureType(UINT type)
 
 }
 
-void Figure::DeleteMeBFunc()
-{
 
-	ElementDelete(this);
-	ElementDelete(this->FrontButton);
-
-}
 
 void Figure::Move(Vector2d& dest, float deltaTime)
 {

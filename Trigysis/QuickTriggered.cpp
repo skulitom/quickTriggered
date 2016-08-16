@@ -134,12 +134,15 @@ void QuickTriggered::Update()
 	}
 
 
+
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
 
 
 	QuickTriggered::Draw();
 
 }
+
+
 
 void QuickTriggered::InitVPorts()
 {
