@@ -337,6 +337,8 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, floa
 	XMFLOAT4& userVars, XMFLOAT4& aColor)
 {
 
+	PrepareShader(pMaterial, this);
+
 	this->PStrides = sizeof(ShaderManager::Vertex2d);
 	this->POffSet = 0;
 	this->D3dApp->DeviceContext->IASetVertexBuffers(0, 1, &this->VertexBuffer, &PStrides, &POffSet);

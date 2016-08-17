@@ -1,4 +1,5 @@
 #include "GUIFigures.h"
+#include "GUIPhysBasic.h"
 
 //////////////////////////////////////////////////////
 //**CCButton
@@ -75,7 +76,6 @@ Figure::Figure(BasicInterface* super)
 
 	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
 	this->SetBlendState((UINT)DX_BS_TRANSPARENCY);
-
 }
 
 Figure::~Figure()
@@ -147,8 +147,6 @@ void Figure::SetFigureType(UINT type)
 
 }
 
-
-
 void Figure::Move(Vector2d& dest, float deltaTime)
 {
 
@@ -189,6 +187,63 @@ void Figure::MoveDirect(Vector2d& dest, float moveSpeed)
 		this->MoveSpeed = moveSpeed;
 		this->IsMoving = true;
 	}
+
+}
+
+#define NUM_OF_PIECES 5
+
+void Figure::Delete()
+{
+
+	Element::Delete();
+
+	Material* DestrMat = nullptr;
+
+	switch (MathHelp::GetRandom(0, 0, false))
+	{
+		case 0:
+		{
+			DestrMat = this->Super->GetMaterial(std::string("HexagonBroken01"));
+			break;
+		}
+	}
+
+	if (!DestrMat)
+		return;
+
+	DestrMat->AdditionalTexture = this->MaterialPtr->AdditionalTexture;
+
+	PhysBasic* NewFigPiece = nullptr;
+
+	for (int i = 0; i < NUM_OF_PIECES; i++)
+	{
+
+		NewFigPiece = new PhysBasic(this->Super);
+		NewFigPiece->SetMaterial(DestrMat);
+		NewFigPiece->SetMass(40.f);
+		NewFigPiece->SetLifeTime(2);
+		//NewFigPiece->TogglePhysic();
+		NewFigPiece->SetCustomVars(XMFLOAT4(i, 0, 0, 0));
+		NewFigPiece->SetBlendState(DX_BS_TRANSPARENCY);
+		NewFigPiece->SetSizes(this->Sizes);
+		
+		NewFigPiece->SetColors(this->Color);
+
+		if (i == 0)
+			NewFigPiece->SetImpulse(Vector2d(0, MathHelp::GetRandom(70,48,false)));
+		else if (i == 1)
+			NewFigPiece->SetImpulse(Vector2d(MathHelp::GetRandom(70, 48, false), MathHelp::GetRandom(70, 48, false)));
+		else if (i == 2)
+			NewFigPiece->SetImpulse(Vector2d(MathHelp::GetRandom(70, 48, false), 0));
+		else if (i == 3)
+			NewFigPiece->SetImpulse(Vector2d(-MathHelp::GetRandom(70, 48, false), -MathHelp::GetRandom(70, 48, false)));
+		else if (i == 4)
+			NewFigPiece->SetImpulse(Vector2d(-MathHelp::GetRandom(70, 48, false), 0));
+
+		NewFigPiece->Spawn(this->Position, this->IndexOfViewPort);
+
+	}
+	this->IsNeedRender = false;
 
 }
 

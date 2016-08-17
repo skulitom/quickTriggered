@@ -113,6 +113,7 @@
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="BasicElement.h" />
+    <ClInclude Include="GUIPhysBasic.h" />
     <ClInclude Include="Progress.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="StringHelper.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
+    <ClCompile Include="GUIPhysBasic.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -152,6 +154,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HexagonBroken01PS.fx" />
     <Text Include="TestSave.txt" />
   </ItemGroup>
   <ItemGroup>
