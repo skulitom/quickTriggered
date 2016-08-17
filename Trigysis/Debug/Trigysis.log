@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 18/08/2016 00:21:37.
      1>Project "C:\Users\artem\Desktop\quickTriggered\Trigysis\Trigysis.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Trigysis.vcxproj).  This can lead to incorrect clean and rebuild behavior.
@@ -94,3 +95,15 @@
 Build succeeded.
 
 Time Elapsed 00:00:01.61
+=======
+﻿Build started 17.08.2016 18:57:51.
+     1>Project "C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Trigysis\Trigysis.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Trigysis.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Link:
+         Trigysis.vcxproj -> C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.exe
+     1>Done Building Project "C:\Users\Sagit\Desktop\quickTriggered\quickTriggered\Trigysis\Trigysis.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.80
+>>>>>>> 872930ae1dfbe72d929f3f7c2df9234a3111c650

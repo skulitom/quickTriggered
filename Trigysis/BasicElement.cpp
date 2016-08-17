@@ -316,7 +316,6 @@ bool ElementInterface::SetMaterial(std::string& materialName)
 	this->MaterialPtr = this->D3dApp->GetMaterial(materialName);
 	if (this->MaterialPtr)
 	{
-		PrepareShader(this->MaterialPtr, this->PMLand->GetDraw2D()->GetShaderManager());
 		return true;
 	}
 	else

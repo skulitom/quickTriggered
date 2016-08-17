@@ -66,6 +66,8 @@ public:
 
 	FButton* GetButton() { return this->FrontButton; }
 
+	virtual void Delete() override;
+
 private:
 
 	UINT Type;

@@ -93,6 +93,9 @@
     <ClInclude Include="Turns.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="GUIPhysBasic.h">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -152,6 +155,9 @@
     <ClCompile Include="Turns.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
+    <ClCompile Include="GUIPhysBasic.cpp">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="StandartVShader.fx">
@@ -172,6 +178,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSave.txt" />
+    <Text Include="HexagonBroken01PS.fx">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="NewPS.fx">
