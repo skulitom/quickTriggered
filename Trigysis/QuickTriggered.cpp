@@ -83,6 +83,7 @@ bool QuickTriggered::InitApp()
 
 		setBoard();
 
+
 		
 		return true;
 
@@ -126,6 +127,7 @@ void QuickTriggered::Update()
 
 
 	QuickTriggered::Draw();
+	this->GetFont2D()->DrawA(Vector2d(0, 0), COLOR_WHITE_3, 2, "Time: %d", this->turns->getTime());
 
 }
 
