@@ -119,7 +119,7 @@ void QuickTriggered::Update()
 
 	Vector2d Pos;
 
-	grid->Update();
+	grid->Update(this);
 
 
 

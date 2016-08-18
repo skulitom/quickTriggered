@@ -33,7 +33,8 @@ public:
 	void insertAt(int x, int y, FigureB* fig);
 	void deleteAt(int x, int y);
 	bool compareAt(int x1, int y1, int x2, int y2);
-	virtual void Update();
+	virtual void Update(BasicInterface* super);
+	void updatePositions(BasicInterface* super);
 
 protected:
 private:

@@ -22,7 +22,7 @@ public:
 	inline int getType() { return this->type; }
 	virtual bool Update() override;
 	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
-	inline bool isClicked(){return this->fig->GetButton()->GetStatus(DX_BUTTON_FUNC_TYPE_ONCLICK) ?  true : false;}
+	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
 
 protected:
 private:

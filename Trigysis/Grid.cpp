@@ -26,7 +26,7 @@ Grid::Grid(BasicInterface* super)
 
 }
 
-void Grid::Update()
+void Grid::Update(BasicInterface* super)
 {
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
 	{
@@ -38,7 +38,39 @@ void Grid::Update()
 				{
 					deleteAt(i,j);
 				}
+				if (j-1>= 0)
+				{
+					if (this->net->at(i).at(j-1)==nullptr)
+					{
+						int counter = 1;
+						while (this->net->at(i).at(j - counter) == nullptr)
+						{
+							this->net->at(i).at(j - counter) = this->net->at(i).at(j - counter + 1);
+							this->net->at(i).at(j - counter + 1) = nullptr;
+							counter++;
+							if (counter > j)
+								break;
+						}
+						updatePositions(super);
+					}
+				}
 			}
+		}
+	}
+}
+
+void Grid::updatePositions(BasicInterface* super)
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		if (this->net->at(i).at(GRID_FIGURE_WIDTH-1) == nullptr)
+		{
+			generateFig(super, (i*BOARD_INTERVAL) - BOARD_SIZE, BOARD_SIZE);
+		}
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j)!=nullptr)
+				this->net->at(i).at(j)->SetPosition(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
 		}
 	}
 }
@@ -50,27 +82,6 @@ void Grid::setBoard(BasicInterface* super)
 		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
 		{
 			generateFig(super, i, j);
-			while (compareAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, (i + BOARD_SIZE) / BOARD_INTERVAL - 2, (j + BOARD_SIZE) / BOARD_INTERVAL))
-			{
-				deleteAt((i + BOARD_SIZE) / BOARD_INTERVAL - 2, (j + BOARD_SIZE) / BOARD_INTERVAL);
-				generateFig(super, i - 2 * BOARD_INTERVAL, j);
-			}
-			while (compareAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, (i + BOARD_SIZE) / BOARD_INTERVAL + 2, (j + BOARD_SIZE) / BOARD_INTERVAL))
-			{
-				deleteAt((i + BOARD_SIZE) / BOARD_INTERVAL + 2, (j + BOARD_SIZE) / BOARD_INTERVAL);
-				generateFig(super, i + 2 * BOARD_INTERVAL, j);
-			}
-			while (compareAt(i, j, i, j - (2 + BOARD_SIZE) / BOARD_INTERVAL))
-			{
-				deleteAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL - 2);
-				generateFig(super, i, j - 2 * BOARD_INTERVAL);
-			}
-			while (compareAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, (i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL + 2))
-			{
-				deleteAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL + 2);
-				generateFig(super, i, j + 2 * BOARD_INTERVAL);
-			}
-				
 
 		}
 	}
