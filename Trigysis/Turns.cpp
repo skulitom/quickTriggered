@@ -39,7 +39,7 @@ void Turns::Update()
 
 void Turns::endTurn()
 {
-	this->isEndTurn = true;
+	this->numberOfTurns++;
 }
 
 void Turns::startClock()

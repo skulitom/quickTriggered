@@ -7,6 +7,7 @@ FigureB::FigureB(BasicInterface* super, int type)
 		
 		this->type = type;
 		fig = new Figure(super);
+		this->toBreak = false;
 
 }
 

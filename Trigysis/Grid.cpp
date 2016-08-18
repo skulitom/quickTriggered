@@ -34,6 +34,22 @@ void Grid::Update(BasicInterface* super)
 		{
 			if (!(this->net->at(i).at(j) == nullptr))
 			{
+				if (j>=2)
+					if (this->net->at(i).at(j-1) != nullptr && this->net->at(i).at(j-2) != nullptr)
+						if (compareAt(i,j,i,j-1)&&compareAt(i,j,i,j-2))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i).at(j-1)->breakFig();
+							this->net->at(i).at(j-2)->breakFig();
+						}
+				if (i>=2)
+					if (this->net->at(i-1).at(j) != nullptr && this->net->at(i-2).at(j) != nullptr)
+						if (compareAt(i, j, i-1, j) && compareAt(i, j, i-2, j))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i-1).at(j)->breakFig();
+							this->net->at(i-2).at(j)->breakFig();
+						}
 				if (this->net->at(i).at(j)->isClicked())
 				{
 					deleteAt(i,j);
@@ -57,6 +73,7 @@ void Grid::Update(BasicInterface* super)
 		}
 	}
 	updatePositions(super);
+	breakAll();
 }
 
 void Grid::updatePositions(BasicInterface* super)
@@ -71,6 +88,19 @@ void Grid::updatePositions(BasicInterface* super)
 		{
 			if (this->net->at(i).at(j)!=nullptr)
 				this->net->at(i).at(j)->SetPosition(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+		}
+	}
+}
+
+void Grid::breakAll()
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j)!=nullptr)
+				if (this->net->at(i).at(j)->getToBreak())
+					deleteAt(i,j);
 		}
 	}
 }

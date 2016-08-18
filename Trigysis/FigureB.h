@@ -20,6 +20,8 @@ public:
 
 	inline void setType(int type) { this->type = type; };
 	inline int getType() { return this->type; }
+	inline bool getToBreak(){ return this->toBreak; }
+	inline void breakFig(){ this->toBreak = true; }
 	virtual bool Update() override;
 	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
@@ -29,6 +31,7 @@ private:
 
 	XMFLOAT4 colorPicker();
 	int type;
+	bool toBreak;
 	Figure *fig;
 };
 
