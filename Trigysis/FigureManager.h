@@ -39,6 +39,7 @@ public:
 	~FigureManager();
 
 	int FigureToDrop();
+	int FigureToDrop(bool round);
 	void analyseAction(int type, int action);
 
 	inline void setProb(int type, int prob){ this->prob.at(type) = prob; }

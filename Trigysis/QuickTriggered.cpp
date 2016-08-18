@@ -127,7 +127,7 @@ void QuickTriggered::Update()
 
 
 	QuickTriggered::Draw();
-	this->GetFont2D()->DrawA(Vector2d(0, 0), COLOR_WHITE_3, 2, "Time: %d", this->turns->getTime());
+	this->GetFont2D()->Draw(Vector2d(0, 0), COLOR_WHITE_3, 1, "Time: ");
 
 }
 

@@ -51,12 +51,12 @@ void Grid::Update(BasicInterface* super)
 							if (counter > j)
 								break;
 						}
-						updatePositions(super);
 					}
 				}
 			}
 		}
 	}
+	updatePositions(super);
 }
 
 void Grid::updatePositions(BasicInterface* super)
@@ -77,11 +77,20 @@ void Grid::updatePositions(BasicInterface* super)
 
 void Grid::setBoard(BasicInterface* super)
 {
+	bool round = false;
 	for (int i = -BOARD_SIZE; i <= BOARD_SIZE; i += BOARD_INTERVAL)
 	{
 		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)
 		{
-			generateFig(super, i, j);
+			if (j%3==0)
+			{
+				generateFig(super, i, j, round);
+				round = !round;
+			}
+			else
+			{
+				generateFig(super, i, j);
+			}
 
 		}
 	}
@@ -113,6 +122,14 @@ void Grid::generateFig(BasicInterface* super, int i, int j)
 	int drop = fmanager->FigureToDrop();
 	this->fig = new FigureB(super, drop);	
 	this->fig->Spawn(Vector2d(i,j),1); 
+	insertAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, this->fig);
+}
+
+void Grid::generateFig(BasicInterface* super, int i, int j, bool round)
+{
+	int drop = fmanager->FigureToDrop(round);
+	this->fig = new FigureB(super, drop);
+	this->fig->Spawn(Vector2d(i, j), 1);
 	insertAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, this->fig);
 }
 

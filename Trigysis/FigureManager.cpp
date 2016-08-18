@@ -229,3 +229,51 @@ int FigureManager::FigureToDrop()
 	return j;
 
 }
+
+int FigureManager::FigureToDrop(bool round)
+{
+	int totalProb = 0;
+	int j = 0;
+	if (round)
+	{
+		for (int i = 0; i < prob.size()/2; i++)
+		{
+			totalProb += this->prob.at(i);
+			j = i;
+		}
+		int random = MathHelp::GetRandom(totalProb, 0, false);
+
+		while (totalProb > 0)
+		{
+			totalProb -= this->prob.at(j);
+			if (random >= totalProb)
+			{
+				break;
+			}
+			j--;
+		}
+	}
+	else
+	{
+		for (int i = prob.size() / 2; i < prob.size(); i++)
+		{
+			totalProb += this->prob.at(i);
+			j = i;
+		}
+		int random = MathHelp::GetRandom(totalProb, 0, false);
+
+		while (totalProb > 0)
+		{
+			totalProb -= this->prob.at(j);
+			if (random >= totalProb)
+			{
+				break;
+			}
+			j--;
+		}
+		j;
+	}
+
+	return j;
+
+}

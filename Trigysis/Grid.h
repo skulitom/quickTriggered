@@ -38,7 +38,8 @@ public:
 
 protected:
 private:
-	void generateFig(BasicInterface* super, int i, int j);	
+	void generateFig(BasicInterface* super, int i, int j);
+	void generateFig(BasicInterface* super, int i, int j, bool round);
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;
