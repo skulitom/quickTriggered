@@ -77,7 +77,7 @@ void Grid::updatePositions(BasicInterface* super)
 
 void Grid::setBoard(BasicInterface* super)
 {
-	bool round = false;
+	bool round = fmanager->getRandomBool();
 	for (int i = -BOARD_SIZE; i <= BOARD_SIZE; i += BOARD_INTERVAL)
 	{
 		for (int j = -BOARD_SIZE; j <= BOARD_SIZE; j += BOARD_INTERVAL)

@@ -205,6 +205,12 @@ void FigureManager::iHaveADream(int type)
 	}
 }
 
+bool FigureManager::getRandomBool()
+{
+	int j = MathHelp::GetRandom(1, 0, false);
+	return j == 1 ? true : false;
+}
+
 int FigureManager::FigureToDrop()
 {
 	int totalProb = 0;

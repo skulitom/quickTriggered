@@ -41,6 +41,7 @@ public:
 	int FigureToDrop();
 	int FigureToDrop(bool round);
 	void analyseAction(int type, int action);
+	bool getRandomBool();
 
 	inline void setProb(int type, int prob){ this->prob.at(type) = prob; }
 	inline void setMorale(int type, int morale){ this->morale.at(type) = morale; }
