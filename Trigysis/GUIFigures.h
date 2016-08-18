@@ -4,6 +4,7 @@
 #include "BasicInterface.h"
 #include "Element.h"
 #include "Button.h"
+#include "GUIPhysBasic.h"
 
 #define GUIF_SIZE 64
 #define GUIF_MOVE_SPEED 100
@@ -35,7 +36,7 @@ private:
 
 };
 
-class Figure : public Element
+class Figure : public Element, public PhysBasic
 {
 
 public:
@@ -68,6 +69,9 @@ public:
 
 	virtual void Delete() override;
 
+	bool GetIsFalling() { return this->IsFalling ? true : false; }
+	void FallToPos(Vector2d& startPos, Vector2d& endPos);
+
 private:
 
 	UINT Type;
@@ -77,6 +81,9 @@ private:
 
 	bool IsMoving;
 	
+	Vector2d FallPos;
+	bool IsFalling;
+
 private:
 
 	void Move(Vector2d& dest, float deltaTime);

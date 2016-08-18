@@ -75,7 +75,7 @@ bool QuickTriggered::InitApp()
 		this->InitVPShaders();
 		
 		Element* NE = new Element(this);
-		NE->SetSizesRelative(Vector2d(512, 512));
+		NE->SetSizesRelative(Vector2d(this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight));
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 

@@ -1,12 +1,9 @@
 #include "GUIPhysBasic.h"
 
-PhysBasic::PhysBasic(BasicInterface* super)
-	:Element(super)
+PhysBasic::PhysBasic()
 {
 
 	this->Mass = 10;
-	this->LifeTime = 0;
-	this->LLifeTime = 0;
 
 	this->IsPhysicEnabled = true;
 
@@ -17,7 +14,33 @@ PhysBasic::~PhysBasic()
 
 }
 
-void PhysBasic::Spawn(Vector2d& position, short indexOfVP)
+bool PhysBasic::Simulate(Vector2d& pos, float deltaTime)
+{
+
+	if (this->IsPhysicEnabled)
+	{
+		this->Impulse.Y = this->Impulse.Y - PH_G * this->Mass * deltaTime;
+		pos = pos + this->Impulse * deltaTime;
+		//this->Position = this->Position + this->Impulse * this->Super->GetTimer()->GetDeltaTime();
+	}
+	return true;
+}
+
+EPhysBasic::EPhysBasic(BasicInterface* super)
+	:Element(super)
+{
+
+	this->LifeTime = 0;
+	this->LLifeTime = 0;
+
+}
+
+EPhysBasic::~EPhysBasic()
+{
+
+}
+
+void EPhysBasic::Spawn(Vector2d& position, short indexOfVP)
 {
 
 	Element::Spawn(position, indexOfVP);
@@ -26,15 +49,7 @@ void PhysBasic::Spawn(Vector2d& position, short indexOfVP)
 
 }
 
-void PhysBasic::PhysUpdate()
-{
-
-	this->Impulse.Y = this->Impulse.Y - PH_G * this->Mass * this->Super->GetTimer()->GetDeltaTime();
-	this->Position = this->Position + this->Impulse * this->Super->GetTimer()->GetDeltaTime();
-
-}
-
-bool PhysBasic::Update()
+bool EPhysBasic::Update()
 {
 	if (!Element::Update())
 		return false;
@@ -48,11 +63,10 @@ bool PhysBasic::Update()
 			ElementDelete(this);
 			return false;
 		}
-			
+
 	}
 
-	if (this->IsPhysicEnabled)
-		this->PhysUpdate();
+	this->Simulate(this->GetPosition(), this->Super->GetTimer()->GetDeltaTime());
 
 	if (this->ATexture)
 		this->MaterialPtr->AdditionalTexture = this->ATexture;

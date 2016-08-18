@@ -1,6 +1,0 @@
-$Name:
-HexagonBroken01
-$Texture:
-HexagonBroken01.dds
-$Shader:
-HexagonBroken01PS

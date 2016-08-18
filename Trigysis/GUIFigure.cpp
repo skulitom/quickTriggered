@@ -24,6 +24,7 @@ FButton::FButton(BasicInterface* super, Figure* pFigureClass)
 
 	this->ShapeType = EL_SHAPE_TYPE_HEXAGON;
 	this->IsCircle = true;
+
 }
 
 void FButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc ff)
@@ -62,7 +63,7 @@ void FButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc ff)
 //////////////////////////////////////////////////////
 
 Figure::Figure(BasicInterface* super)
-	:Element(super)
+	:Element(super), PhysBasic()
 {
 
 	DeclareElementName(Figure, this->EName);
@@ -76,6 +77,8 @@ Figure::Figure(BasicInterface* super)
 
 	this->ShapeType = EL_SHAPE_TYPE_RECTANGLE;
 	this->SetBlendState((UINT)DX_BS_TRANSPARENCY);
+
+	this->SetMass(80);
 }
 
 Figure::~Figure()
@@ -87,9 +90,10 @@ Figure::~Figure()
 
 void Figure::Spawn(Vector2d& position, short indexOfVPort)
 {
-	Element::Spawn(position, indexOfVPort);
-	
-	this->FrontButton->Spawn(position, indexOfVPort);
+
+	this->FallToPos(position + Vector2d(0, 1000.f), position);
+
+	Element::Spawn(this->FallPos, indexOfVPort);
 
 }
 
@@ -213,12 +217,12 @@ void Figure::Delete()
 
 	DestrMat->AdditionalTexture = this->MaterialPtr->AdditionalTexture;
 
-	PhysBasic* NewFigPiece = nullptr;
+	EPhysBasic* NewFigPiece = nullptr;
 
 	for (int i = 0; i < NUM_OF_PIECES; i++)
 	{
 
-		NewFigPiece = new PhysBasic(this->Super);
+		NewFigPiece = new EPhysBasic(this->Super);
 		NewFigPiece->SetMaterial(DestrMat);
 		NewFigPiece->SetMass(40.f);
 		NewFigPiece->SetLifeTime(2);
@@ -247,6 +251,15 @@ void Figure::Delete()
 
 }
 
+void Figure::FallToPos(Vector2d& startPos, Vector2d& endPos)
+{
+
+	this->FallPos = startPos;
+	this->Position = endPos;
+	this->IsFalling = true;
+
+}
+
 bool Figure::Update()
 {
 
@@ -254,6 +267,21 @@ bool Figure::Update()
 		return false;
 
 	//this->Color = this->FrontButton->GetColors();
+	
+	if (this->IsFalling)
+	{
+		if (this->FallPos.Y <= Position.Y)
+		{
+			this->IsFalling = false;
+			if (!this->FrontButton->GetIsSpawned())
+				this->FrontButton->Spawn(this->Position, this->IndexOfViewPort);
+		}
+		else
+		{
+			this->Position = this->FallPos;
+			this->Simulate(this->FallPos, this->Super->GetTimer()->GetDeltaTime());
+		}
+	}
 
 	this->Move(this->DestPos, this->D3dApp->GetTimer()->GetDeltaTime());
 	this->FrontButton->SetPosition(this->Position);
@@ -262,5 +290,7 @@ bool Figure::Update()
 	this->CustomVars.y = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->IndexOfViewPort)).Y;
 
 	this->FrontButton->SetCustomVars(this->CustomVars);
+
+	return true;
 
 }

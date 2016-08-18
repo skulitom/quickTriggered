@@ -5,17 +5,12 @@
 
 #define PH_G 9.8
 
-class PhysBasic : public Element
+class PhysBasic
 {
 
-public :
-	PhysBasic(BasicInterface* super);
+public:
+	PhysBasic();
 	virtual ~PhysBasic();
-
-	void SetLifeTime(float newLifeTime) { this->LifeTime = newLifeTime; }
-	float GetLifeTime() { return this->LifeTime; }
-
-	float GetLifeTimeLeft(){ return this->LifeTime - this->LLifeTime; }
 
 	void SetMass(float newMass) { this->Mass = newMass; }
 	float GetMass() { return this->Mass; }
@@ -27,28 +22,50 @@ public :
 
 	void TogglePhysic() { this->IsPhysicEnabled ? this->IsPhysicEnabled = false : this->IsPhysicEnabled = false; }
 
-	virtual bool Update() override;
-	virtual void Spawn(Vector2d& position, short indexOfVP) override;
+	virtual bool Simulate(Vector2d& pos, float deltaTime);
 
 protected:
 
 private:
 
-	virtual void PhysUpdate();
-
 private:
-
-	ID3D11ShaderResourceView* ATexture;
 
 	bool IsPhysicEnabled;
 
 	float Mass;
 
+	Vector2d Impulse;
+
+};
+
+class EPhysBasic : public Element, public PhysBasic
+{
+
+public:
+	EPhysBasic(BasicInterface* super);
+	virtual ~EPhysBasic();
+
+	virtual bool Update() override;
+	virtual void Spawn(Vector2d& position, short indexOfVP) override;
+
+	void SetLifeTime(float newLifeTime) { this->LifeTime = newLifeTime; }
+	float GetLifeTime() { return this->LifeTime; }
+
+	float GetLifeTimeLeft(){ return this->LifeTime - this->LLifeTime; }
+
+
+protected:
+
+private:
+
+private:
+
+	ID3D11ShaderResourceView* ATexture;
+
 	float LifeTime;
 	float LLifeTime;
 
-	Vector2d Impulse;
-
+	
 };
 
 #endif //!PHYS_BASIC_H
