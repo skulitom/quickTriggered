@@ -72,6 +72,8 @@ public:
 	inline bool GetIsFalling() { return this->IsFalling ? true : false; }
 	void FallToPos(Vector2d& startPos, Vector2d& endPos);
 
+	Vector2d& GetFallDestPos() { return this->FallDestPos; }
+
 private:
 
 	UINT Type;
@@ -82,6 +84,7 @@ private:
 	bool IsMoving;
 	
 	Vector2d FallPos;
+	Vector2d FallDestPos;
 	bool IsFalling;
 
 private:

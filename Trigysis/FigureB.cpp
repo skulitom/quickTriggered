@@ -38,6 +38,8 @@ void FigureB::FallToPos(Vector2d& pos)
 
 }
 
+//Думаю, нужно поменять название 
+//Небольшой конфликт имён с GetPosition()
 Vector2d FigureB::getPosition()
 {
 	Vector2d pos = this->fig->GetPosition();

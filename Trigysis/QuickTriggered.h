@@ -63,6 +63,7 @@ private:
 
 	FontManager* fontManager;
 
+	Figure* FigToTest;
 
 private:
 

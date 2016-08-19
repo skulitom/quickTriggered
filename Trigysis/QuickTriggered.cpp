@@ -83,7 +83,10 @@ bool QuickTriggered::InitApp()
 
 		setBoard();
 
-
+		this->FigToTest = new Figure(this);
+		this->FigToTest->SetFigureType(0);
+		this->FigToTest->SetFigureSuperType(0);
+		this->FigToTest->Spawn(Vector2d(-300, 0), 1);
 		
 		return true;
 
@@ -121,10 +124,10 @@ void QuickTriggered::Update()
 
 	grid->Update(this);
 
-
+	if (this->FigToTest->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED))
+		this->FigToTest->FallToPos(this->FigToTest->GetPosition(), this->FigToTest->GetPosition() - Vector2d(0, 200.f));
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
-
 
 	QuickTriggered::Draw();
 	this->GetFont2D()->Draw(Vector2d(0, 0), COLOR_WHITE_3, 1, "Time: ");

@@ -93,7 +93,7 @@ void Figure::Spawn(Vector2d& position, short indexOfVPort)
 
 	this->FallToPos(position + Vector2d(0, 1000.f), position);
 
-	Element::Spawn(this->FallPos, indexOfVPort);
+	Element::Spawn(this->Position, indexOfVPort);
 
 }
 
@@ -255,7 +255,7 @@ void Figure::FallToPos(Vector2d& startPos, Vector2d& endPos)
 {
 
 	this->FallPos = startPos;
-	this->Position = endPos;
+	this->FallDestPos = endPos;
 	this->IsFalling = true;
 
 }
@@ -263,25 +263,27 @@ void Figure::FallToPos(Vector2d& startPos, Vector2d& endPos)
 bool Figure::Update()
 {
 
-	if (!Element::Update())
-		return false;
-
-	//this->Color = this->FrontButton->GetColors();
-	
-	if (this->IsFalling)
+	if (this->IsFalling && !this->IsFired)
 	{
-		if (this->FallPos.Y <= Position.Y)
+		if (this->FallPos.Y <= this->FallDestPos.Y)
 		{
 			this->IsFalling = false;
+			this->FallPos = this->FallDestPos;
 			if (!this->FrontButton->GetIsSpawned())
 				this->FrontButton->Spawn(this->Position, this->IndexOfViewPort);
+			this->ResetImpulse();
 		}
 		else
 		{
-			this->Position = this->FallPos;
 			this->Simulate(this->FallPos, this->Super->GetTimer()->GetDeltaTime());
 		}
+
+		this->Position = this->FallPos;
+
 	}
+
+	if (!Element::Update())
+		return false;
 
 	this->Move(this->DestPos, this->D3dApp->GetTimer()->GetDeltaTime());
 	this->FrontButton->SetPosition(this->Position);
