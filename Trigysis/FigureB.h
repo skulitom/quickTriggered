@@ -13,7 +13,7 @@
 #define ASIAN 4
 #define WHITE_SUPREME 5
 
-class FigureB : public Element{
+class FigureB : public Element , public PhysBasic{
 public:
 	FigureB(BasicInterface* super, int type);
 	virtual ~FigureB();
@@ -24,6 +24,9 @@ public:
 	inline void breakFig(){ this->toBreak = true; }
 	virtual bool Update() override;
 	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
+	virtual void FallToPos(Vector2d& endPos);
+	virtual inline bool getIsFalling(){ return this->fig->GetIsFalling(); };
+	virtual Vector2d getPosition();
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
 
 protected:

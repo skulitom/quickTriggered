@@ -46,18 +46,18 @@ public:
 
 	virtual void Spawn(Vector2d& position, short indexOfVPort) override;
 
-	Vector2d& GetInCellPos() { return this->InCellPos; }
+	inline Vector2d& GetInCellPos() { return this->InCellPos; }
 	void SetInCellPos(Vector2d& inCellPos) { this->InCellPos = inCellPos; }
 
 	//**Set What type of the persona this type is belogs to
 	void SetFigureType(UINT type);
 	//**Get What type of the persona this type is belogs to
-	UINT GetFigureType() { return this->Type; }
+	inline UINT GetFigureType() { return this->Type; }
 
 	//**Set What type of the super persona this type is belogs to
 	void SetFigureSuperType(UINT sType);
 	//**Get What type of the super persona this type is belogs to
-	UINT GetFigureSuperType() { return this->SType; }
+	inline UINT GetFigureSuperType() { return this->SType; }
 
 	bool Update() override;
 
@@ -65,11 +65,11 @@ public:
 
 	void DeleteMeBFunc();
 
-	FButton* GetButton() { return this->FrontButton; }
+	inline FButton* GetButton() { return this->FrontButton; }
 
 	virtual void Delete() override;
 
-	bool GetIsFalling() { return this->IsFalling ? true : false; }
+	inline bool GetIsFalling() { return this->IsFalling ? true : false; }
 	void FallToPos(Vector2d& startPos, Vector2d& endPos);
 
 private:

@@ -32,6 +32,18 @@ void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 
 }
 
+void FigureB::FallToPos(Vector2d& pos)
+{
+	this->fig->FallToPos(getPosition(), pos);
+
+}
+
+Vector2d FigureB::getPosition()
+{
+	Vector2d pos = this->fig->GetPosition();
+	return pos;
+}
+
 XMFLOAT4 FigureB::colorPicker()
 {
 	switch(this->type)

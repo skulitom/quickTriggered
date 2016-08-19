@@ -86,8 +86,11 @@ void Grid::updatePositions(BasicInterface* super)
 		}
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			if (this->net->at(i).at(j)!=nullptr)
-				this->net->at(i).at(j)->SetPosition(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+			if (this->net->at(i).at(j) != nullptr){
+				Vector2d pos = this->net->at(i).at(j)->getPosition();
+				if (!this->net->at(i).at(j)->getIsFalling() && (pos.X != (i*BOARD_INTERVAL) - BOARD_SIZE || pos.Y != (j*BOARD_INTERVAL) - BOARD_SIZE))
+					this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+			}
 		}
 	}
 }
