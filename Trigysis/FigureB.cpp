@@ -34,13 +34,13 @@ void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 
 void FigureB::FallToPos(Vector2d& pos)
 {
-	this->fig->FallToPos(getPosition(), pos);
+	this->fig->FallToPos(getPositionB(), pos);
 
 }
 
 //Думаю, нужно поменять название 
 //Небольшой конфликт имён с GetPosition()
-Vector2d FigureB::getPosition()
+Vector2d FigureB::getPositionB()
 {
 	Vector2d pos = this->fig->GetPosition();
 	return pos;

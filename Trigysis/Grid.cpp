@@ -28,58 +28,65 @@ Grid::Grid()
 
 void Grid::Update(BasicInterface* super)
 {
+	FirstRoundLogic(super);
+	SecondRoundLogic(super);
+}
+
+void Grid::FirstRoundLogic(BasicInterface* super)
+{
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
 	{
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			FirstRoundLogic(i,j);
-		}
-	}
-	SecondRoundLogic(super);
-}
-
-void Grid::FirstRoundLogic(int i, int j)
-{
-	if (!(this->net->at(i).at(j) == nullptr))
-	{
-		if (j >= 2)
-			if (this->net->at(i).at(j - 1) != nullptr && this->net->at(i).at(j - 2) != nullptr)
-				if (compareAt(i, j, i, j - 1) && compareAt(i, j, i, j - 2))
-				{
-					this->net->at(i).at(j)->breakFig();
-					this->net->at(i).at(j - 1)->breakFig();
-					this->net->at(i).at(j - 2)->breakFig();
-				}
-		if (i >= 2)
-			if (this->net->at(i - 1).at(j) != nullptr && this->net->at(i - 2).at(j) != nullptr)
-				if (compareAt(i, j, i - 1, j) && compareAt(i, j, i - 2, j))
-				{
-					this->net->at(i).at(j)->breakFig();
-					this->net->at(i - 1).at(j)->breakFig();
-					this->net->at(i - 2).at(j)->breakFig();
-				}
-		if (this->net->at(i).at(j)->isClicked())
-		{
-			//while (this->net->at(i).at(j)->isDragged())
-			//{
-			//	this->net->at(i).at(j)->SetPosition(Vector2d());
-			//}
-			deleteAt(i, j);
-		}
-		if (j - 1 >= 0)
-		{
-			if (this->net->at(i).at(j - 1) == nullptr)
+			if (!(this->net->at(i).at(j) == nullptr))
 			{
-				int counter = 1;
-				while (this->net->at(i).at(j - counter) == nullptr)
+				if (j >= 2)
+					if (this->net->at(i).at(j - 1) != nullptr && this->net->at(i).at(j - 2) != nullptr)
+						if (compareAt(i, j, i, j - 1) && compareAt(i, j, i, j - 2))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i).at(j - 1)->breakFig();
+							this->net->at(i).at(j - 2)->breakFig();
+						}
+				if (i >= 2)
+					if (this->net->at(i - 1).at(j) != nullptr && this->net->at(i - 2).at(j) != nullptr)
+						if (compareAt(i, j, i - 1, j) && compareAt(i, j, i - 2, j))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i - 1).at(j)->breakFig();
+							this->net->at(i - 2).at(j)->breakFig();
+						}
+				if (this->net->at(i).at(j)->isClicked())
 				{
-					this->net->at(i).at(j - counter) = this->net->at(i).at(j - counter + 1);
-					this->net->at(i).at(j - counter + 1) = nullptr;
-					counter++;
-					if (counter > j)
-						break;
+					Vector2d originalPos = this->net->at(i).at(j)->getPositionB();
+					while (this->net->at(i).at(j)->isDragged())
+					{
+						this->net->at(i).at(j)->SetPosition(Vector2d(super->GetInput()->GetMousePosCenterVPort(super->GetVPStruct(1))));
+					}
+					Vector2d newPos = this->net->at(i).at(j)->getPositionB();
+					smartInsertAt(newPos.X, newPos.Y, originalPos, this->net->at(i).at(j));
+				}
+				if (j - 1 >= 0)
+				{
+					if (this->net->at(i).at(j - 1) == nullptr)
+					{
+						int counter = 1;
+						while (this->net->at(i).at(j - counter) == nullptr)
+						{
+							this->net->at(i).at(j - counter) = this->net->at(i).at(j - counter + 1);
+							this->net->at(i).at(j - counter + 1) = nullptr;
+							counter++;
+							if (counter > j)
+								break;
+						}
+					}
 				}
 			}
+
+
+
+
+
 		}
 	}
 }
@@ -95,7 +102,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
 			if (this->net->at(i).at(j) != nullptr){
-				Vector2d pos = this->net->at(i).at(j)->getPosition();
+				Vector2d pos = this->net->at(i).at(j)->getPositionB();
 				if (!this->net->at(i).at(j)->getIsFalling())
 					this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
 			}
@@ -173,7 +180,26 @@ void Grid::generateFig(BasicInterface* super, int i, int j, bool round)
 
 void Grid::insertAt(int x, int y, FigureB* fig)
 {
+	
 	net->at(x).at(y) = fig;
+}
+
+void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
+{
+	x -= x%BOARD_INTERVAL;
+	y -= y%BOARD_INTERVAL;
+	if (x < -BOARD_SIZE || x > BOARD_SIZE || y < -BOARD_SIZE || y > BOARD_SIZE)
+	{
+		fig->SetPosition(originalPos);
+	}
+	else if (originalPos.X == x && originalPos.Y == y)
+	{
+		fig->SetPosition(originalPos);
+	}
+	else
+	{
+		insertAt((x / BOARD_INTERVAL) - BOARD_SIZE, (y / BOARD_INTERVAL) - BOARD_SIZE, fig);
+	}
 }
 
 void Grid::deleteAt(int x, int y)

@@ -26,9 +26,9 @@ public:
 	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
 	virtual void FallToPos(Vector2d& endPos);
 	virtual inline bool getIsFalling(){ return this->fig->GetIsFalling(); };
-	virtual Vector2d getPosition();
+	virtual Vector2d getPositionB();
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
-	inline bool isDragged(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) ? true : false; }
+	inline bool isDragged(){ return this->fig->GetButton()->GetStatus(DX_MOUSE_DOWN_LEFT) ? true : false; }
 
 protected:
 private:

@@ -31,11 +31,12 @@ public:
 	void setBoard(BasicInterface* super);
 
 	void insertAt(int x, int y, FigureB* fig);
+	void smartInsertAt(int x, int y,Vector2d originalPos, FigureB* fig);
 	void deleteAt(int x, int y);
 	bool compareAt(int x1, int y1, int x2, int y2);
 	virtual void Update(BasicInterface* super);
 	void SecondRoundLogic(BasicInterface* super);
-	void FirstRoundLogic(int i, int j);
+	void FirstRoundLogic(BasicInterface* super);
 
 protected:
 private:
