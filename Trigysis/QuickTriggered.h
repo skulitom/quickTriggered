@@ -11,10 +11,9 @@
 #include "Basic2DDraw.h"
 //#include "Link.h"
 #include "Files.h"
-#include "Turns.h"
 #include "Font.h"
+#include "PrimaryGame.h"
 
-#include "Grid.h"
 
 class QuickTriggered;
 typedef void (QuickTriggered::*QTFunc)(void);
@@ -58,9 +57,8 @@ private:
 	void createFigure(int x, int y);
 	void setBoard();
 
-	Grid* grid;
-	Turns* turns;
-
+	
+	PrimaryGame *primaryGame;
 	FontManager* fontManager;
 
 	Figure* FigToTest;

@@ -80,27 +80,15 @@ bool QuickTriggered::InitApp()
 		NE->Spawn(Vector2d(0, 0), 1);
 
 	//	this->fontManager = new FontManager();
-
-		setBoard();
-
-		this->FigToTest = new Figure(this);
-		this->FigToTest->SetFigureType(0);
-		this->FigToTest->SetFigureSuperType(0);
-		this->FigToTest->Spawn(Vector2d(-300, 0), 1);
+		this->primaryGame = new PrimaryGame();
+		primaryGame->init(this);
 		
+
 		return true;
 
 	}
 
 	return false;
-}
-
-void QuickTriggered::setBoard()
-{
-	this->grid = new Grid(this);
-	this->grid->setBoard(this);
-	// start turns with standard time and num of turns
-	this->turns = new Turns(SD_MAX_TURNS,SD_MAX_TIME);
 }
 
 
@@ -122,10 +110,7 @@ void QuickTriggered::Update()
 
 	Vector2d Pos;
 
-	grid->Update(this);
-
-	if (this->FigToTest->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED))
-		this->FigToTest->FallToPos(this->FigToTest->GetPosition(), this->FigToTest->GetPosition() - Vector2d(0, 200.f));
+	primaryGame->Update(this);
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
 

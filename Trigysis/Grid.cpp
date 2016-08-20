@@ -7,7 +7,7 @@ struct FigureTypeException : public std::exception
 	}
 };
 
-Grid::Grid(BasicInterface* super)
+Grid::Grid()
 {
 	this->fmanager = new FigureManager();
 	this->net = new std::vector<std::vector<FigureB*>>(((2 * BOARD_SIZE) / BOARD_INTERVAL)+1);
@@ -32,51 +32,59 @@ void Grid::Update(BasicInterface* super)
 	{
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			if (!(this->net->at(i).at(j) == nullptr))
-			{
-				if (j>=2)
-					if (this->net->at(i).at(j-1) != nullptr && this->net->at(i).at(j-2) != nullptr)
-						if (compareAt(i,j,i,j-1)&&compareAt(i,j,i,j-2))
-						{
-							this->net->at(i).at(j)->breakFig();
-							this->net->at(i).at(j-1)->breakFig();
-							this->net->at(i).at(j-2)->breakFig();
-						}
-				if (i>=2)
-					if (this->net->at(i-1).at(j) != nullptr && this->net->at(i-2).at(j) != nullptr)
-						if (compareAt(i, j, i-1, j) && compareAt(i, j, i-2, j))
-						{
-							this->net->at(i).at(j)->breakFig();
-							this->net->at(i-1).at(j)->breakFig();
-							this->net->at(i-2).at(j)->breakFig();
-						}
-				if (this->net->at(i).at(j)->isClicked())
+			FirstRoundLogic(i,j);
+		}
+	}
+	SecondRoundLogic(super);
+}
+
+void Grid::FirstRoundLogic(int i, int j)
+{
+	if (!(this->net->at(i).at(j) == nullptr))
+	{
+		if (j >= 2)
+			if (this->net->at(i).at(j - 1) != nullptr && this->net->at(i).at(j - 2) != nullptr)
+				if (compareAt(i, j, i, j - 1) && compareAt(i, j, i, j - 2))
 				{
-					deleteAt(i,j);
+					this->net->at(i).at(j)->breakFig();
+					this->net->at(i).at(j - 1)->breakFig();
+					this->net->at(i).at(j - 2)->breakFig();
 				}
-				if (j-1>= 0)
+		if (i >= 2)
+			if (this->net->at(i - 1).at(j) != nullptr && this->net->at(i - 2).at(j) != nullptr)
+				if (compareAt(i, j, i - 1, j) && compareAt(i, j, i - 2, j))
 				{
-					if (this->net->at(i).at(j-1)==nullptr)
-					{
-						int counter = 1;
-						while (this->net->at(i).at(j - counter) == nullptr)
-						{
-							this->net->at(i).at(j - counter) = this->net->at(i).at(j - counter + 1);
-							this->net->at(i).at(j - counter + 1) = nullptr;
-							counter++;
-							if (counter > j)
-								break;
-						}
-					}
+					this->net->at(i).at(j)->breakFig();
+					this->net->at(i - 1).at(j)->breakFig();
+					this->net->at(i - 2).at(j)->breakFig();
+				}
+		if (this->net->at(i).at(j)->isClicked())
+		{
+			//while (this->net->at(i).at(j)->isDragged())
+			//{
+			//	this->net->at(i).at(j)->SetPosition(Vector2d());
+			//}
+			deleteAt(i, j);
+		}
+		if (j - 1 >= 0)
+		{
+			if (this->net->at(i).at(j - 1) == nullptr)
+			{
+				int counter = 1;
+				while (this->net->at(i).at(j - counter) == nullptr)
+				{
+					this->net->at(i).at(j - counter) = this->net->at(i).at(j - counter + 1);
+					this->net->at(i).at(j - counter + 1) = nullptr;
+					counter++;
+					if (counter > j)
+						break;
 				}
 			}
 		}
 	}
-	updatePositions(super);
-	breakAll();
 }
 
-void Grid::updatePositions(BasicInterface* super)
+void Grid::SecondRoundLogic(BasicInterface* super)
 {
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
 	{
@@ -88,24 +96,21 @@ void Grid::updatePositions(BasicInterface* super)
 		{
 			if (this->net->at(i).at(j) != nullptr){
 				Vector2d pos = this->net->at(i).at(j)->getPosition();
-				if (!this->net->at(i).at(j)->getIsFalling() && (pos.X != (i*BOARD_INTERVAL) - BOARD_SIZE || pos.Y != (j*BOARD_INTERVAL) - BOARD_SIZE))
+				if (!this->net->at(i).at(j)->getIsFalling())
 					this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
 			}
+			breakIt(i, j);
 		}
 	}
 }
 
-void Grid::breakAll()
+void Grid::breakIt(int i, int j)
 {
-	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
-	{
-		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
-		{
-			if (this->net->at(i).at(j)!=nullptr)
-				if (this->net->at(i).at(j)->getToBreak())
-					deleteAt(i,j);
-		}
-	}
+
+	if (this->net->at(i).at(j)!=nullptr)
+		if (this->net->at(i).at(j)->getToBreak())
+			deleteAt(i,j);
+
 }
 
 void Grid::setBoard(BasicInterface* super)

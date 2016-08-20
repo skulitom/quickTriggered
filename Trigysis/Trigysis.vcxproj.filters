@@ -96,6 +96,9 @@
     <ClInclude Include="GUIPhysBasic.h">
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClInclude>
+    <ClInclude Include="PrimaryGame.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="GUIPhysBasic.cpp">
       <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimaryGame.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

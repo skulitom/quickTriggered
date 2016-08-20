@@ -25,7 +25,7 @@
 
 class Grid {
 public:
-	Grid(BasicInterface* super);
+	Grid();
 	~Grid();
 
 	void setBoard(BasicInterface* super);
@@ -34,13 +34,14 @@ public:
 	void deleteAt(int x, int y);
 	bool compareAt(int x1, int y1, int x2, int y2);
 	virtual void Update(BasicInterface* super);
-	void updatePositions(BasicInterface* super);
+	void SecondRoundLogic(BasicInterface* super);
+	void FirstRoundLogic(int i, int j);
 
 protected:
 private:
 	void generateFig(BasicInterface* super, int i, int j);
 	void generateFig(BasicInterface* super, int i, int j, bool round);
-	void breakAll();
+	void breakIt(int i, int j);
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;
