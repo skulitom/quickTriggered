@@ -1668,10 +1668,14 @@ FLOAT D3DAPPINPUT::GetMouseScroll()
 
 }
 
-Vector2d& D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct)
+void D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct, Vector2d* oPtrMPos)
 {
 
-	return Vector2d(this->mMouseX - viewPortStruct.WinPos.X, -this->mMouseY + viewPortStruct.WinPos.Y);
+	if (oPtrMPos)
+	{
+		oPtrMPos->X = this->mMouseX - viewPortStruct.WinPos.X;
+		oPtrMPos->Y = -this->mMouseY + viewPortStruct.WinPos.Y;
+	}
 
 }
 

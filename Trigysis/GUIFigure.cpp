@@ -288,11 +288,6 @@ bool Figure::Update()
 	this->Move(this->DestPos, this->D3dApp->GetTimer()->GetDeltaTime());
 	this->FrontButton->SetPosition(this->Position);
 
-	this->CustomVars.x = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->IndexOfViewPort)).X;
-	this->CustomVars.y = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->IndexOfViewPort)).Y;
-
-	this->FrontButton->SetCustomVars(this->CustomVars);
-
 	return true;
 
 }

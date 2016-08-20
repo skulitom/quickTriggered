@@ -379,7 +379,7 @@ public:
 	FLOAT GetMousePosXCenter(FLOAT shiftByX = 0);
 	FLOAT GetMousePosYCenter(FLOAT shiftByY = 0);
 
-	Vector2d& GetMousePosCenterVPort(VPortStruct& viewPortStruct);
+	void GetMousePosCenterVPort(VPortStruct& viewPortStruct, Vector2d* oPtrMPos);
 
 	FLOAT GetMouseScroll();
 

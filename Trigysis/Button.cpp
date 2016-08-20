@@ -98,7 +98,8 @@ bool ButtonInterface::CheckIsSelected()
 	{
 
 		Vector2d HalfSizes = this->GetSizes() * 0.5f;
-		Vector2d MousePos = this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->GetIndexOfViewPort()));
+		Vector2d MousePos;
+		this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->GetIndexOfViewPort()), &MousePos);
 		FLOAT BRadius = HalfSizes.GetLength() * 0.707f;
 		HalfSizes = this->GetPosition() - MousePos;
 		FLOAT Radius = HalfSizes.GetLength();
