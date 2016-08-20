@@ -81,8 +81,12 @@ bool QuickTriggered::InitApp()
 
 	//	this->fontManager = new FontManager();
 		this->primaryGame = new PrimaryGame();
-		primaryGame->init(this);
+		//primaryGame->init(this);
 		
+		this->FigToTest = new Figure(this);
+		this->FigToTest->SetFigureType(0);
+		this->FigToTest->SetFigureSuperType(0);
+		this->FigToTest->Spawn(Vector2d(0, 0), 1);
 
 		return true;
 
@@ -90,7 +94,6 @@ bool QuickTriggered::InitApp()
 
 	return false;
 }
-
 
 void QuickTriggered::Update()
 {
@@ -109,8 +112,30 @@ void QuickTriggered::Update()
 		this->Resize(DX_DISPLAY_MODE_1920_1080);
 
 	Vector2d Pos;
+	
+	//////////////////////
+	static bool IsMoving = false;
+	static Vector2d PrevMPos, MPos;
+	if (this->FigToTest->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
+	{
+		if (!IsMoving)
+		{
+			this->Input->GetMousePosCenterVPort(this->GetVPStruct(1), &PrevMPos);
+			//PrevMPos = TMPrevPos;
+			IsMoving = true;
+		}
+		else
+			PrevMPos = MPos;
 
-	primaryGame->Update(this);
+		this->Input->GetMousePosCenterVPort(this->GetVPStruct(1), &MPos);
+		//MPos = TMPos;
+		this->FigToTest->SetPosition(this->FigToTest->GetPosition() + MPos - PrevMPos);
+	}
+	else
+		IsMoving = false;
+	//////////////////////
+
+	//primaryGame->Update(this);
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
 
