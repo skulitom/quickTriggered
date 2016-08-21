@@ -58,13 +58,14 @@ void Grid::FirstRoundLogic(BasicInterface* super)
 						}
 				if (this->net->at(i).at(j)->isClicked())
 				{
-					Vector2d originalPos = this->net->at(i).at(j)->getPositionB();
-					while (this->net->at(i).at(j)->isDragged())
-					{
-						this->net->at(i).at(j)->SetPosition(Vector2d(super->GetInput()->GetMousePosCenterVPort(super->GetVPStruct(1))));
-					}
-					Vector2d newPos = this->net->at(i).at(j)->getPositionB();
-					smartInsertAt(newPos.X, newPos.Y, originalPos, this->net->at(i).at(j));
+					//Vector2d originalPos = this->net->at(i).at(j)->getPositionB();
+					//while (this->net->at(i).at(j)->isDragged())
+					//{
+					//	this->net->at(i).at(j)->SetPosition(Vector2d(super->GetInput()->GetMousePosCenterVPort(super->GetVPStruct(1))));
+					//}
+					//Vector2d newPos = this->net->at(i).at(j)->getPositionB();
+					//smartInsertAt(newPos.X, newPos.Y, originalPos, this->net->at(i).at(j));
+					deleteAt(i, j);
 				}
 				if (j - 1 >= 0)
 				{
@@ -104,7 +105,10 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 			if (this->net->at(i).at(j) != nullptr){
 				Vector2d pos = this->net->at(i).at(j)->getPositionB();
 				if (!this->net->at(i).at(j)->getIsFalling())
-					this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+				{
+						this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+
+				}
 			}
 			breakIt(i, j);
 		}
