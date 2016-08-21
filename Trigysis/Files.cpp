@@ -20,9 +20,9 @@ void FileManager::Open(std::string& fileName, char FM_FILE_READ_OR_WRITE)
 {
 
 	if (FM_FILE_READ_OR_WRITE == FM_FILE_READ)
-		this->FILE.open(fileName);
+		this->FILE.open(fileName, std::ios_base::in);
 	else
-		this->FILE.open(fileName);
+		this->FILE.open(fileName,std::ios_base::out);
 
 
 

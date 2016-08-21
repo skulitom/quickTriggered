@@ -1552,9 +1552,13 @@ ID3D11SamplerState* D3DAPP::SCreateSampler(enum D3D11_TEXTURE_ADDRESS_MODE adres
 ////INPUT
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define KB_STATUS_DEFAULT 0
+#define KB_STATUS_PRESS 1
+
 D3DAPPINPUT::D3DAPPINPUT()
 {
 	MousePos(0, 0);
+	this->KStatus = KB_STATUS_DEFAULT;
 	this->Status = 0;
 }
 
@@ -1572,8 +1576,8 @@ void D3DAPPINPUT::SetWinSizes(WindowSizes& winSizes)
 
 void D3DAPPINPUT::MousePos(float CursorPosX,float CursorPosY)
 {
-	mMouseX = CursorPosX;
-	mMouseY = CursorPosY;
+	MouseX = CursorPosX;
+	MouseY = CursorPosY;
 }
 
 void D3DAPPINPUT::OnMouseDown(bool left)
@@ -1600,72 +1604,21 @@ void D3DAPPINPUT::OnMouseMove(float CursorPosX, float CursorPosY)
 void D3DAPPINPUT::OnMouseScroll(FLOAT scrollUp)
 {
 
-	this->MouseScroll = scrollUp;
+	//this->MouseScroll = scrollUp;
 
-}
-
-float D3DAPPINPUT::GetMouseX()
-{
-	return mMouseX;
-}
-
-float D3DAPPINPUT::GetMouseY()
-{
-	return mMouseY;
-}
-
-FLOAT D3DAPPINPUT::GetMapMousePosX(XMFLOAT4X4 mProject, XMFLOAT3 cameraPos)
-{
-	this->mMapMouseX = (2.f*this->mMouseX / this->WinSizes.ClientWWidth - 1.f) / mProject(0, 0);
-	return  this->mMapMouseX;
-
-}
-
-FLOAT D3DAPPINPUT::GetMapMousePosY(XMFLOAT3 cameraPos)
-{
-
-	return this->mMapMouseY = this->WinSizes.ClientWHeight - this->mMouseX;
-
-}
-
-XMFLOAT3& D3DAPPINPUT::GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos)
-{
-
-	XMFLOAT3 Start = { cameraPos.x, cameraPos.y, cameraPos.z };
-	XMFLOAT3 End = { this->mMapMouseX, 0, objPos.z };
-
-	XMVECTOR V = XMLoadFloat3(&Start) - XMLoadFloat3(&End);
-
-	V = XMVector3Normalize(V);
-
-	XMStoreFloat3(&End, V);
-
-	objPos.x = End.x;
-
-	 return objPos;
 }
 
 FLOAT D3DAPPINPUT::GetMousePosXCenter(FLOAT shiftByX)
 {
 
-	return this->mMouseX - (this->WinSizes.ClientWWidth) / 2.f - shiftByX;
+	return this->MouseX - (this->WinSizes.ClientWWidth) / 2.f - shiftByX;
 }
 
 FLOAT D3DAPPINPUT::GetMousePosYCenter(FLOAT shiftByY)
 {
 
-	return this->WinSizes.ClientWWidth / 2.f - shiftByY - this->mMouseY;
+	return this->WinSizes.ClientWWidth / 2.f - shiftByY - this->MouseY;
 	
-}
-
-FLOAT D3DAPPINPUT::GetMouseScroll()
-{
-
-	FLOAT Scroll = this->MouseScroll;
-	this->MouseScroll = 0;
-
-	return Scroll;
-
 }
 
 void D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct, Vector2d* oPtrMPos)
@@ -1673,15 +1626,30 @@ void D3DAPPINPUT::GetMousePosCenterVPort(VPortStruct& viewPortStruct, Vector2d* 
 
 	if (oPtrMPos)
 	{
-		oPtrMPos->X = this->mMouseX - viewPortStruct.WinPos.X;
-		oPtrMPos->Y = -this->mMouseY + viewPortStruct.WinPos.Y;
+		oPtrMPos->X = this->MouseX - viewPortStruct.WinPos.X;
+		oPtrMPos->Y = -this->MouseY + viewPortStruct.WinPos.Y;
 	}
 
 }
 
-unsigned short D3DAPPINPUT::GetStatus()
+bool D3DAPPINPUT::KBPress(int vKey)
+{
+	return (GetAsyncKeyState(vKey) & 0x8000);
+}
+bool D3DAPPINPUT::KBClicked(int vKey)
 {
 
-	return this->Status;
+	if (this->KStatus == KB_STATUS_DEFAULT && this->KBPress(vKey))
+	{
+		this->KStatus = KB_STATUS_PRESS;
+		return false;
+	}
+	if (this->KStatus == KB_STATUS_PRESS && !this->KBPress(vKey))
+	{
+		this->KStatus = KB_STATUS_DEFAULT;
+		return true;
+	}
+
+	return false;
 
 }

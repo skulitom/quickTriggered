@@ -66,8 +66,12 @@ void ElementsMLand::UpdateAndDraw(FLOAT deltaTime)
 				if (this->Elements.at(i).at(Index)->GetIsSpawned())
 				{
 					if (!this->IsLoadMode && this->Elements.at(i).at(Index)->GetIsNeedUpdate())
+					{
 						this->Elements.at(i).at(Index)->Update();
-
+						if (this->Elements.at(i).at(Index)->GetIsFired())
+							this->ReleaseFromCache(this->Elements.at(i).at(Index));
+					}
+						
 					this->Elements.at(i).at(Index)->Render();
 
 				}

@@ -31,6 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevhInstance, LPSTR cmdline, 
 	QuickTriggered* TAApp = nullptr;
 	if (!Init(&TAApp, hInstance, cmd))
 		return msg.wParam;
+	//TAApp->GetTimer()->SetTimeScale(0.5f);
 	TAApp->GetTimer()->Reset();
 	TAApp->InitApp();
 	

@@ -91,7 +91,7 @@ Figure::~Figure()
 void Figure::Spawn(Vector2d& position, short indexOfVPort)
 {
 
-	this->FallToPos(position + Vector2d(0, 1000.f), position);
+	this->FallToPos(position + Vector2d(0, this->Super->GetWindowSizes().ClientWHeight * 0.5f), position);
 
 	Element::Spawn(this->Position, indexOfVPort);
 
@@ -258,6 +258,9 @@ void Figure::FallToPos(Vector2d& startPos, Vector2d& endPos)
 	this->FallDestPos = endPos;
 	this->IsFalling = true;
 
+	if (this->FrontButton)
+		this->FrontButton->Disable();
+
 }
 
 bool Figure::Update()
@@ -271,7 +274,8 @@ bool Figure::Update()
 			this->FallPos = this->FallDestPos;
 			if (!this->FrontButton->GetIsSpawned())
 				this->FrontButton->Spawn(this->Position, this->IndexOfViewPort);
-			this->ResetImpulse();
+			
+				this->FrontButton->Disable();
 		}
 		else
 		{

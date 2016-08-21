@@ -337,7 +337,9 @@ void ShaderManager::Render(short indexOfVP, XMFLOAT4& color, Vector2d& pos, floa
 	XMFLOAT4& userVars, XMFLOAT4& aColor)
 {
 
-	PrepareShader(pMaterial, this);
+
+	if (pMaterial)
+		PrepareShader(pMaterial, this);
 
 	this->PStrides = sizeof(ShaderManager::Vertex2d);
 	this->POffSet = 0;

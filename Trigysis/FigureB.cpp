@@ -29,7 +29,6 @@ void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 	
 	this->fig->SetColors(colorPicker());
 	this->fig->Spawn(pos, 1);
-
 }
 
 void FigureB::FallToPos(Vector2d& pos)

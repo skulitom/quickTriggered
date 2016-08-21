@@ -19,6 +19,11 @@
 #include "Camera.h"
 
 #pragma comment(lib, "dxgi.lib")
+#ifdef NDEBUG 
+#pragma comment(lib, "d3dx9.lib")
+#pragma comment(lib, "d3dx11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+#endif //NDEBUG
 //#include "Shader.h"
 #pragma warning(disable : 4996)
 #define D3DRelease(x){if(x) {x->Release() ; x = 0;}}
@@ -338,41 +343,23 @@ protected:
 #define DX_MOUSE_DOWN_LEFT 0x1
 #define DX_MOUSE_DOWN_RIGHT 0x2
 
-// Класс DX отвечающий за ввод
+
 class D3DAPPINPUT
 {
 public:
 	D3DAPPINPUT();
 	~D3DAPPINPUT();
 
-	// Вызывается, если зажата клавиша мыши
 	void OnMouseDown(bool left = true);
-	// Вызывается, если отпущена клавиша мыши
 	void OnMouseUp(bool left = true);
-	// Вызывается, если мышь движется
 	void OnMouseMove(float CursorPosX, float CursorPosY);
-	// Записывает позиции мыши
-	void MousePos(float CursorPosX, float CursorPosY);
-	// Вызывается, если используется колесо мыши
 	void OnMouseScroll(float scrollUp);
-	
+
+	void MousePos(float CursorPosX, float CursorPosY);
 	void SetWinSizes(WindowSizes& winSizes);
 
-	// Возвращает координаты мыши по Х
-	float GetMouseX();
-	// Возвращает координаты мыши по У
-	float GetMouseY();
-private:
-	//координаты мыши по Х
-	float mMouseX;
-	//координаты мыши по У
-	float mMouseY;
-
-public:
-	//void InitMapMousePos(FLOAT windowWidth, FLOAT windowHeight, XMFLOAT3 cameraPos);
-
-	FLOAT GetMapMousePosX(XMFLOAT4X4 mProject, XMFLOAT3 cameraPos);
-	FLOAT GetMapMousePosY(XMFLOAT3 cameraPos);
+	int GetMouseX() { return MouseX; }
+	int GetMouseY() { return MouseY; }
 
 	XMFLOAT3& GetCoordX(XMFLOAT3& objPos, XMFLOAT3 cameraPos);
 
@@ -381,16 +368,18 @@ public:
 
 	void GetMousePosCenterVPort(VPortStruct& viewPortStruct, Vector2d* oPtrMPos);
 
-	FLOAT GetMouseScroll();
+	unsigned short GetStatus() { return this->Status; }
+	bool GetStatus(unsigned char DX_MOUSE_) { return this->Status & DX_MOUSE_; }
 
-	unsigned short GetStatus();
+	bool KBPress(int vKey);
+	bool KBClicked(int vKey);
 
 private:
 
-	FLOAT mMapMouseX;
-	FLOAT mMapMouseY;
+	INT8 KStatus;
 
-	FLOAT MouseScroll;
+	int MouseX;
+	int MouseY;
 
 	WindowSizes WinSizes;
 
