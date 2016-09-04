@@ -56,17 +56,9 @@ void Grid::FirstRoundLogic(BasicInterface* super)
 							this->net->at(i - 1).at(j)->breakFig();
 							this->net->at(i - 2).at(j)->breakFig();
 						}
-				if (this->net->at(i).at(j)->isClicked())
-				{
-					//Vector2d originalPos = this->net->at(i).at(j)->getPositionB();
-					//while (this->net->at(i).at(j)->isDragged())
-					//{
-					//	this->net->at(i).at(j)->SetPosition(Vector2d(super->GetInput()->GetMousePosCenterVPort(super->GetVPStruct(1))));
-					//}
-					//Vector2d newPos = this->net->at(i).at(j)->getPositionB();
-					//smartInsertAt(newPos.X, newPos.Y, originalPos, this->net->at(i).at(j));
-					deleteAt(i, j);
-				}
+		
+				
+			
 				if (j - 1 >= 0)
 				{
 					if (this->net->at(i).at(j - 1) == nullptr)
@@ -205,6 +197,8 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
 		insertAt((x / BOARD_INTERVAL) - BOARD_SIZE, (y / BOARD_INTERVAL) - BOARD_SIZE, fig);
 	}
 }
+
+
 
 void Grid::deleteAt(int x, int y)
 {

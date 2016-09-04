@@ -13,14 +13,16 @@
 #include "Basic2DDraw.h"
 #include "Files.h"
 
-#define GRID_FIGURE_WIDTH 9
-#define GRID_FIGURE_HEIGHT 9
+#define GRID_FIGURE_WIDTH 1
+#define GRID_FIGURE_HEIGHT GRID_FIGURE_WIDTH
 
 #define INITIAL_PROB 100
 #define INITIAL_MORALE 100
 
 #define BOARD_INTERVAL 60
-#define BOARD_SIZE 240
+#define BOARD_SIZE ((GRID_FIGURE_WIDTH-1)*BOARD_INTERVAL)/2
+
+//((GRID_FIGURE_WIDTH - 1)*BOARD_INTERVAL) / 2
 
 
 class Grid {
@@ -43,6 +45,7 @@ private:
 	void generateFig(BasicInterface* super, int i, int j);
 	void generateFig(BasicInterface* super, int i, int j, bool round);
 	void breakIt(int i, int j);
+	void moveFig(int i, int j, BasicInterface* super);
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;

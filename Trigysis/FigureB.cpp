@@ -6,8 +6,11 @@ FigureB::FigureB(BasicInterface* super, int type)
 {
 		
 		this->type = type;
-		fig = new Figure(super);
+		this->fig = new Figure(super);
+		this->fig->SetFigureType(0);
+		this->fig->SetFigureSuperType(0);
 		this->toBreak = false;
+		this->IsMoving = false;
 
 }
 
@@ -17,9 +20,31 @@ bool FigureB::Update()
 	{
 		return false;
 	}
-	this->fig->SetPosition(this->Position);
+	//this->fig->SetPosition(this->Position);
+	if (this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
+		 {
+		if (!IsMoving)
+			{
+				this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->PrevMPos);
+				IsMoving = true;
+			}
+		else
+			 PrevMPos = MPos;
+		
+			this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->MPos);
+			this->fig->SetPosition( this->fig->GetPosition()+ MPos-PrevMPos );
+			this->Super->GetFont2D()->DrawA(Vector2d(100,100),COLOR_RED_3,1,"%f",PrevMPos.X);
+			this->Super->GetFont2D()->DrawA(Vector2d(100, 80), COLOR_RED_3, 1, "%f", MPos.X);
+			this->Super->GetFont2D()->DrawA(Vector2d(100, 60), COLOR_RED_3, 1, "%f", MPos.X - PrevMPos.X);
+
+		}
+	else
+		 IsMoving = false;
+
 	return true;
 }
+
+//this->Super->GetFont2D()->DrawA(Vector2d(100, 60), COLOR_RED_3, 1, "%f", MPos.X - PrevMPos.X);
 
 void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 {
