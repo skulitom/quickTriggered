@@ -98,6 +98,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 				Vector2d pos = this->net->at(i).at(j)->getPositionB();
 				if (!this->net->at(i).at(j)->getIsFalling())
 				{
+					if (this->net->at(i).at(j)->GetPosition().X != (i*BOARD_INTERVAL) - BOARD_SIZE && this->net->at(i).at(j)->GetPosition().Y != (j*BOARD_INTERVAL) - BOARD_SIZE)
 						this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
 
 				}

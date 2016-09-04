@@ -13,7 +13,7 @@
 #include "Basic2DDraw.h"
 #include "Files.h"
 
-#define GRID_FIGURE_WIDTH 1
+#define GRID_FIGURE_WIDTH 9
 #define GRID_FIGURE_HEIGHT GRID_FIGURE_WIDTH
 
 #define INITIAL_PROB 100
