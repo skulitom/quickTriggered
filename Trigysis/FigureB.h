@@ -5,6 +5,7 @@
 #include <vector>
 #include "BasicInterface.h"
 #include "GUIFigures.h"
+#include "Crypter.h"
 
 #define MEXICANS 0
 #define JEWS 1
@@ -39,6 +40,7 @@ private:
 	Figure *fig;
 	bool IsMoving;
 	Vector2d PrevMPos, MPos;
+	Crypter *crypt;
 };
 
 #endif

@@ -99,6 +99,9 @@
     <ClInclude Include="PrimaryGame.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="Crypter.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -162,6 +165,9 @@
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClCompile>
     <ClCompile Include="PrimaryGame.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Crypter.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>

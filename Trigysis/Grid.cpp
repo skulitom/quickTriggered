@@ -57,7 +57,10 @@ void Grid::FirstRoundLogic(BasicInterface* super)
 							this->net->at(i - 2).at(j)->breakFig();
 						}
 		
-				
+				if (super->GetInput()->GetStatus(DX_MOUSE_DOWN_RIGHT) && this->net->at(i).at(j)->isDragged())
+				{
+					deleteAt(i,j);
+				}
 			
 				if (j - 1 >= 0)
 				{
