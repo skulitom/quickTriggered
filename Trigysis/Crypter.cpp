@@ -12,51 +12,61 @@ using CryptoPP::DefaultEncryptorWithMAC;
 
 Crypter::Crypter()
 {
-	this->password = "pvx124";
+	this->password = "pvxWty782qw";
 	this->fileName = "./saves.txt";
-	this->decrypted = "";
-	this->encrypted = "";
 	fileManager = new FileManager();
-	encrypt();
+	fileManager->Open(fileName, 1);
 }
 
-std::string Crypter::openFile()
+std::string Crypter::readFile()
 {
-
+	fileManager->Close();
 	fileManager->Open(fileName, 0);
-	encrypt();
-//	decript();
-	return encrypted;
+	encrypted = fileManager->GetStringFromFile(); 
+	decrypted = "";
+	if (encrypted == "")
+	{
+		return decrypted;
+	}
+	decrypt();
+	fileManager->clearFile();
+	fileManager->Open(fileName, 1);
+	writeToFile(decrypted);
+	return decrypted;
 }
 
-void Crypter::encrypt()
+void Crypter::writeToFile(std::string& toEncrypt)
 {
-	FileSource fileSource1("./saves.txt", true,
-		new DefaultEncryptorWithMAC(
-			(byte*)this->password.data(), this->password.size(),
-				new HexEncoder(
-					new StringSink(this->encrypted)
-				)
-			)
-		);
-
+	encrypted = "";
+	encrypt(toEncrypt);
 	fileManager->writeToFile(encrypted);
+	encrypted = "";
+}
 
-
+void Crypter::encrypt(std::string& toEncrypt)
+{
+	StringSource ss1(toEncrypt, true,
+		new DefaultEncryptorWithMAC(
+			(byte*)password.data(), password.size(),
+				new HexEncoder(
+				new StringSink(encrypted)
+			)
+		)
+	);
 
 }
 
-void Crypter::decript()
+void Crypter::decrypt()
 {
-	FileSource fileSource2("./saves.txt", true,
-			new HexDecoder(
-				new DefaultDecryptorWithMAC(
-					(byte*)this->password.data(), this->password.size(),
-					new StringSink(decrypted)
-				)
+	StringSource ss1(encrypted, true,
+		new HexDecoder(
+			new DefaultDecryptorWithMAC(
+				(byte*)password.data(), password.size(),
+				new StringSink(decrypted)
 			)
-		);
-	fileManager->writeToFile(decrypted);
+		)
+	);
+
 }
 
 Crypter::~Crypter()

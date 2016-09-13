@@ -40,7 +40,6 @@ private:
 	Figure *fig;
 	bool IsMoving;
 	Vector2d PrevMPos, MPos;
-	Crypter *crypt;
 };
 
 #endif

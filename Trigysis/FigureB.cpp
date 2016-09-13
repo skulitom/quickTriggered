@@ -11,7 +11,6 @@ FigureB::FigureB(BasicInterface* super, int type)
 		this->fig->SetFigureSuperType(0);
 		this->toBreak = false;
 		this->IsMoving = false;
-		this->crypt = new Crypter();
 
 }
 
@@ -34,7 +33,7 @@ bool FigureB::Update()
 		
 			this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->MPos);
 			this->fig->SetPosition( this->fig->GetPosition()+ MPos-PrevMPos );
-			this->Super->GetFont2D()->DrawA(Vector2d(100,100),COLOR_RED_3,1,"%s",crypt->openFile());
+	//		this->Super->GetFont2D()->DrawA(Vector2d(100,100),COLOR_RED_3,1,crypt->readFile().c_str());
 			this->Super->GetFont2D()->DrawA(Vector2d(100, 80), COLOR_RED_3, 1, "%f", MPos.X);
 			this->Super->GetFont2D()->DrawA(Vector2d(100, 60), COLOR_RED_3, 1, "%f", MPos.X - PrevMPos.X);
 

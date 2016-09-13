@@ -30,6 +30,7 @@ public:
 	void Close();
 	void writeToFileAt(int num, int loc);
 	void writeToFileAt(std::string& name, int loc);
+	void clearFile();
 
 	std::string& GetStringFromFile();
 	int FindString(std::string findName);
