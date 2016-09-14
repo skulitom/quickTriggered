@@ -29,6 +29,8 @@ protected:
 private:
 	Grid* grid;
 	Turns* turns;
+	float localTime;
+	bool gameWon;
 
 
 };

@@ -1,27 +1,32 @@
 #include "Turns.h"
 /*
 	Turns uses timer to manage in game turns
-	TODO: use timer made by Sagitus instead of custom
 */
 
-Turns::Turns(unsigned int maxTurns, unsigned long maxTime)
+Turns::Turns(float maxTurns, float maxTime)
 {
 	this->maxTurns = maxTurns;
 	this->maxTime = maxTime;
 	this->numberOfTurns = 0;
-	this->reset = true;
-	this->running = false;
 	this->sTime = 0;
 	this->eTime = 0;
-	this->isEndTurn = false;
+	this->endedTurn = false;
 	this->endGame = false;
+	this->timer = new D3DAPPTIMER(SD_TIMESCALE);
+	this->timer->Reset();
+	this->running = false;
 
-	startClock();
 }
 
 void Turns::Update()
 {
-	if (isEndTurn)
+	timer->Tick();
+	if (!running)
+	{
+		startClock();
+		running = true;
+	}
+	if (endedTurn)
 	{
 		if (numberOfTurns >= maxTurns)
 		{
@@ -29,9 +34,8 @@ void Turns::Update()
 		}
 		else
 		{
-			this->numberOfTurns++;
-			this->isEndTurn = false;
-			resetClock();
+			startClock();
+			this->endedTurn = false;
 		}
 	}
 	else if (getTime() >= this->maxTime)
@@ -43,58 +47,28 @@ void Turns::Update()
 
 void Turns::endTurn()
 {
+	this->endedTurn = true;
 	this->numberOfTurns++;
 }
 
 void Turns::startClock()
 {
-	if (!running)
-	{
-		if (this->reset)
-		{
-			this->sTime = (unsigned long)clock();
-		}
-		else
-		{
-			this->sTime -= this->eTime - (unsigned long)clock();
-		}
-		this->running = true;
-		this->reset = false;
-	}
-
+	this->sTime = this->timer->GetTotalTime();
 }
 
 void Turns::stopClock()
 {
-	if (running)
-	{
-		eTime = (unsigned long)clock();
-		running = false;
-	}
+	this->eTime = this->timer->GetTotalTime();
 }
 
-void Turns::resetClock()
+int Turns::getTime()
 {
-	bool wasRunning = running;
-	if (wasRunning)
-		stopClock();
-	this->reset = true;
-	this->sTime = 0;
-	this->eTime = 0;
-	if (wasRunning)
-		startClock();
-
-}
-
-unsigned long Turns::getTime()
-{
-	if (this->running)
-		return ((unsigned long)clock() - this->sTime) / CLOCKS_PER_SEC;
-	else
-		return this->eTime - this->sTime;
+	stopClock();
+	int currentTime = int(this->eTime - this->sTime + 0.5);
+	return currentTime;
 }
 
 Turns::~Turns()
 {
-	stopClock();
+	delete timer;
 }

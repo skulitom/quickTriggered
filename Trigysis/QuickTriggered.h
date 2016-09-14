@@ -61,9 +61,10 @@ private:
 	PrimaryGame *primaryGame;
 	FontManager* fontManager;
 
-	Figure* FigToTest;
-
-private:
-
-};
-#endif //QuickTriggered_H
+	Figure* FigToTest;			   
+								   
+private:						   
+								   
+};								   
+#endif //QuickTriggered_H		   
+								   

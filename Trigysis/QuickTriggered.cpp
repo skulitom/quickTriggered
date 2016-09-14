@@ -140,9 +140,9 @@ void QuickTriggered::Update()
 
 	//////////////////////
 
-	primaryGame->Update(this);
-
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
+
+	primaryGame->Update(this);
 
 	QuickTriggered::Draw();
 	this->GetFont2D()->Draw(Vector2d(0, 0), COLOR_WHITE_3, 1, "Time: ");
