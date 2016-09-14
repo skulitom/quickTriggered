@@ -1,4 +1,8 @@
 #include "Turns.h"
+/*
+	Turns uses timer to manage in game turns
+	TODO: use timer made by Sagitus instead of custom
+*/
 
 Turns::Turns(unsigned int maxTurns, unsigned long maxTime)
 {

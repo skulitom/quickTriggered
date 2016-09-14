@@ -20,7 +20,7 @@ bool FigureB::Update()
 	{
 		return false;
 	}
-	//this->fig->SetPosition(this->Position);
+	// check if figure is pressed in which case move the figure with cursor
 	if (this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
 		 {
 		if (!IsMoving)
@@ -50,8 +50,7 @@ void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 {
 	Element::Spawn(pos, indexOfVP);
 	this->fig->SetFigureSuperType(0);
-	this->fig->SetFigureType(0);
-	
+	this->fig->SetFigureType(0);	
 	this->fig->SetColors(colorPicker());
 	this->fig->Spawn(pos, 1);
 }
@@ -62,8 +61,6 @@ void FigureB::FallToPos(Vector2d& pos)
 
 }
 
-//Думаю, нужно поменять название 
-//Небольшой конфликт имён с GetPosition()
 Vector2d FigureB::getPositionB()
 {
 	Vector2d pos = this->fig->GetPosition();
@@ -72,6 +69,7 @@ Vector2d FigureB::getPositionB()
 
 XMFLOAT4 FigureB::colorPicker()
 {
+	// assigns colors to figure types
 	switch(this->type)
 	{
 	case MEXICANS:

@@ -1,5 +1,6 @@
 #include "FigureManager.h"
 
+// custom exceptions for unknown actions and types {
 struct FigureActionException : public std::exception
 {
 	const char * what() const throw () {
@@ -13,7 +14,7 @@ struct FigureTypeException : public std::exception
 		return "***Figure TYPE error***";
 	}
 };
-
+// }
 
 FigureManager::FigureManager()
 {
@@ -25,14 +26,6 @@ FigureManager::FigureManager()
 		prob.at(i) = 100;
 		morale.at(i) = 100;
 	}
-}
-
-FigureManager::~FigureManager()
-{
-	prob.clear();
-	prob.shrink_to_fit();
-	morale.clear();
-	morale.shrink_to_fit();
 }
 
 void FigureManager::analyseAction(int type, int action)
@@ -282,4 +275,12 @@ int FigureManager::FigureToDrop(bool round)
 
 	return j;
 
+}
+
+FigureManager::~FigureManager()
+{
+	prob.clear();
+	prob.shrink_to_fit();
+	morale.clear();
+	morale.shrink_to_fit();
 }

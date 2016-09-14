@@ -1,5 +1,14 @@
 #include "PrimaryGame.h"
 
+/*
+	This class is resposible for the core gameplay of the game
+	such as:
+		|Turn managment
+		|FigureManager usage
+		|Board configuration
+		TODO: ?|In-primary game text
+*/
+
 PrimaryGame::PrimaryGame()
 {
 	this->grid = new Grid();
