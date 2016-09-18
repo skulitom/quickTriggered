@@ -11,6 +11,7 @@ struct FigureTypeException : public std::exception
 Grid::Grid()
 {
 	this->fmanager = new FigureManager();
+	this->toMove = false;
 	// net will keep figures (basically representig the board)
 	this->net = new std::vector<std::vector<FigureB*>>(((2 * BOARD_SIZE) / BOARD_INTERVAL)+1);
 	for (int t = 0; t <= (2 * BOARD_SIZE) / BOARD_INTERVAL; t++)
@@ -108,17 +109,27 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 		}
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			if (this->net->at(i).at(j) != nullptr){
-				Vector2d pos = this->net->at(i).at(j)->getPositionB();
+			breakIt(i, j);
+			if (this->net->at(i).at(j) != nullptr)
+			{
+				//Vector2d pos = this->net->at(i).at(j)->getPositionB();
 				// fall to updated position if not already falling
-				if (!this->net->at(i).at(j)->getIsFalling())
+				if (!this->net->at(i).at(j)->getIsFalling() && !this->net->at(i).at(j)->getIsMoving())
 				{
-					if (this->net->at(i).at(j)->GetPosition().X != (i*BOARD_INTERVAL) - BOARD_SIZE || this->net->at(i).at(j)->GetPosition().Y != (j*BOARD_INTERVAL) - BOARD_SIZE)
+					if (this->net->at(i).at(j)->getPositionB().X != (i*BOARD_INTERVAL) - BOARD_SIZE || this->net->at(i).at(j)->getPositionB().Y != (j*BOARD_INTERVAL) - BOARD_SIZE)
+					{
 						this->net->at(i).at(j)->FallToPos(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+					}
 
 				}
+				else if (this->net->at(i).at(j)->getIsMoving())
+				{
+							
+					smartInsertAt(this->net->at(i).at(j)->getPositionB().X, this->net->at(i).at(j)->getPositionB().Y, this->net->at(i).at(j)->getOriginalPos(), this->net->at(i).at(j));
+					
+				}
+				
 			}
-			breakIt(i, j);
 		}
 	}
 }
@@ -221,7 +232,10 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
 	}
 	else
 	{
-		insertAt((x / BOARD_INTERVAL) - BOARD_SIZE, (y / BOARD_INTERVAL) - BOARD_SIZE, fig);
+		FigureB* holder = this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL);
+		insertAt((x + BOARD_SIZE) / BOARD_INTERVAL, (y + BOARD_SIZE) / BOARD_INTERVAL, fig);
+		insertAt((originalPos.X + BOARD_SIZE) / BOARD_INTERVAL, (originalPos.Y + BOARD_SIZE) / BOARD_INTERVAL, holder);
+		holder = nullptr;
 	}
 }
 

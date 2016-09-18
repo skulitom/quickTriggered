@@ -11,6 +11,9 @@ FigureB::FigureB(BasicInterface* super, int type)
 		this->fig->SetFigureSuperType(0);
 		this->toBreak = false;
 		this->IsMoving = false;
+		this->originalPos = getPositionB();
+		this->newPos = getPositionB();
+
 
 }
 
@@ -26,20 +29,24 @@ bool FigureB::Update()
 		if (!IsMoving)
 			{
 				this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->PrevMPos);
+				this->originalPos = getPositionB();
 				IsMoving = true;
 			}
 		else
 			 PrevMPos = MPos;
 		
-			this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->MPos);
-			this->fig->SetPosition( this->fig->GetPosition()+ MPos-PrevMPos );
-	//		this->Super->GetFont2D()->DrawA(Vector2d(100,100),COLOR_RED_3,1,crypt->readFile().c_str());
-			this->Super->GetFont2D()->DrawA(Vector2d(100, 80), COLOR_RED_3, 1, "%f", MPos.X);
-			this->Super->GetFont2D()->DrawA(Vector2d(100, 60), COLOR_RED_3, 1, "%f", MPos.X - PrevMPos.X);
+	   		this->Input->GetMousePosCenterVPort(this->Super->GetVPStruct(1), &this->MPos);
+			this->newPos = this->fig->GetPosition() + MPos - PrevMPos;
+			if ((this->originalPos.X + DISTANCE_DELTA > this->newPos.X && this->originalPos.X - DISTANCE_DELTA < this->newPos.X) || (this->originalPos.Y + DISTANCE_DELTA > this->newPos.Y && this->originalPos.Y - DISTANCE_DELTA < this->newPos.Y))
+			{
+				this->fig->SetPosition(this->newPos);
+			}
 
 		}
 	else
-		 IsMoving = false;
+	{
+		IsMoving = false;
+	}
 
 	return true;
 }

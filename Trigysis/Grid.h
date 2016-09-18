@@ -46,6 +46,7 @@ private:
 	void generateFig(BasicInterface* super, int i, int j, bool round);
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
+	bool toMove;
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;

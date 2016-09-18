@@ -14,6 +14,8 @@
 #define ASIAN 4
 #define WHITE_SUPREME 5
 
+#define DISTANCE_DELTA 5
+
 class FigureB : public Element {
 public:
 	FigureB(BasicInterface* super, int type);
@@ -21,6 +23,7 @@ public:
 
 	inline void setType(int type) { this->type = type; };
 	inline int getType() { return this->type; }
+	inline bool getIsMoving(){ return this->IsMoving; }
 	inline bool getToBreak(){ return this->toBreak; }
 	inline void breakFig(){ this->toBreak = true; }
 	virtual bool Update() override;
@@ -28,6 +31,8 @@ public:
 	virtual void FallToPos(Vector2d& endPos);
 	virtual inline bool getIsFalling(){ return this->fig->GetIsFalling(); };
 	virtual Vector2d getPositionB();
+	inline Vector2d getOriginalPos(){ return this->originalPos; };
+	inline void setPositionB(Vector2d pos){ this->fig->SetPosition(pos); }
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
 	inline bool isDragged(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) ? true : false; }
 
@@ -40,6 +45,8 @@ private:
 	Figure *fig;
 	bool IsMoving;
 	Vector2d PrevMPos, MPos;
+	Vector2d originalPos;
+	Vector2d newPos;
 };
 
 #endif

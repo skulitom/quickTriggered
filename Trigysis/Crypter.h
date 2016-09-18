@@ -6,7 +6,7 @@
 #include "crypto\hex.h"
 #include "crypto\default.h"
 #include "Files.h"
-#include <string.h>
+#include <string>
 
 
 class Crypter {
