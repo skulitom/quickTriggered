@@ -97,9 +97,12 @@ bool ButtonInterface::CheckIsSelected()
 	if (this->Settings.IsActive)
 	{
 
+		if (this->Input->GetStatus(DX_MOUSE_DOWN_LEFT | DX_MOUSE_DOWN_RIGHT) && !this->GetStatus(DX_BUTTON_STATUS_IS_SELECT))
+			return false;
+
 		Vector2d HalfSizes = this->GetSizes() * 0.5f;
 		Vector2d MousePos;
-		this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->GetIndexOfViewPort()), &MousePos);
+		this->Input->GetMousePosCenterVPort(this->D3dApp->GetVPStruct(this->GetIndexOfViewPort()),&MousePos);
 		FLOAT BRadius = HalfSizes.GetLength() * 0.707f;
 		HalfSizes = this->GetPosition() - MousePos;
 		FLOAT Radius = HalfSizes.GetLength();
@@ -115,6 +118,7 @@ bool ButtonInterface::CheckIsSelected()
 
 		if (Radius - BRadius * 2.f <= 0)
 		{
+
 			if (MousePos.X < this->GetPosition().X - this->GetSizes().X * 0.5f || MousePos.X > this->GetPosition().X + this->GetSizes().X * 0.5f)
 				return false;
 			if (MousePos.Y < this->GetPosition().Y - this->GetSizes().Y * 0.5f || MousePos.Y > this->GetPosition().Y + this->GetSizes().Y * 0.5f)
@@ -129,8 +133,13 @@ bool ButtonInterface::CheckIsSelected()
 bool ButtonInterface::CheckIsPress(FLOAT deltaTime)
 {
 	this->SetStatus(DX_BUTTON_STATUS_WAS_PRESSED,this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING));
-	if ((this->Input->GetStatus()) && this->GetStatus(DX_BUTTON_STATUS_IS_SELECT))
+
+	if ((this->Input->GetStatus() && this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && 
+		this->Input->CheckNewGUIButton(this, this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))) || 
+		(this->Input->GetStatus() && this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) && 
+		this->Input->CheckNewGUIButton(this, this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))))
 	{
+			
 		this->MButtonUsed = 0;
 		if (!(this->GetStatus(DX_BUTTON_STATUS_WAS_PRESSED)))
 			this->PressTime = 1;
@@ -139,6 +148,8 @@ bool ButtonInterface::CheckIsPress(FLOAT deltaTime)
 		return true;
 	}
 	this->SetStatus(DX_BUTTON_STATUS_IS_PRESSING, false);
+	if (this->Input->GetGUIButtonPtr() == this)
+		this->Input->ClearGUIButton();
 	return false;
 }
 
@@ -227,6 +238,12 @@ bool ButtonInterface::Update()
 	}
 	this->SetStatus(DX_BUTTON_STATUS_WAS_SELECT, this->GetStatus(DX_BUTTON_STATUS_IS_SELECT));
 	this->SetStatus(DX_BUTTON_STATUS_IS_SELECT | DX_BUTTON_STATUS_WORKING, this->CheckIsSelected());
+	
+	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && !( this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT)))
+		this->Super->GetSound()->Play(std::string("ButtonSelect.wav"), 65);
+
+	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT))
+
 	if (this->CheckIsPress(this->D3dApp->GetTimer()->GetDeltaTime()))
 	{
 		this->SetColors(this->Settings.SuppressColor);
@@ -270,4 +287,39 @@ bool ButtonInterface::Update()
 
 	}
 	return true;
+}
+
+void ButtonInterface::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, void(*func)(void*), void* arg)
+{
+
+	this->Arg = arg;
+
+	switch (DX_BUTTON_FUNC_TYPE_)
+	{
+	case DX_BUTTON_FUNC_TYPE_ONSELECT:
+	{
+		this->FuncOnSelect = func;
+		this->Feature |= DX_BUTTON_FEATURE_ONSELECT;
+		return;
+	}
+	case DX_BUTTON_FUNC_TYPE_ONPRESS:
+	{
+		this->FuncOnPress = func;
+		this->Feature |= DX_BUTTON_FEATURE_ONPRESS;
+		return;
+	}
+	case DX_BUTTON_FUNC_TYPE_ONCLICK:
+	{
+		this->FuncOnClick = func;
+		this->Feature |= DX_BUTTON_FEATURE_ONCLICK;
+		return;
+	}
+	case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
+	{
+		this->FuncOnStopInquisition = func;
+		this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
+		return;
+	}
+	}
+
 }

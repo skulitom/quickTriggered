@@ -72,10 +72,10 @@ public:
 	FLOAT GetPressTime() { return this->PressTime - 1.f; }
 	bool GetStatus(unsigned __int16 DX_BUTTON_STATUS_) { return this->Status & DX_BUTTON_STATUS_; }
 	bool Update() override;
-	virtual void EventOnSelect(){};
-	virtual void EventOnClick(){};
-	virtual void EventOnPress(){};
-	virtual void EventOnStopInquisition(){};
+	virtual void EventOnSelect(){ this->FuncOnSelect(this->Arg); }
+	virtual void EventOnClick(){ this->FuncOnClick(this->Arg); };
+	virtual void EventOnPress(){ this->FuncOnPress(this->Arg); };
+	virtual void EventOnStopInquisition(){ this->FuncOnStopInquisition(this->Arg); };
 	void ToggleVisible(bool weakLink = false);
 	void SetIsNeedRender(bool isNeedRender) override;
 	virtual void SetColor(unsigned __int8 DX_BUTTON_COLOR_STYLE_, XMFLOAT4 color);
@@ -83,6 +83,7 @@ public:
 	void SetDone();
 	void SetIndName(UINT prevLevel, char* name);
 	char* GetIndName(UINT prevLevel);
+	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, void(*func)(void*), void* arg);
 private:
 	bool CheckIsSelected();
 	bool CheckIsPress(FLOAT deltaTime);
@@ -97,11 +98,19 @@ private:
 	FLOAT PressTime;
 	ButtonSettings Settings;
 	unsigned __int16 Status;
+	bool MButtonPress;
 protected:
 	unsigned __int8 Feature;
 	unsigned __int8 MButtonUsed;
 	bool IsCircle;
 	IndName* IName;
+
+	void(*FuncOnSelect)(void*);
+	void(*FuncOnClick)(void*);
+	void(*FuncOnPress)(void*);
+	void(*FuncOnStopInquisition)(void*);
+	void* Arg;
+
 };
 
 //template<class BClass>

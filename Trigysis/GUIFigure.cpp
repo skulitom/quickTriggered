@@ -4,11 +4,10 @@
 //////////////////////////////////////////////////////
 //**CCButton
 //////////////////////////////////////////////////////
-FButton::FButton(BasicInterface* super, Figure* pFigureClass)
+FButton::FButton(BasicInterface* super)
 	:ButtonInterface(super)
 {
 	DeclareElementName(FButton, this->EName);
-	this->PFigureClass = pFigureClass;
 	ButtonSettings BS;
 	BS.IdleColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.f);
 	BS.InActiveColor = XMFLOAT4(1, 1, 1, 0.f);
@@ -26,38 +25,6 @@ FButton::FButton(BasicInterface* super, Figure* pFigureClass)
 	this->IsCircle = true;
 
 }
-
-void FButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc ff)
-{
-	switch (DX_BUTTON_FUNC_TYPE_)
-	{
-	case DX_BUTTON_FUNC_TYPE_ONSELECT:
-	{
-		this->FFOnSelect = ff;
-		this->Feature |= DX_BUTTON_FEATURE_ONSELECT;
-		return;
-	}
-	case DX_BUTTON_FUNC_TYPE_ONPRESS:
-	{
-		this->FFOnPress = ff;
-		this->Feature |= DX_BUTTON_FEATURE_ONPRESS;
-		return;
-	}
-	case DX_BUTTON_FUNC_TYPE_ONCLICK:
-	{
-		this->FFOnClick = ff;
-		this->Feature |= DX_BUTTON_FEATURE_ONCLICK;
-		return;
-	}
-	case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
-	{
-		this->FFOnStopInquisition = ff;
-		this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
-		return;
-	}
-	}
-}
-
 //////////////////////////////////////////////////////
 //**Figure
 //////////////////////////////////////////////////////
@@ -70,7 +37,7 @@ Figure::Figure(BasicInterface* super)
 	this->Sizes = Vector2d(GUIF_SIZE, GUIF_SIZE);
 	this->Color = XMFLOAT4(1, 1, 1, 0);
 
-	this->FrontButton = new FButton(super, this);
+	this->FrontButton = new FButton(super);
 //	this->FrontButton->SetFunc(DX_BUTTON_FUNC_TYPE_ONCLICK, &Figure::DeleteMeBFunc);
 
 	Figure::SetFigureSuperType(0);

@@ -84,7 +84,7 @@ namespace MathHelp
 
 	}
 
- 	static UINT CBufferMemory(UINT haveMemory)
+ 	/*static UINT CBufferMemory(UINT haveMemory)
 	{
 
 		UINT Helper = 16;
@@ -102,7 +102,7 @@ namespace MathHelp
 		MessageBox(NULL, "CBuffer memory is out of limits", "Math helper: 'CBufferMemory' error!", MB_ICONERROR);
 
 		return false;
-	}
+	}*/
 
 	static INT DistIsLessOrEquals(Vector2d& pos1, Vector2d& pos2, FLOAT dist)
 	{

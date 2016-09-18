@@ -102,6 +102,9 @@
     <ClInclude Include="Crypter.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="Crypter.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>FrameWork\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

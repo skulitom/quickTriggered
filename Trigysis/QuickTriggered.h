@@ -14,25 +14,11 @@
 #include "Font.h"
 #include "PrimaryGame.h"
 
-
-class QuickTriggered;
-typedef void (QuickTriggered::*QTFunc)(void);
 class QTButton : public ButtonInterface
 {
 public:
 	QTButton(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
-	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc tf);
-private:
-	void EventOnSelect() {(this->PQTClass->*this->QTFOnSelect)();}
-	void EventOnClick() { (this->PQTClass->*this->QTFOnClick)(); }
-	void EventOnPress() { (this->PQTClass->*this->QTFOnPress)(); }
-	void EventOnStopInquisition() { (this->PQTClass->*this->QTFOnStopInquisition)(); }
-private:
-	QTFunc QTFOnSelect;
-	QTFunc QTFOnClick;
-	QTFunc QTFOnPress;
-	QTFunc QTFOnStopInquisition;
-	QuickTriggered* PQTClass;
+
 };
 
 //////////////////////////////////////////////////////

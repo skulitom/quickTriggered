@@ -9,6 +9,7 @@
 #include "Basic2DDraw.h"
 #include "MathHelper.h"
 #include "Font.h"
+#include "Sound.h"
 
 class BasicInterface : public D3DAPP
 {
@@ -24,6 +25,7 @@ public:
 	ElementsMLand* GetElementBase() { return this->ElementBase; }
 	D3DAPPINPUT* GetInput() { return this->Input; }
 	FontManager* GetFont2D() { return this->Font2D; }
+	SoundBasic* GetSound() { return this->BSound; }
 
 	void Draw() override;
 
@@ -47,6 +49,7 @@ protected:
 	ElementsMLand* ElementBase;
 	FontManager* Font2D;
 
+	SoundBasic* BSound;
 
 	D3DAPPINPUT* Input;
 	//D3DAPPTIMER* Timer;

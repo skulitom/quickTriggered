@@ -8,40 +8,10 @@ QTButton::QTButton(BasicInterface* super, ButtonSettings& bs)
 {
 	DeclareElementName(CCButton, this->EName);
 	this->Sizes = Vector2d(50, 30);
-	this->PQTClass = dynamic_cast<QuickTriggered*>(this->D3dApp);
 	//this->SetShapeType(DX_)
 }
 
-void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
-{
-	switch (DX_BUTTON_FUNC_TYPE_)
-	{
-		case DX_BUTTON_FUNC_TYPE_ONSELECT:
-		{
-			this->QTFOnSelect = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONSELECT;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONPRESS:
-		{
-			this->QTFOnPress = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONPRESS;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONCLICK:
-		{
-			this->QTFOnClick = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONCLICK;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
-		{
-			this->QTFOnStopInquisition = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
-			return;
-		}
-	}
-}
+
 //////////////////////////////////////////////////////
 //**QuickTriggered
 //////////////////////////////////////////////////////
