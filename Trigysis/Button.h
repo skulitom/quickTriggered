@@ -65,7 +65,7 @@ class ButtonInterface : public Element
 {
 public:
 	ButtonInterface(BasicInterface* super, ButtonSettings& bs = ButtonSettings());
-	virtual ~ButtonInterface(){ this->ReleaseIndNames(); }
+	virtual ~ButtonInterface();
 	void ReleaseIndNames();
 	void SetSettings(ButtonSettings& bSettings);
 	ButtonSettings& GetSettings() { return this->Settings; }

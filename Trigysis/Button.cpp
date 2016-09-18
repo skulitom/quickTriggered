@@ -8,6 +8,13 @@ ButtonInterface::ButtonInterface(BasicInterface* super, ButtonSettings& bs)
 	this->TIsConstant = true;
 }
 
+ButtonInterface::~ButtonInterface()
+{
+	this->ReleaseIndNames(); 
+	if (this->Input->GetGUIButtonPtr() == this) 
+		this->Input->ClearGUIButton();
+}
+
 void ButtonInterface::Disable(bool visibleOnEneble)
 {
 	this->SetStatus(DX_BUTTON_STATUS_IS_ACTIVE, !this->GetStatus(DX_BUTTON_STATUS_IS_ACTIVE));

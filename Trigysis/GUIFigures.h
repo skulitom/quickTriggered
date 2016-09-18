@@ -14,6 +14,7 @@ class FButton : public ButtonInterface
 
 public:
 	FButton(BasicInterface* super);
+	virtual ~FButton() {}
 };
 
 class Figure : public Element, public PhysBasic

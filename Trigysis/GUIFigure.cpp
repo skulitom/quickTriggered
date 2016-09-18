@@ -167,6 +167,7 @@ void Figure::Delete()
 {
 
 	Element::Delete();
+	ElementDelete(this->FrontButton);
 
 	Material* DestrMat = nullptr;
 
