@@ -60,7 +60,7 @@ public:
 	std::string& GetEName() { return this->EName; }
 	void SetInput(D3DAPPINPUT* input) { this->Input = input; }
 	D3DAPPINPUT* GetInput() { return this->Input; }
-	virtual void Delete() { this->SetIsFired(true); }
+	virtual void Delete() { this->SetIsFired(true);}
 	bool GetIsSpawned() { return this->IsSpawned; }
 	ElementsMLand* GetPMLand(){ return this->PMLand; }
 	__int8 GetShapeType(){ return this->ShapeType; }

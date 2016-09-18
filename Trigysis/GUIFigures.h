@@ -9,31 +9,11 @@
 #define GUIF_SIZE 64
 #define GUIF_MOVE_SPEED 100
 
-class Figure;
-typedef void (Figure::*FFunc)(void);
-
 class FButton : public ButtonInterface
 {
 
 public:
-
-	FButton(BasicInterface* super, Figure* pFigureClass);
-	void SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, FFunc tf);
-
-private:
-
-	void EventOnSelect() { (this->PFigureClass->*this->FFOnSelect)(); }
-	void EventOnClick() { (this->PFigureClass->*this->FFOnClick)(); }
-	void EventOnPress() { (this->PFigureClass->*this->FFOnPress)(); }
-	void EventOnStopInquisition() { (this->PFigureClass->*this->FFOnStopInquisition)(); }
-
-	Figure* PFigureClass;
-
-	FFunc FFOnSelect;
-	FFunc FFOnClick;
-	FFunc FFOnPress;
-	FFunc FFOnStopInquisition;
-
+	FButton(BasicInterface* super);
 };
 
 class Figure : public Element, public PhysBasic

@@ -219,7 +219,7 @@ public:
 	///////////////////////////////////////////////
 	//**ADDITIONAL METHODS
 	///////////////////////////////////////////////
-	inline HWND GetWindow() { return HWnd; }
+	inline HWND& GetWindow() { return HWnd; }
 	UINT GetMaxMSQuality(enum DXGI_FORMAT, INT numOfCounts = -1);
 	void SetRenderTarget(ID3D11RenderTargetView* renderTV);
 	virtual void Resize(enum EDisplayModes mode);
@@ -354,6 +354,7 @@ public:
 	void OnMouseUp(bool left = true);
 	void OnMouseMove(float CursorPosX, float CursorPosY);
 	void OnMouseScroll(float scrollUp);
+	void OnKeyUp() { this->IsKBUp = true; }
 
 	void MousePos(float CursorPosX, float CursorPosY);
 	void SetWinSizes(WindowSizes& winSizes);
@@ -374,7 +375,16 @@ public:
 	bool KBPress(int vKey);
 	bool KBClicked(int vKey);
 
+	bool GetIsGUIButtonFind() { return (this->PtrGUIButton ? true : false); }
+	bool CheckNewGUIButton(void* ptrButton, bool wasPressed, __int8 layer = 0);
+	void* GetGUIButtonPtr(){ return this->PtrGUIButton; }
+	void ClearGUIButton() { this->PtrGUIButton = nullptr; this->GUIButtonLayer = 0; this->WasGUIButtonPressed = 0; }
+
 private:
+
+	__int8 GUIButtonLayer = 0;
+	bool WasGUIButtonPressed = false;
+	void* PtrGUIButton = nullptr;
 
 	INT8 KStatus;
 
@@ -384,6 +394,9 @@ private:
 	WindowSizes WinSizes;
 
 	unsigned short Status;
+
+	int PrevKey;
+	bool IsKBUp;
 
 };
 

@@ -99,6 +99,12 @@
     <ClInclude Include="PrimaryGame.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="GUIBorder.h">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>FrameWork\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -164,6 +170,12 @@
     <ClCompile Include="PrimaryGame.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
+    <ClCompile Include="GUIBorder.cpp">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="StandartVShader.fx">
@@ -185,6 +197,9 @@
   <ItemGroup>
     <Text Include="TestSave.txt" />
     <Text Include="HexagonBroken01PS.fx">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="BorderPS.fx">
       <Filter>Shaders</Filter>
     </Text>
   </ItemGroup>

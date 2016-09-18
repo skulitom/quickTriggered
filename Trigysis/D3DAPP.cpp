@@ -1641,15 +1641,43 @@ bool D3DAPPINPUT::KBClicked(int vKey)
 
 	if (this->KStatus == KB_STATUS_DEFAULT && this->KBPress(vKey))
 	{
+		this->IsKBUp = false;
+		this->PrevKey = vKey;
 		this->KStatus = KB_STATUS_PRESS;
 		return false;
 	}
-	if (this->KStatus == KB_STATUS_PRESS && !this->KBPress(vKey))
+	if (this->KStatus == KB_STATUS_PRESS && this->IsKBUp && (vKey == this->PrevKey))
 	{
 		this->KStatus = KB_STATUS_DEFAULT;
 		return true;
 	}
 
 	return false;
+
+}
+
+bool D3DAPPINPUT::CheckNewGUIButton(void* ptrButton, bool wasPressed, __int8 layer)
+{
+	
+	if (!ptrButton)
+		return false;
+
+	if (this->PtrGUIButton)
+		if (this->PtrGUIButton != ptrButton)
+				if ((layer <= this->GUIButtonLayer) || (!wasPressed && this->WasGUIButtonPressed))
+					return false;
+
+	if (this->PtrGUIButton != ptrButton)
+	{
+		this->GUIButtonLayer = layer;
+		this->PtrGUIButton = ptrButton;
+	}
+	else
+	{
+		if (!this->WasGUIButtonPressed)
+			this->WasGUIButtonPressed = true;
+	}
+
+	return true;
 
 }

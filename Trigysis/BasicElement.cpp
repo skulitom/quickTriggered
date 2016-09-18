@@ -43,7 +43,7 @@ void ElementsMLand::DeleteElement(const UINT indexOfVP, const UINT indexOfElemen
 	if (indexOfVP > this->D3dApp->GetNumOfVPorts() || indexOfVP < 0)
 		return;
 
-	this->ReleaseFromCache(this->Elements.at(indexOfVP).at(indexOfElement));
+	//this->ReleaseFromCache(this->Elements.at(indexOfVP).at(indexOfElement));
 
 	D3DDelete(this->Elements.at(indexOfVP).at(indexOfElement));
 	this->Elements.at(indexOfVP).erase(this->Elements.at(indexOfVP).begin() + indexOfElement);

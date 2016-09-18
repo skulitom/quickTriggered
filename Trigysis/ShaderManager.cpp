@@ -129,6 +129,7 @@ ShaderManager::ShaderManager(D3DAPP* d3dApp, char shaderModel)
 	////////////////////////////////////////
 
 	this->StandartVShader = this->CreateVertexShader("StandartVShader.fx", "VSMain");
+
 	this->StandartPShader = this->CreatePixelShader("StandartPShader.fx", "PSMain");
 
 	////////////////////////////////////////
@@ -257,21 +258,25 @@ ID3D11PixelShader* ShaderManager::CreatePixelShader(LPCSTR fileName, LPCSTR func
 		SMString = "ps_5_0";
 	else
 		return false;
+	HRESULT HR = S_OK;
 
-	HRESULT hr = D3DX11CompileFromFile(fileName, 0, 0, func, SMString.c_str(), this->ShaderFlags, 0, 0, &BlobPShader, &compilationMessage, 0);
+
+	HR = D3DX11CompileFromFile(fileName, 0, 0, func, SMString.c_str(), this->ShaderFlags, 0, 0, &BlobPShader, &compilationMessage, 0);
 	if (compilationMessage != 0)
 	{
 		MessageBox(this->D3dApp->GetWindow(), "Compilation shader warning (PS)", fileName, MB_ICONWARNING);
 	}
-	if (FAILED(hr))
+	if (FAILED(HR))
 	{
-		MessageBox(this->D3dApp->GetWindow(), "Pixel shader load failed!", fileName, MB_ICONERROR);
+		MessageBox(this->D3dApp->GetWindow(), "Pixel shader load failed!",this->D3dApp->GetCatalogName().c_str(), MB_ICONERROR);
 		D3DRelease(BlobPShader);
 		return false;
 	}
-	hr = this->D3dApp->Device->CreatePixelShader(BlobPShader->GetBufferPointer(), BlobPShader->GetBufferSize(),
+
+
+	HR = this->D3dApp->Device->CreatePixelShader(BlobPShader->GetBufferPointer(), BlobPShader->GetBufferSize(),
 		0, &PShader);
-	if (FAILED(hr))
+	if (FAILED(HR))
 	{
 		MessageBox(this->D3dApp->GetWindow(), "Create pixel shader failed!", fileName, MB_ICONERROR);
 		D3DRelease(BlobPShader);
@@ -288,14 +293,18 @@ void ShaderManager::InitAllShaders()
 	FileManager* FManager;
 
 	std::vector<std::string> Files = FileHelp::FindFiles(std::string(this->D3dApp->GetCatalogName() + "\\*PS.fx"));
-
+	std::string FileName;
 	for (int i = 0; i < Files.size(); i++)
 	{
 
 		Shader* NShader = new Shader();
 
-		NShader->Name = Files.at(i).substr(0,Files.at(i).size() - 3);
-		NShader->PPixelShader = this->CreatePixelShader(Files.at(i).c_str(), "PSMain");
+		NShader->Name = Files.at(i).substr(0, Files.at(i).size() - 3);
+
+
+		FileName = NShader->Name + ".fx";
+
+		NShader->PPixelShader = this->CreatePixelShader(FileName.c_str(), "PSMain");
 
 		this->Shaders.push_back(NShader);
 

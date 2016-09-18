@@ -112,6 +112,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameProgress.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="GUIBorder.h" />
     <ClInclude Include="GUIFigures.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MathHelper.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="PrimaryGame.h" />
     <ClInclude Include="Progress.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="QuickTriggered.h" />
     <ClInclude Include="Timer.h" />
@@ -139,12 +141,14 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameProgress.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="GUIBorder.cpp" />
     <ClCompile Include="GUIFigure.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="GUIPhysBasic.cpp" />
     <ClCompile Include="PrimaryGame.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Turns.cpp" />
     <ClCompile Include="Vector2d.cpp" />
@@ -159,6 +163,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BorderPS.fx" />
     <Text Include="HexagonBroken01PS.fx" />
     <Text Include="TestSave.txt" />
   </ItemGroup>

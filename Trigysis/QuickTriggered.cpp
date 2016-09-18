@@ -1,5 +1,7 @@
 #include "QuickTriggered.h"
 
+#include "GUIBorder.h"
+
 //////////////////////////////////////////////////////
 //**QTButton
 //////////////////////////////////////////////////////
@@ -8,40 +10,9 @@ QTButton::QTButton(BasicInterface* super, ButtonSettings& bs)
 {
 	DeclareElementName(CCButton, this->EName);
 	this->Sizes = Vector2d(50, 30);
-	this->PQTClass = dynamic_cast<QuickTriggered*>(this->D3dApp);
 	//this->SetShapeType(DX_)
 }
 
-void QTButton::SetFunc(unsigned short DX_BUTTON_FUNC_TYPE_, QTFunc qtf)
-{
-	switch (DX_BUTTON_FUNC_TYPE_)
-	{
-		case DX_BUTTON_FUNC_TYPE_ONSELECT:
-		{
-			this->QTFOnSelect = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONSELECT;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONPRESS:
-		{
-			this->QTFOnPress = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONPRESS;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONCLICK:
-		{
-			this->QTFOnClick = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONCLICK;
-			return;
-		}
-		case DX_BUTTON_FUNC_TYPE_ONSTOPINQUISITION:
-		{
-			this->QTFOnStopInquisition = qtf;
-			this->Feature |= DX_BUTTON_FEATURE_ONSTOPINQUISITION;
-			return;
-		}
-	}
-}
 //////////////////////////////////////////////////////
 //**QuickTriggered
 //////////////////////////////////////////////////////
@@ -83,11 +54,14 @@ bool QuickTriggered::InitApp()
 		this->primaryGame = new PrimaryGame();
 		this->primaryGame->init(this);
 		
-		//this->FigToTest = new Figure(this);
-		//this->FigToTest->SetFigureType(0);
-		//this->FigToTest->SetFigureSuperType(0);
-		//this->FigToTest->Spawn(Vector2d(0, 0), 1);
+		/*this->FigToTest = new Figure(this);
+		this->FigToTest->SetFigureType(0);
+		this->FigToTest->SetFigureSuperType(0);
+		this->FigToTest->Spawn(Vector2d(0, 0), 1);
 
+		GUIBorder* NewBorder = new GUIBorder(this);
+		NewBorder->Spawn(Vector2d(-100, 0), Vector2d(200, 0), 64, XMFLOAT3(0.5, 0.1, 0.7), 1);
+		*/
 		return true;
 
 	}

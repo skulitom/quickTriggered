@@ -34,6 +34,7 @@ void BasicInterface::Init()
 	this->Draw2D = new Basic2DDraw(this);
 	this->ElementBase = new ElementsMLand(this, this->Input, Draw2D);
 	this->Font2D = new FontManager(this, this->Draw2D, "ArialFont.txt");
+	this->BSound = new SoundBasic(&this->HWnd);
 
 	MathHelp::InitRand();
 
