@@ -50,7 +50,7 @@ bool QuickTriggered::InitApp()
 		NE->Spawn(Vector2d(0, 0), 1);
 
 	//	this->fontManager = new FontManager();
-		this->primaryGame = new PrimaryGame();
+		this->primaryGame = new PrimaryGame(this);
 		this->primaryGame->init(this);
 		
 		//this->FigToTest = new Figure(this);

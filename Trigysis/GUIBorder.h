@@ -1,5 +1,5 @@
 #ifndef BORDER_H
-#define BODRED_H
+#define BORDER_H
 
 #include "Element.h"
 

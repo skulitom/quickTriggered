@@ -9,9 +9,9 @@
 		|In-primary game text
 */
 
-PrimaryGame::PrimaryGame()
+PrimaryGame::PrimaryGame(BasicInterface* super)
 {
-	this->grid = new Grid();
+	this->grid = new Grid(super);
 	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
 	this->gameWon = false;
 }
@@ -58,7 +58,7 @@ void PrimaryGame::Update(BasicInterface* super)
 
 void PrimaryGame::setBoard(BasicInterface* super)
 {
-	this->grid = new Grid();
+	this->grid = new Grid( super);
 	this->grid->setBoard(super);
 	// start turns with standard time and num of turns
 //	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);

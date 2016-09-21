@@ -32,6 +32,7 @@ public:
 	virtual inline bool getIsFalling(){ return this->fig->GetIsFalling(); };
 	virtual Vector2d getPositionB();
 	inline Vector2d getOriginalPos(){ return this->originalPos; };
+	inline void setOriginalPos(Vector2d pos){ this->originalPos = pos; }
 	inline void setPositionB(Vector2d pos){ this->fig->SetPosition(pos); }
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
 	inline bool isDragged(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) ? true : false; }

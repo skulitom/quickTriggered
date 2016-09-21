@@ -105,6 +105,12 @@
     <ClInclude Include="Sound.h">
       <Filter>FrameWork\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GUIBorder.h">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -175,6 +181,12 @@
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>FrameWork\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIBorder.cpp">
+      <Filter>QuickTriggered\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

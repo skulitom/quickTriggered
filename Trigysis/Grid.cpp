@@ -8,10 +8,12 @@ struct FigureTypeException : public std::exception
 	}
 };
 
-Grid::Grid()
+Grid::Grid(BasicInterface* super)
 {
 	this->fmanager = new FigureManager();
 	this->toMove = false;
+	this->movingFig = Vector2d(0,0);
+	this->enti = new Entities(super);
 	// net will keep figures (basically representig the board)
 	this->net = new std::vector<std::vector<FigureB*>>(((2 * BOARD_SIZE) / BOARD_INTERVAL)+1);
 	for (int t = 0; t <= (2 * BOARD_SIZE) / BOARD_INTERVAL; t++)
@@ -26,6 +28,7 @@ Grid::Grid()
 			this->net->at(i).at(j) = nullptr;
 		}
 	}
+
 
 
 }
@@ -112,9 +115,14 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 			breakIt(i, j);
 			if (this->net->at(i).at(j) != nullptr)
 			{
+				if (this->toMove && !this->net->at(movingFig.X).at(movingFig.Y)->getIsMoving())
+				{
+					this->toMove = false;
+					this->enti->destroyBorders();
+				}
 				//Vector2d pos = this->net->at(i).at(j)->getPositionB();
 				// fall to updated position if not already falling
-				if (!this->net->at(i).at(j)->getIsFalling() && !this->net->at(i).at(j)->getIsMoving())
+				if (!this->net->at(i).at(j)->getIsFalling() && !this->toMove)
 				{
 					if (this->net->at(i).at(j)->getPositionB().X != (i*BOARD_INTERVAL) - BOARD_SIZE || this->net->at(i).at(j)->getPositionB().Y != (j*BOARD_INTERVAL) - BOARD_SIZE)
 					{
@@ -124,8 +132,13 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 				}
 				else if (this->net->at(i).at(j)->getIsMoving())
 				{
-							
-					smartInsertAt(this->net->at(i).at(j)->getPositionB().X, this->net->at(i).at(j)->getPositionB().Y, this->net->at(i).at(j)->getOriginalPos(), this->net->at(i).at(j));
+					this->toMove = true;		
+					this->movingFig.X = i;
+					this->movingFig.Y = j;
+					if (!this->enti->checkSpawn())
+						this->enti->spawnBordersAt(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+
+			//		smartInsertAt(this->net->at(i).at(j)->getPositionB().X, this->net->at(i).at(j)->getPositionB().Y, this->net->at(i).at(j)->getOriginalPos(), this->net->at(i).at(j));
 					
 				}
 				
@@ -137,7 +150,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 void Grid::breakIt(int i, int j)
 {
 	// breaks all figures with break flag
-	if (this->net->at(i).at(j)!=nullptr)
+	if (this->net->at(i).at(j) != nullptr && !this->net->at(i).at(j)->getIsFalling() && !this->toMove)
 		if (this->net->at(i).at(j)->getToBreak())
 			deleteAt(i,j);
 
@@ -213,28 +226,29 @@ void Grid::generateFig(BasicInterface* super, int i, int j, bool round)
 
 void Grid::insertAt(int x, int y, FigureB* fig)
 {
-	
+	net->at(x).at(y) = nullptr;
 	net->at(x).at(y) = fig;
 }
 
 // TODO: finish to match figure move
 void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
 {
-	x -= x%BOARD_INTERVAL;
-	y -= y%BOARD_INTERVAL;
+	x = ((x + BOARD_INTERVAL/2)/ BOARD_INTERVAL)* BOARD_INTERVAL;
+	y = ((y + BOARD_INTERVAL / 2) / BOARD_INTERVAL)* BOARD_INTERVAL;
 	if (x < -BOARD_SIZE || x > BOARD_SIZE || y < -BOARD_SIZE || y > BOARD_SIZE)
 	{
 		fig->SetPosition(originalPos);
 	}
 	else if (originalPos.X == x && originalPos.Y == y)
 	{
-		fig->SetPosition(originalPos);
+	//	fig->SetPosition(originalPos);
 	}
 	else
 	{
 		FigureB* holder = this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL);
 		insertAt((x + BOARD_SIZE) / BOARD_INTERVAL, (y + BOARD_SIZE) / BOARD_INTERVAL, fig);
 		insertAt((originalPos.X + BOARD_SIZE) / BOARD_INTERVAL, (originalPos.Y + BOARD_SIZE) / BOARD_INTERVAL, holder);
+		fig->setOriginalPos(fig->getPositionB());
 		holder = nullptr;
 	}
 }

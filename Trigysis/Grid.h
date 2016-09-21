@@ -12,6 +12,8 @@
 #include "GUIFigures.h"
 #include "Basic2DDraw.h"
 #include "Files.h"
+#include "GUIBorder.h"
+#include "Entities.h"
 
 #define GRID_FIGURE_WIDTH 9
 #define GRID_FIGURE_HEIGHT GRID_FIGURE_WIDTH
@@ -27,7 +29,7 @@
 
 class Grid {
 public:
-	Grid();
+	Grid(BasicInterface* super);
 	~Grid();
 
 	void setBoard(BasicInterface* super);
@@ -47,10 +49,12 @@ private:
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
 	bool toMove;
+	Vector2d movingFig;
 	FigureManager *fmanager;
 
 	std::vector<std::vector<FigureB*> > *net;
 	FigureB *fig;
+	Entities *enti;
 
 
 

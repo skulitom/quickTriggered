@@ -18,7 +18,7 @@
 
 class PrimaryGame {
 public:
-	PrimaryGame();
+	PrimaryGame(BasicInterface* super);
 	~PrimaryGame();
 
 	virtual void Update(BasicInterface* super);
