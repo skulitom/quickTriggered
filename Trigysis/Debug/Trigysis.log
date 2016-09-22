@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿Build started 22.09.2016 21:11:30.
      1>Project "C:\Users\rusla\Desktop\quickTriggered\quickTriggered\Trigysis\Trigysis.vcxproj" on node 2 (Build target(s)).
+=======
+﻿Build started 22/09/2016 18:04:25.
+     1>Project "C:\Users\artem\Desktop\quickTriggered\Trigysis\Trigysis.vcxproj" on node 2 (Build target(s)).
+>>>>>>> 624638a90f3e60e989390bf0da24fb2c9ee17834
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Trigysis.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fx /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cpp FigureB.cpp FigureManager.cpp GUIFigure.cpp Grid.cpp PrimaryGame.cpp QuickTriggered.cpp
@@ -483,6 +488,7 @@
                  c:\program files (x86)\windows kits\8.1\include\shared\winerror.h(50445) : see previous definition of 'D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS'
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\dxinclude\d3d10.h(609): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND' : macro redefinition
                  c:\program files (x86)\windows kits\8.1\include\shared\winerror.h(50454) : see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
+<<<<<<< HEAD
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\stringhelper.h(15): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\timer.h(35): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\d3dapp.h(373): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
@@ -494,6 +500,25 @@
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\button.h(73): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
      1>c:\users\rusla\desktop\quicktriggered\quicktriggered\trigysis\application.cpp(76): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
          Generating Code...
+=======
+     1>c:\users\artem\desktop\quicktriggered\trigysis\stringhelper.h(15): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\artem\desktop\quicktriggered\trigysis\timer.h(35): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\d3dapp.h(373): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\artem\desktop\quicktriggered\trigysis\basicelement.h(49): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\artem\desktop\quicktriggered\trigysis\basicelement.h(58): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\artem\desktop\quicktriggered\trigysis\basicelement.h(64): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\artem\desktop\quicktriggered\trigysis\mathhelper.h(120): warning C4244: 'return' : conversion from 'float' to 'INT', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\sound.h(72): warning C4244: 'return' : conversion from 'float' to 'short', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\button.h(73): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(120): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(131): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(138): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(141): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(143): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(217): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\artem\desktop\quicktriggered\trigysis\grid.cpp(227): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+>>>>>>> 624638a90f3e60e989390bf0da24fb2c9ee17834
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\rusla\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.exe" /INCREMENTAL /NOLOGO d3d11.lib d3dcompiler.lib d3dx11d.lib d3dx9d.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Effects11.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib cryptlib.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\rusla\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\rusla\Desktop\quickTriggered\quickTriggered\Debug\FastTriggered.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Basic2DDraw.obj
@@ -563,4 +588,8 @@
 
 Build succeeded.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:24.40
+=======
+Time Elapsed 00:00:03.37
+>>>>>>> 624638a90f3e60e989390bf0da24fb2c9ee17834

@@ -26,8 +26,14 @@ void PrimaryGame::Update(BasicInterface* super)
 {
 	if (!turns->isEndGame())
 	{
+		if (this->grid->getEndTurn())
+		{
+			this->turns->endTurn();
+			this->grid->setEndTurn(false);
+		}
 		if (turns->isEndTurn())
 		{
+			this->grid->Update(super);
 			localTime = localTime + super->GetTimer()->GetDeltaTime();
 			super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Turn Ended");
 			if (localTime > 2)

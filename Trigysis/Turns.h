@@ -24,14 +24,14 @@ public:
 	inline bool isEndGame(){ return this->endGame; }
 	inline bool isEndTurn(){ return this->endedTurn; }
 	inline int getTurn(){ return this->numberOfTurns; }
+	void endTurn();
 	int getTime();								
 															
 protected:													
 private:													
 	void startClock();										
 	void stopClock();											
-	bool endTime(float seconds);					
-	void endTurn();											
+	bool endTime(float seconds);															
 															
 	int numberOfTurns;									
 	int maxTurns;											
