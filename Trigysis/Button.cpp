@@ -248,7 +248,7 @@ bool ButtonInterface::Update()
 	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && !( this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT)))
 		this->Super->GetSound()->Play(std::string("ButtonSelect.wav"), 65);
 
-	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT) ||
+	if ((this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT)) ||
 		this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
 		if (this->CheckIsPress(this->D3dApp->GetTimer()->GetDeltaTime()))
 		{

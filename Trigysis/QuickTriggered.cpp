@@ -43,7 +43,12 @@ bool QuickTriggered::InitApp()
 		this->InitVPorts();
 
 		this->InitVPShaders();
-		
+
+		std::vector<std::string>* Files;
+		this->MainSound = new SoundBasic(&this->HWnd);
+		this->MainSound->LoadSounds(std::string(this->GetCatalogName() + "\\Resources\\Music"), &Files);
+		this->MainSound->Play(std::string("Sax.wav"),80,true);
+
 		Element* NE = new Element(this);
 		NE->SetSizesRelative(Vector2d(this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight));
 		NE->SetMaterial(std::string("Icon"));
@@ -86,7 +91,6 @@ void QuickTriggered::Update()
 	//////////////////////
 	static bool IsMoving = false;
 	static Vector2d PrevMPos, MPos;
-
 
 	//if (this->FigToTest->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
 	//{

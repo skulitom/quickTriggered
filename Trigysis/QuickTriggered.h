@@ -13,6 +13,7 @@
 #include "Files.h"
 #include "Font.h"
 #include "PrimaryGame.h"
+#include "Sound.h"
 
 class QTButton : public ButtonInterface
 {
@@ -48,7 +49,9 @@ private:
 	FontManager* fontManager;
 
 	Figure* FigToTest;			   
-								   
+	
+	SoundBasic* MainSound;
+
 private:						   
 								   
 };								   
