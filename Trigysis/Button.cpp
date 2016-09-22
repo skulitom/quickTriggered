@@ -146,7 +146,6 @@ bool ButtonInterface::CheckIsPress(FLOAT deltaTime)
 		(this->Input->GetStatus() && this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) && 
 		this->Input->CheckNewGUIButton(this, this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))))
 	{
-			
 		this->MButtonUsed = 0;
 		if (!(this->GetStatus(DX_BUTTON_STATUS_WAS_PRESSED)))
 			this->PressTime = 1;
@@ -249,14 +248,15 @@ bool ButtonInterface::Update()
 	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && !( this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT)))
 		this->Super->GetSound()->Play(std::string("ButtonSelect.wav"), 65);
 
-	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT))
+	if (this->GetStatus(DX_BUTTON_STATUS_IS_SELECT) && this->GetStatus(DX_BUTTON_STATUS_WAS_SELECT) ||
+		this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
+		if (this->CheckIsPress(this->D3dApp->GetTimer()->GetDeltaTime()))
+		{
+			this->SetColors(this->Settings.SuppressColor);
+			if (this->Feature & DX_BUTTON_FEATURE_ONPRESS)
+				this->EventOnPress();
+		}
 
-	if (this->CheckIsPress(this->D3dApp->GetTimer()->GetDeltaTime()))
-	{
-		this->SetColors(this->Settings.SuppressColor);
-		if (this->Feature & DX_BUTTON_FEATURE_ONPRESS)
-			this->EventOnPress();
-	}
 	if (!(this->GetStatus(DX_BUTTON_STATUS_IS_PRESSING)))
 	{
 		if (this->CheckIsClick() )

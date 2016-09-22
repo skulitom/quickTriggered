@@ -105,9 +105,6 @@ void QuickTriggered::Update()
 	//}
 	//else
 	//	IsMoving = false;
-
-
-
 	//////////////////////
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
@@ -118,8 +115,6 @@ void QuickTriggered::Update()
 	this->GetFont2D()->Draw(Vector2d(0, 0), COLOR_WHITE_3, 1, "Time: ");
 
 }
-
-
 
 void QuickTriggered::InitVPorts()
 {

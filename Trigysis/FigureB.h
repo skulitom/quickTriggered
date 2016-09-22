@@ -14,7 +14,7 @@
 #define ASIAN 4
 #define WHITE_SUPREME 5
 
-#define DISTANCE_DELTA 5
+#define DISTANCE_DELTA 1
 
 class FigureB : public Element {
 public:

@@ -6,7 +6,7 @@
 #include "Button.h"
 #include "GUIPhysBasic.h"
 
-#define GUIF_SIZE 64
+#define GUIF_SIZE 56
 #define GUIF_MOVE_SPEED 100
 
 class FButton : public ButtonInterface
