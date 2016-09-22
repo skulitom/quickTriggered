@@ -41,6 +41,8 @@ public:
 	virtual void Update(BasicInterface* super);
 	void SecondRoundLogic(BasicInterface* super);
 	void FirstRoundLogic(BasicInterface* super);
+	inline bool getEndTurn(){ return this->endTurn; }
+	inline void setEndTurn(bool endTurn){ this->endTurn = endTurn; }
 
 protected:
 private:
@@ -49,6 +51,7 @@ private:
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
 	bool toMove;
+	bool endTurn;
 	Vector2d movingFig;
 	FigureManager *fmanager;
 
