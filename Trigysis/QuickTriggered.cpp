@@ -47,7 +47,7 @@ bool QuickTriggered::InitApp()
 		std::vector<std::string>* Files;
 		this->MainSound = new SoundBasic(&this->HWnd);
 		this->MainSound->LoadSounds(std::string(this->GetCatalogName() + "\\Resources\\Music"), &Files);
-		this->MainSound->Play(std::string("Sax.wav"),80,true);
+		this->MainSound->Play(std::string("Sax.wav"),100,true);
 
 		Element* NE = new Element(this);
 		NE->SetSizesRelative(Vector2d(this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight));

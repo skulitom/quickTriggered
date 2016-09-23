@@ -13,7 +13,6 @@ Grid::Grid(BasicInterface* super)
 	this->endTurn = false;
 	this->fmanager = new FigureManager();
 	this->toMove = false;
-	this->movingFig = Vector2d(0,0);
 	this->enti = new Entities(super);
 	// net will keep figures (basically representig the board)
 	this->net = new std::vector<std::vector<FigureB*>>(((2 * BOARD_SIZE) / BOARD_INTERVAL)+1);
@@ -31,8 +30,8 @@ Grid::Grid(BasicInterface* super)
 	}
 
 
-
 }
+
 
 void Grid::Update(BasicInterface* super)
 {
@@ -250,12 +249,22 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
 	else
 	{
 		//FigureB* holder = this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL);
-		/*insertAt((x + BOARD_SIZE) / BOARD_INTERVAL, (y + BOARD_SIZE) / BOARD_INTERVAL, fig);
-		insertAt((originalPos.X + BOARD_SIZE) / BOARD_INTERVAL, (originalPos.Y + BOARD_SIZE) / BOARD_INTERVAL, this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL));*/
+		//insertAt((x + BOARD_SIZE) / BOARD_INTERVAL, (y + BOARD_SIZE) / BOARD_INTERVAL, fig);
+		//insertAt((originalPos.X + BOARD_SIZE) / BOARD_INTERVAL, (originalPos.Y + BOARD_SIZE) / BOARD_INTERVAL, this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL));
 		//this->net->at((x + BOARD_SIZE) / BOARD_INTERVAL).at((y + BOARD_SIZE) / BOARD_INTERVAL)->setPositionB(Vector2d(x,y));
+	    //	fig->setOriginalPos(fig->getPositionB());
 		
-	//	fig->setOriginalPos(fig->getPositionB());
-		
+	}
+}
+
+void Grid::swap(int x1, int y1, int x2, int y2)
+{
+	if (this->net->at(x1).at(y1) != nullptr && this->net->at(x2).at(y2) != nullptr)
+	{
+		FigureB* holder = this->net->at(x1).at(y1);
+		this->net->at(x1).at(y1) = this->net->at(x2).at(y2);
+		this->net->at(x2).at(y2) = holder;
+		holder = nullptr;
 	}
 }
 
@@ -263,7 +272,8 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos, FigureB* fig)
 
 void Grid::deleteAt(int x, int y)
 {
-	this->net->at(x).at(y)->Delete();
+	if (this->net->at(x).at(y)!=nullptr)
+		this->net->at(x).at(y)->Delete();
 	this->net->at(x).at(y) = nullptr;
 }
 

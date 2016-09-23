@@ -24,6 +24,7 @@
 #define BOARD_INTERVAL 60
 #define BOARD_SIZE ((GRID_FIGURE_WIDTH-1)*BOARD_INTERVAL)/2
 
+
 //((GRID_FIGURE_WIDTH - 1)*BOARD_INTERVAL) / 2
 
 
@@ -50,6 +51,7 @@ private:
 	void generateFig(BasicInterface* super, int i, int j, bool round);
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
+	void swap(int x1, int y1, int x2, int y2);
 	bool toMove;
 	bool endTurn;
 	Vector2d movingFig;
