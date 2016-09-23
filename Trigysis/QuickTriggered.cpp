@@ -45,7 +45,11 @@ bool QuickTriggered::InitApp()
 		std::vector<std::string>* Files;
 		this->MainSound = new SoundBasic(&this->HWnd);
 		this->MainSound->LoadSounds(std::string(this->GetCatalogName() + "\\Resources\\Music"), &Files);
+<<<<<<< HEAD
 		this->MainSound->Play(std::string("Sax.wav"),60,true);
+=======
+		this->MainSound->Play(std::string("Sax.wav"),100,true);
+>>>>>>> bd9713ab3369359870ac288b865cd66940b60fc1
 
 		Element* NE = new Element(this);
 		NE->SetSizes(Vector2d(580, 580));
