@@ -379,6 +379,10 @@ __int16 SoundBasic::GetVolume(IDirectSoundBuffer8* ptrSound)
 
 	return this->BStandartToVolume(Volume);
 
+	//return IDDSB.
+
+	
+
 }
 
 __int16 SoundBasic::GetVolume(std::string& soundName)

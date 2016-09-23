@@ -11,11 +11,9 @@ QTButton::QTButton(BasicInterface* super, ButtonSettings& bs)
 	//this->SetShapeType(DX_)
 }
 
-
 //////////////////////////////////////////////////////
 //**QuickTriggered
 //////////////////////////////////////////////////////
-
 
 bool QuickTriggered::InitApp()
 {
@@ -47,10 +45,10 @@ bool QuickTriggered::InitApp()
 		std::vector<std::string>* Files;
 		this->MainSound = new SoundBasic(&this->HWnd);
 		this->MainSound->LoadSounds(std::string(this->GetCatalogName() + "\\Resources\\Music"), &Files);
-		this->MainSound->Play(std::string("Sax.wav"),80,true);
+		this->MainSound->Play(std::string("Sax.wav"),60,true);
 
 		Element* NE = new Element(this);
-		NE->SetSizesRelative(Vector2d(this->WinSizes.ClientWWidth, this->WinSizes.ClientWHeight));
+		NE->SetSizes(Vector2d(580, 580));
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 1);
 
@@ -122,8 +120,13 @@ void QuickTriggered::Update()
 
 void QuickTriggered::InitVPorts()
 {
-	this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth,
-		this->WinSizes.ClientWHeight, 0, 0, "NewPS");
+
+	this->CreateViewPort(256, 256, 550,
+		550, 0, 0, "NewPS");
+
+	this->CreateViewPort(0, 0, 550,
+		550, 0, 0, "NewPS");
+
 }
 
 void QuickTriggered::ReleaseDefault()
