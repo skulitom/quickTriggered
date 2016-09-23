@@ -32,7 +32,6 @@ private:
 	float localTime;
 	bool gameWon;
 
-
 };
 
 #endif

@@ -8,8 +8,11 @@ struct FigureTypeException : public std::exception
 	}
 };
 
-Grid::Grid(BasicInterface* super)
+Grid::Grid(BasicInterface* super, short indexOfVP)
 {
+
+	this->indexOfVP = indexOfVP;
+
 	this->endTurn = false;
 	this->fmanager = new FigureManager();
 	this->toMove = false;
@@ -137,7 +140,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 					this->movingFig.X = i;
 					this->movingFig.Y = j;
 					if (!this->enti->checkSpawn())
-						this->enti->spawnBordersAt(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE));
+						this->enti->spawnBordersAt(Vector2d((i*BOARD_INTERVAL) - BOARD_SIZE, (j*BOARD_INTERVAL) - BOARD_SIZE), this->indexOfVP);
 
 					smartInsertAt(this->net->at(i).at(j)->getPositionB().X, this->net->at(i).at(j)->getPositionB().Y, this->net->at(i).at(j)->getOriginalPos(), this->net->at(i).at(j));
 					
@@ -213,7 +216,7 @@ void Grid::generateFig(BasicInterface* super, int i, int j)
 {
 	int drop = fmanager->FigureToDrop();
 	this->fig = new FigureB(super, drop);	
-	this->fig->Spawn(Vector2d(i,j),1); 
+	this->fig->Spawn(Vector2d(i, j), this->indexOfVP);
 	insertAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, this->fig);
 }
 
@@ -223,7 +226,7 @@ void Grid::generateFig(BasicInterface* super, int i, int j, bool round)
 {
 	int drop = fmanager->FigureToDrop(round);
 	this->fig = new FigureB(super, drop);
-	this->fig->Spawn(Vector2d(i, j), 1);
+	this->fig->Spawn(Vector2d(i, j), this->indexOfVP);
 	insertAt((i + BOARD_SIZE) / BOARD_INTERVAL, (j + BOARD_SIZE) / BOARD_INTERVAL, this->fig);
 }
 

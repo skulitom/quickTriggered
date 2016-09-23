@@ -14,7 +14,6 @@ FigureB::FigureB(BasicInterface* super, int type)
 		this->originalPos = getPositionB();
 		this->newPos = getPositionB();
 
-
 }
 
 bool FigureB::Update()
@@ -59,7 +58,7 @@ void FigureB::Spawn(Vector2d& pos, short indexOfVP)
 	this->fig->SetFigureSuperType(0);
 	this->fig->SetFigureType(0);	
 	this->fig->SetColors(colorPicker());
-	this->fig->Spawn(pos, 1);
+	this->fig->Spawn(pos, this->IndexOfViewPort);
 }
 
 void FigureB::FallToPos(Vector2d& pos)

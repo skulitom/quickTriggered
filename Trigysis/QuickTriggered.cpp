@@ -45,16 +45,18 @@ bool QuickTriggered::InitApp()
 		std::vector<std::string>* Files;
 		this->MainSound = new SoundBasic(&this->HWnd);
 		this->MainSound->LoadSounds(std::string(this->GetCatalogName() + "\\Resources\\Music"), &Files);
-<<<<<<< HEAD
+
 		this->MainSound->Play(std::string("Sax.wav"),60,true);
-=======
-		this->MainSound->Play(std::string("Sax.wav"),100,true);
->>>>>>> bd9713ab3369359870ac288b865cd66940b60fc1
 
 		Element* NE = new Element(this);
 		NE->SetSizes(Vector2d(580, 580));
 		NE->SetMaterial(std::string("Icon"));
-		NE->Spawn(Vector2d(0, 0), 1);
+		NE->Spawn(Vector2d(0, 0), 2);
+
+		NE = new Element(this);
+		NE->SetSizes(Vector2d(300, 280));
+		NE->SetMaterial(std::string("homelessF"));
+		NE->Spawn(Vector2d(200, -100), 1);
 
 	//	this->fontManager = new FontManager();
 		this->primaryGame = new PrimaryGame(this);
@@ -125,8 +127,8 @@ void QuickTriggered::Update()
 void QuickTriggered::InitVPorts()
 {
 
-	this->CreateViewPort(256, 256, 550,
-		550, 0, 0, "NewPS");
+	this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth,
+		this->WinSizes.ClientWHeight, 0, 0, "NewPS");
 
 	this->CreateViewPort(0, 0, 550,
 		550, 0, 0, "NewPS");

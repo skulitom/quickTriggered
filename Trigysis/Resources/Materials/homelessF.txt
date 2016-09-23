@@ -1,0 +1,7 @@
+$Name:
+homelessF
+$Texture:
+homelessF.dds
+$Alpha
+//$Shader:
+//SmoothPS

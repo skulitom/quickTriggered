@@ -21,7 +21,7 @@ public:
 	void destroyBorders();
 	inline bool checkSpawn(){ return spawned; };
 
-	void spawnBordersAt(Vector2d pos);
+	void spawnBordersAt(Vector2d pos, short indexOfVP);
 
 protected:
 private:

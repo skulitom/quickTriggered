@@ -30,7 +30,7 @@
 
 class Grid {
 public:
-	Grid(BasicInterface* super);
+	Grid(BasicInterface* super, short indexOfVP);
 	~Grid();
 
 	void setBoard(BasicInterface* super);
@@ -60,6 +60,8 @@ private:
 	std::vector<std::vector<FigureB*> > *net;
 	FigureB *fig;
 	Entities *enti;
+
+	short indexOfVP;
 
 
 
