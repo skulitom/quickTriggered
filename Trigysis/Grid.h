@@ -65,6 +65,7 @@ private:
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
 	void swap(int x1, int y1, int x2, int y2, bool drag);
+	void swapToEnd(int x1, int y1, int x2, int y2, bool drag);
 	int round(int x);
 	bool toMove;
 	bool endTurn;

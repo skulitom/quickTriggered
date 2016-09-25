@@ -58,11 +58,15 @@ void PrimaryGame::continueGame()
 		if (this->grid->getMovingFigBreak())
 		{
 			this->grid->setEndTurn(true);
+			this->grid->Update(super);
 			this->grid->updateOriginalPos();
 		}
 		else
 		{
+			
 			this->grid->moveBackAll();
+			
+			
 		}
 	}
 	if (this->grid->getEndTurn())
@@ -72,10 +76,8 @@ void PrimaryGame::continueGame()
 	}
 	if (turns->isEndTurn())
 	{
-		localTime += this->super->GetTimer()->GetDeltaTime();
 		this->grid->freezFigures(true);
-		super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Turn Ended");
-		if (localTime > 2)
+		if (!this->grid->checkBreaks())
 		{
 			this->grid->freezFigures(false);
 			this->turns->Update();

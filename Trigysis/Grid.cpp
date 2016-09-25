@@ -120,7 +120,7 @@ void Grid::moveBackAll()
 			if (this->net->at(i).at(j) != nullptr)
 			{
 				this->net->at(i).at(j)->setPositionB(this->net->at(i).at(j)->getOriginalPos());
-				swap(i, j, POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().X), POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().Y), false);
+				swapToEnd(i, j, POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().X), POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().Y), false);
 			}
 		}
 	}
@@ -171,6 +171,12 @@ bool Grid::checkBreaks()
 							this->net->at(i - 2).at(j)->breakFig();
 							oneBreak = true;
 						}
+				if (this->net->at(i).at(j)->getIsFalling())
+					return true;
+			}
+			else
+			{
+				return  true;
 			}
 		}
 	}
@@ -376,6 +382,17 @@ void Grid::swap(int x1, int y1, int x2, int y2, bool drag)
 		this->net->at(x1).at(y1)->setLastPos(this->net->at(x1).at(y1)->getPositionB());
 		holder = nullptr;
 	}
+}
+
+void Grid::swapToEnd(int x1, int y1, int x2, int y2, bool drag)
+{
+	if (POINT_TO_LOCATION(this->net->at(x1).at(y1)->getOriginalPos().X) != x2 || POINT_TO_LOCATION(this->net->at(x1).at(y1)->getOriginalPos().Y) != y2)
+	{
+	     
+		swap(x1, y1, x2,y2, drag);
+		swapToEnd(x1, y1, POINT_TO_LOCATION(this->net->at(x1).at(y1)->getOriginalPos().X), POINT_TO_LOCATION(this->net->at(x1).at(y1)->getOriginalPos().Y), drag);
+	}
+	
 }
 
 
