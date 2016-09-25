@@ -15,6 +15,7 @@ PrimaryGame::PrimaryGame(BasicInterface* super)
 	this->grid = new Grid(super, 2);
 	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
 	this->gameWon = false;
+	this->localTime = 0;
 }
 
 void PrimaryGame::init()
@@ -25,7 +26,8 @@ void PrimaryGame::init()
 
 void PrimaryGame::Update()
 {
-	this->turns->Update();
+	if (!this->turns->isEndTurn())
+		this->turns->Update();
 	this->grid->Update(this->super);
 
 	if (!turns->isEndGame())
@@ -34,6 +36,7 @@ void PrimaryGame::Update()
 	}
 	else
 	{
+		this->grid->freezFigures(true);
 		if (gameWon)
 		{
 			super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Success");
@@ -47,6 +50,21 @@ void PrimaryGame::Update()
 
 void PrimaryGame::continueGame()
 {
+	if (this->grid->getToBreak())
+	{
+		this->grid->setToBreak(false);
+		this->grid->clearBreaks();
+		this->grid->checkBreaks();
+		if (this->grid->getMovingFigBreak())
+		{
+			this->grid->setEndTurn(true);
+			this->grid->updateOriginalPos();
+		}
+		else
+		{
+			this->grid->moveBackAll();
+		}
+	}
 	if (this->grid->getEndTurn())
 	{
 		this->turns->endTurn();
@@ -54,10 +72,13 @@ void PrimaryGame::continueGame()
 	}
 	if (turns->isEndTurn())
 	{
-		localTime = localTime + this->super->GetTimer()->GetDeltaTime();
+		localTime += this->super->GetTimer()->GetDeltaTime();
+		this->grid->freezFigures(true);
 		super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Turn Ended");
 		if (localTime > 2)
 		{
+			this->grid->freezFigures(false);
+			this->turns->Update();
 			localTime = 0;
 		}
 	}
@@ -72,7 +93,7 @@ void PrimaryGame::setBoard()
 	this->grid = new Grid( this->super, INDEX_OF_VP);
 	this->grid->setBoard(this->super);
 	// start turns with standard time and num of turns
-//	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
+   //	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
 }
 
 PrimaryGame::~PrimaryGame()

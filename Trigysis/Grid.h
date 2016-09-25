@@ -47,9 +47,16 @@ public:
 	void SecondRoundLogic(BasicInterface* super);
 	void FirstRoundLogic(BasicInterface* super);
 	void clearBreaks();
+	void moveBackAll();
+	void updateOriginalPos();
+	bool checkBreaks();
+	void freezFigures(bool freez);
 	inline bool getEndTurn(){ return this->endTurn; }
 	inline void setEndTurn(bool endTurn){ this->endTurn = endTurn; }
 	inline bool getToMove(){ return this->toMove; }
+	inline void setToBreak(bool toBreak){ this->toBreak = toBreak; }
+	inline bool getToBreak(){ return this->toBreak; }
+	inline bool getMovingFigBreak(){ return this->net->at(movingFig.X).at(movingFig.Y)!= nullptr ? this->net->at(movingFig.X).at(movingFig.Y)->getToBreak(): true; }
 
 protected:
 private:
@@ -57,10 +64,11 @@ private:
 	void generateFig(BasicInterface* super, int i, int j, bool round);
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
-	void swap(int x1, int y1, int x2, int y2);
+	void swap(int x1, int y1, int x2, int y2, bool drag);
 	int round(int x);
 	bool toMove;
 	bool endTurn;
+	bool toBreak;
 	Vector2d movingFig;
 	FigureManager *fmanager;
 

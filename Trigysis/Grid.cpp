@@ -53,26 +53,7 @@ void Grid::FirstRoundLogic(BasicInterface* super)
 		{
 			if (!(this->net->at(i).at(j) == nullptr))
 			{
-				// scans board for at least 3 consequitive types in a row
-				// first scans horizontaly and second vertically
-				//horizontal
-				if (j >= 2 && !this->toMove)
-					if (this->net->at(i).at(j - 1) != nullptr && this->net->at(i).at(j - 2) != nullptr)
-						if (compareAt(i, j, i, j - 1) && compareAt(i, j, i, j - 2))
-						{
-							this->net->at(i).at(j)->breakFig();
-							this->net->at(i).at(j - 1)->breakFig();
-							this->net->at(i).at(j - 2)->breakFig();
-						}
-				// vertical
-				if (i >= 2 && !this->toMove)
-					if (this->net->at(i - 1).at(j) != nullptr && this->net->at(i - 2).at(j) != nullptr)
-						if (compareAt(i, j, i - 1, j) && compareAt(i, j, i - 2, j))
-						{
-							this->net->at(i).at(j)->breakFig();
-							this->net->at(i - 1).at(j)->breakFig();
-							this->net->at(i - 2).at(j)->breakFig();
-						}
+				checkBreaks();
 			    // delete on right click --DEMO_ONLY-- (TODO: remove){
 				if (super->GetInput()->GetStatus(DX_MOUSE_DOWN_RIGHT) && this->net->at(i).at(j)->isDragged())
 				{
@@ -112,10 +93,90 @@ void Grid::clearBreaks()
 	{
 		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
 		{
-			this->net->at(i).at(j)->recoverFig();
+			if (this->net->at(i).at(j) != nullptr)
+				this->net->at(i).at(j)->recoverFig();
 		}
 	}
 }
+
+void Grid::freezFigures(bool freez)
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j) != nullptr)
+				this->net->at(i).at(j)->setFreez(freez);
+		}
+	}
+}
+
+void Grid::moveBackAll()
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j) != nullptr)
+			{
+				this->net->at(i).at(j)->setPositionB(this->net->at(i).at(j)->getOriginalPos());
+				swap(i, j, POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().X), POINT_TO_LOCATION(this->net->at(i).at(j)->getOriginalPos().Y), false);
+			}
+		}
+	}
+}
+
+void Grid::updateOriginalPos()
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j) != nullptr)
+			{
+				this->net->at(i).at(j)->setOriginalPos(this->net->at(i).at(j)->getPositionB());
+			}
+		}
+	}
+}
+
+bool Grid::checkBreaks()
+{
+	bool oneBreak = false;
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			if (this->net->at(i).at(j) != nullptr)
+			{
+				// scans board for at least 3 consequitive types in a row
+				// first scans horizontaly and second vertically
+				//horizontal
+				if (j >= 2 )
+					if (this->net->at(i).at(j - 1) != nullptr && this->net->at(i).at(j - 2) != nullptr)
+						if (compareAt(i, j, i, j - 1) && compareAt(i, j, i, j - 2))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i).at(j - 1)->breakFig();
+							this->net->at(i).at(j - 2)->breakFig();
+							oneBreak = true;
+						}
+				// vertical
+				if (i >= 2)
+					if (this->net->at(i - 1).at(j) != nullptr && this->net->at(i - 2).at(j) != nullptr)
+						if (compareAt(i, j, i - 1, j) && compareAt(i, j, i - 2, j))
+						{
+							this->net->at(i).at(j)->breakFig();
+							this->net->at(i - 1).at(j)->breakFig();
+							this->net->at(i - 2).at(j)->breakFig();
+							oneBreak = true;
+						}
+			}
+		}
+	}
+	return oneBreak;
+}
+
 
 void Grid::SecondRoundLogic(BasicInterface* super)
 {
@@ -134,7 +195,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 				if (this->toMove && !this->net->at(movingFig.X).at(movingFig.Y)->getIsMoving())
 				{
 					this->toMove = false;
-					this->endTurn = true;
+					this->toBreak = true;
 					this->enti->destroyBorders();
 				}
 				//Vector2d pos = this->net->at(i).at(j)->getPositionB();
@@ -260,10 +321,10 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos)
 {
 	x = round(x);
 	y = round(y);
-//	this->super->GetFont2D()->DrawA(Vector2d(0, 0), COLOR_RED_3, 2, "x and y: %d , %d", (int)POINT_TO_LOCATION(originalPos.X), (int)POINT_TO_LOCATION(originalPos.Y));
+	//this->super->GetFont2D()->DrawA(Vector2d(0, 0), COLOR_RED_3, 2, "x and y: %d , %d", (int)movingFig.X, (int)movingFig.Y);
 	if (x < -BOARD_SIZE || x > BOARD_SIZE || y < -BOARD_SIZE || y > BOARD_SIZE)
 	{
-		fig->setPositionB(originalPos);
+		// do nothing
 	}
 	else if ((originalPos.X == x && originalPos.Y == y) || (originalPos.X != x && originalPos.Y != y))
 	{
@@ -271,7 +332,7 @@ void Grid::smartInsertAt(int x, int y, Vector2d originalPos)
 	}
 	else
 	{
-		swap(POINT_TO_LOCATION(originalPos.X), POINT_TO_LOCATION(originalPos.Y), POINT_TO_LOCATION(x), POINT_TO_LOCATION(y));
+		swap(POINT_TO_LOCATION(originalPos.X), POINT_TO_LOCATION(originalPos.Y), POINT_TO_LOCATION(x), POINT_TO_LOCATION(y), true);
 		
 	}
 }
@@ -297,7 +358,7 @@ int Grid::round(int x)
 	}
 }
 
-void Grid::swap(int x1, int y1, int x2, int y2)
+void Grid::swap(int x1, int y1, int x2, int y2, bool drag)
 {
 	if (this->net->at(x1).at(y1) != nullptr && this->net->at(x2).at(y2) != nullptr)
 	{
@@ -307,8 +368,11 @@ void Grid::swap(int x1, int y1, int x2, int y2)
 		this->net->at(x2).at(y2) = holder;
 	//	this->net->at(x2).at(y2)->setPositionB(Vector2d(LOCATION_TO_POINT(x2), LOCATION_TO_POINT(y2)));
 		this->net->at(x2).at(y2)->setLastPos(Vector2d(LOCATION_TO_POINT(x2), LOCATION_TO_POINT(y2)));
-		this->movingFig.X = x2;
-		this->movingFig.Y = y2;
+		if (drag)
+		{
+			this->movingFig.X = x2;
+			this->movingFig.Y = y2;
+		}
 		this->net->at(x1).at(y1)->setLastPos(this->net->at(x1).at(y1)->getPositionB());
 		holder = nullptr;
 	}

@@ -11,6 +11,7 @@ FigureB::FigureB(BasicInterface* super, int type)
 		this->fig->SetFigureSuperType(0);
 		this->toBreak = false;
 		this->IsMoving = false;
+		this->frozen = false;
 		this->originalPos = getPositionB();
 		this->lastPos = getPositionB();
 		this->newPos = getPositionB();
@@ -24,7 +25,7 @@ bool FigureB::Update()
 		return false;
 	}
 	// check if figure is pressed in which case move the figure with cursor
-	if (this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING))
+	if (this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) && !this->frozen)
 		 {
 		if (!IsMoving)
 			{
