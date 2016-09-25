@@ -1,0 +1,10 @@
+$Name:
+cityF
+$Texture:
+cityF.dds
+$ATexture:
+Fog.dds
+$ATextureMoveUp:
+2
+
+

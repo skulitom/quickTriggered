@@ -169,6 +169,7 @@
     <FxCompile Include="StandartVShader.fx">
       <DeploymentContent>false</DeploymentContent>
     </FxCompile>
+    <FxCompile Include="TransparentPS.fx" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HexagonBroken01PS.fx" />

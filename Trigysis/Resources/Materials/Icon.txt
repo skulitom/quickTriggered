@@ -12,5 +12,7 @@ $TextureMoveRight:
 10
 $Alpha
 //$GlobalTexCoords
+$Shader:
+TransparentPS
 
 

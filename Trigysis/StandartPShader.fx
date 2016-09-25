@@ -56,6 +56,9 @@ float4 PSMain(PSInput input) : SV_Target
 
     }
     //return PTexture;
-    return float4(lerp(PTexture.xyz, PATexture.xyz, 0.5f), 1);
+	if (UVal0)
+		return float4(lerp(PTexture.xyz, PATexture.xyz, UVal0), 1);
+
+		return float4(lerp(PTexture.xyz, PATexture.xyz, 0.5f), 1);
 
 }

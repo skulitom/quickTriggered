@@ -211,6 +211,9 @@
     <FxCompile Include="FigurePS.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="TransparentPS.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSave.txt" />

@@ -10,7 +10,7 @@
 #include "Sound.h"
 
 #define INDEX_OF_VP 1
-#define HOMELESS_DOWN_SPEED 250
+#define HOMELESS_DOWN_SPEED 500
 #define HOMELESS_UP_SPEED 50
 
 class SecondaryGame

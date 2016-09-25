@@ -49,10 +49,17 @@ bool QuickTriggered::InitApp()
 		this->MainSound->Play(std::string("Sax.wav"),60,true);
 
 		Element* NE = new Element(this);
+		NE->SetSizesRelative(Vector2d(1, 1), 1);
+		NE->SetMaterial(std::string("cityF"));
+		NE->SetCustomVars(XMFLOAT4(0.10, 0, 0, 0));
+		NE->Spawn(Vector2d(0, 0), 1);
+
+		NE = new Element(this);
 		NE->SetSizes(Vector2d(580, 580));
 		NE->SetMaterial(std::string("Icon"));
-		NE->Spawn(Vector2d(0, 0), 2);
-
+		NE->SetBlendState(DX_BS_TRANSPARENCY);
+		NE->SetCustomVars(XMFLOAT4(0.75, 0, 0, 0));
+		NE->Spawn(Vector2d(0, 0), 1);
 
 	//	this->fontManager = new FontManager();
 		this->secondaryGame = new SecondaryGame(this);
@@ -130,8 +137,8 @@ void QuickTriggered::InitVPorts()
 	this->CreateViewPort(0, 0, this->WinSizes.ClientWWidth,
 		this->WinSizes.ClientWHeight, 0, 0, "NewPS");
 
-	this->CreateViewPort(0, 0, 550,
-		550, 0, 0, "NewPS");
+	/*this->CreateViewPort(0, 0, 550,
+		550, 0, 0, "NewPS");*/
 
 }
 

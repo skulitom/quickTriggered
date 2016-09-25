@@ -14,7 +14,7 @@ bool Init(QuickTriggered** ppQuickTriggeredAppPtr, HINSTANCE hInstance, int cmd)
 {
 	QuickTriggered* TAA = new QuickTriggered(HWnd, Input);
 	
-	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, DX_DISPLAY_MODE_800_600,
+	HWnd = TAA->CreateD3DWindow(hInstance, WinProc, 0, 0, DX_DISPLAY_MODE_1366_768,
 		"HDWND", "QuickTriggered", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU);
 	if (!TAA->SInit(1, 4, true))
 		return false;

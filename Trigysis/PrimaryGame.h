@@ -15,7 +15,7 @@
 #include "Grid.h"
 #include "Turns.h"
 
-#define INDEX_OF_VP 2
+#define INDEX_OF_VP 1
 
 
 class PrimaryGame {

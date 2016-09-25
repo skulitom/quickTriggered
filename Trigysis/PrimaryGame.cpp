@@ -12,7 +12,7 @@
 PrimaryGame::PrimaryGame(BasicInterface* super)
 {
 	this->super = super;
-	this->grid = new Grid(super, 2);
+	this->grid = new Grid(super, INDEX_OF_VP);
 	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
 	this->gameWon = false;
 	this->localTime = 0;
@@ -92,8 +92,8 @@ void PrimaryGame::continueGame()
 
 void PrimaryGame::setBoard()
 {
-	this->grid = new Grid( this->super, INDEX_OF_VP);
-	this->grid->setBoard(this->super);
+	/*this->grid = new Grid( this->super, INDEX_OF_VP);
+	this->grid->setBoard(this->super);*/
 	// start turns with standard time and num of turns
    //	this->turns = new Turns(SD_MAX_TURNS, SD_MAX_TIME);
 }
