@@ -124,6 +124,7 @@
     <ClInclude Include="GUIPhysBasic.h" />
     <ClInclude Include="PrimaryGame.h" />
     <ClInclude Include="Progress.h" />
+    <ClInclude Include="SecondaryGame.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StringHelper.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="GUIPhysBasic.cpp" />
     <ClCompile Include="PrimaryGame.cpp" />
     <ClCompile Include="QuickTriggered.cpp" />
+    <ClCompile Include="SecondaryGame.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Timer.cpp" />

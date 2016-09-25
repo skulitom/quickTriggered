@@ -27,6 +27,7 @@ protected:
 private:
 
 	//- border highlight
+
 	std::vector<GUIBorder* > *borders;
 	GUIBorder* border;
 	BasicInterface* super;

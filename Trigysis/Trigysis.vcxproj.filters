@@ -111,6 +111,9 @@
     <ClInclude Include="Entities.h">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClInclude>
+    <ClInclude Include="SecondaryGame.h">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DAPP.cpp">
@@ -186,6 +189,9 @@
       <Filter>QuickTriggered\FrontEnd</Filter>
     </ClCompile>
     <ClCompile Include="Entities.cpp">
+      <Filter>QuickTriggered\BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="SecondaryGame.cpp">
       <Filter>QuickTriggered\BackEnd</Filter>
     </ClCompile>
   </ItemGroup>

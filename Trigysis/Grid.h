@@ -24,6 +24,10 @@
 #define BOARD_INTERVAL 60
 #define BOARD_SIZE ((GRID_FIGURE_WIDTH-1)*BOARD_INTERVAL)/2
 
+#define POINT_TO_LOCATION(X) (X + BOARD_SIZE) / BOARD_INTERVAL
+#define LOCATION_TO_POINT(X) (X * BOARD_INTERVAL) - BOARD_SIZE
+#define CLOSEST_POINT(X) ((X + BOARD_INTERVAL/2)/ BOARD_INTERVAL)* BOARD_INTERVAL
+
 
 //((GRID_FIGURE_WIDTH - 1)*BOARD_INTERVAL) / 2
 
@@ -36,7 +40,7 @@ public:
 	void setBoard(BasicInterface* super);
 
 	void insertAt(int x, int y, FigureB* fig);
-	void smartInsertAt(int x, int y,Vector2d originalPos, FigureB* fig);
+	void smartInsertAt(int x, int y,Vector2d originalPos);
 	void deleteAt(int x, int y);
 	bool compareAt(int x1, int y1, int x2, int y2);
 	virtual void Update(BasicInterface* super);
@@ -52,6 +56,7 @@ private:
 	void breakIt(int i, int j);
 	void moveFig(int i, int j, BasicInterface* super);
 	void swap(int x1, int y1, int x2, int y2);
+	int round(int x);
 	bool toMove;
 	bool endTurn;
 	Vector2d movingFig;
@@ -60,6 +65,7 @@ private:
 	std::vector<std::vector<FigureB*> > *net;
 	FigureB *fig;
 	Entities *enti;
+	BasicInterface* super;
 
 	short indexOfVP;
 

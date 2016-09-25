@@ -15,18 +15,21 @@
 #include "Grid.h"
 #include "Turns.h"
 
+#define INDEX_OF_VP 2
+
 
 class PrimaryGame {
 public:
 	PrimaryGame(BasicInterface* super);
 	~PrimaryGame();
 
-	virtual void Update(BasicInterface* super);
-	void init(BasicInterface* super);
-	void setBoard(BasicInterface* super);
+	virtual void Update();
+	void init();
+	void setBoard();
 
 protected:
 private:
+	BasicInterface* super;
 	Grid* grid;
 	Turns* turns;
 	float localTime;

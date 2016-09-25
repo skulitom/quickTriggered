@@ -33,6 +33,8 @@ public:
 	virtual Vector2d getPositionB();
 	inline Vector2d getOriginalPos(){ return this->originalPos; };
 	inline void setOriginalPos(Vector2d pos){ this->originalPos = pos; }
+	inline Vector2d getLastPos(){ return this->lastPos; };
+	inline void setLastPos(Vector2d pos){ this->lastPos = pos; }
 	inline void setPositionB(Vector2d pos){ this->fig->SetPosition(pos); }
 	inline bool isClicked(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_CLICKED) ? true : false; }
 	inline bool isDragged(){ return this->fig->GetButton()->GetStatus(DX_BUTTON_STATUS_IS_PRESSING) ? true : false; }
@@ -47,6 +49,7 @@ private:
 	bool IsMoving;
 	Vector2d PrevMPos, MPos;
 	Vector2d originalPos;
+	Vector2d lastPos;
 	Vector2d newPos;
 };
 

@@ -53,14 +53,13 @@ bool QuickTriggered::InitApp()
 		NE->SetMaterial(std::string("Icon"));
 		NE->Spawn(Vector2d(0, 0), 2);
 
-		NE = new Element(this);
-		NE->SetSizes(Vector2d(300, 280));
-		NE->SetMaterial(std::string("homelessF"));
-		NE->Spawn(Vector2d(200, -100), 1);
 
 	//	this->fontManager = new FontManager();
+		this->secondaryGame = new SecondaryGame(this);
+		this->secondaryGame->init();
+
 		this->primaryGame = new PrimaryGame(this);
-		this->primaryGame->init(this);
+		this->primaryGame->init();
 		
 		//this->FigToTest = new Figure(this);
 		//this->FigToTest->SetFigureType(0);
@@ -117,7 +116,8 @@ void QuickTriggered::Update()
 
 	this->ElementBase->UpdateAndDraw(this->Timer->GetDeltaTime());
 
-	primaryGame->Update(this);
+	secondaryGame->Update();
+	primaryGame->Update();
 
 	QuickTriggered::Draw();
 	this->GetFont2D()->Draw(Vector2d(0, 0), COLOR_WHITE_3, 1, "Time: ");

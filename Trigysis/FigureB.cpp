@@ -12,6 +12,7 @@ FigureB::FigureB(BasicInterface* super, int type)
 		this->toBreak = false;
 		this->IsMoving = false;
 		this->originalPos = getPositionB();
+		this->lastPos = getPositionB();
 		this->newPos = getPositionB();
 
 }
