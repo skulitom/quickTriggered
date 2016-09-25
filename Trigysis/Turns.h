@@ -5,7 +5,7 @@
 #include <time.h>
 #include "Timer.h"
 
-#define SD_MAX_TURNS 40
+#define SD_MAX_TURNS 10
 #define SD_MAX_TIME 40
 #define SD_TIMESCALE 1
 

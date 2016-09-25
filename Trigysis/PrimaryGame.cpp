@@ -25,30 +25,12 @@ void PrimaryGame::init()
 
 void PrimaryGame::Update()
 {
+	this->turns->Update();
+	this->grid->Update(this->super);
+
 	if (!turns->isEndGame())
 	{
-		if (this->grid->getEndTurn())
-		{
-			this->turns->endTurn();
-			this->grid->setEndTurn(false);
-		}
-		if (turns->isEndTurn())
-		{
-			this->grid->Update(this->super);
-			localTime = localTime + this->super->GetTimer()->GetDeltaTime();
-			super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Turn Ended");
-			if (localTime > 2)
-			{
-				localTime = 0;
-				this->turns->Update();
-			}
-		}
-		else{
-			this->grid->Update(this->super);
-			this->turns->Update();
-			super->GetFont2D()->DrawA(Vector2d(280, -220), COLOR_BLACK_3, 1, "%s: %d", "Turn", this->turns->getTurn());
-			super->GetFont2D()->DrawA(Vector2d(280, -250), COLOR_BLACK_3, 1, "%s: %d", "Time", this->turns->getTime());
-		}
+		continueGame();
 	}
 	else
 	{
@@ -60,6 +42,28 @@ void PrimaryGame::Update()
 		{
 			super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Game Over");
 		}
+	}
+}
+
+void PrimaryGame::continueGame()
+{
+	if (this->grid->getEndTurn())
+	{
+		this->turns->endTurn();
+		this->grid->setEndTurn(false);
+	}
+	if (turns->isEndTurn())
+	{
+		localTime = localTime + this->super->GetTimer()->GetDeltaTime();
+		super->GetFont2D()->Draw(Vector2d(-150, 0), COLOR_BLACK_3, 3, "Turn Ended");
+		if (localTime > 2)
+		{
+			localTime = 0;
+		}
+	}
+	else{
+		super->GetFont2D()->DrawA(Vector2d(100, -220), COLOR_BLACK_3, 1, "%s: %d", "Turn", this->turns->getTurn());
+		super->GetFont2D()->DrawA(Vector2d(100, -250), COLOR_BLACK_3, 1, "%s: %d", "Time", this->turns->getTime());
 	}
 }
 

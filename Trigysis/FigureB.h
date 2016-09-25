@@ -26,6 +26,7 @@ public:
 	inline bool getIsMoving(){ return this->IsMoving; }
 	inline bool getToBreak(){ return this->toBreak; }
 	inline void breakFig(){ this->toBreak = true; }
+	inline void recoverFig(){ this->toBreak = false; }
 	virtual bool Update() override;
 	virtual void Spawn(Vector2d& pos, short indexOfVP) override;
 	virtual void FallToPos(Vector2d& endPos);

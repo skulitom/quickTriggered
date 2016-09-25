@@ -29,6 +29,8 @@ public:
 
 protected:
 private:
+	void continueGame();
+
 	BasicInterface* super;
 	Grid* grid;
 	Turns* turns;

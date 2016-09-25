@@ -106,6 +106,17 @@ void Grid::FirstRoundLogic(BasicInterface* super)
 	}
 }
 
+void Grid::clearBreaks()
+{
+	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_FIGURE_WIDTH; j++)
+		{
+			this->net->at(i).at(j)->recoverFig();
+		}
+	}
+}
+
 void Grid::SecondRoundLogic(BasicInterface* super)
 {
 	for (int i = 0; i < GRID_FIGURE_HEIGHT; i++)
@@ -123,6 +134,7 @@ void Grid::SecondRoundLogic(BasicInterface* super)
 				if (this->toMove && !this->net->at(movingFig.X).at(movingFig.Y)->getIsMoving())
 				{
 					this->toMove = false;
+					this->endTurn = true;
 					this->enti->destroyBorders();
 				}
 				//Vector2d pos = this->net->at(i).at(j)->getPositionB();

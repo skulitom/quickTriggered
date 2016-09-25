@@ -46,8 +46,10 @@ public:
 	virtual void Update(BasicInterface* super);
 	void SecondRoundLogic(BasicInterface* super);
 	void FirstRoundLogic(BasicInterface* super);
+	void clearBreaks();
 	inline bool getEndTurn(){ return this->endTurn; }
 	inline void setEndTurn(bool endTurn){ this->endTurn = endTurn; }
+	inline bool getToMove(){ return this->toMove; }
 
 protected:
 private:
